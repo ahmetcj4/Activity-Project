@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.0"
-    repositories{
+    repositories {
         mavenCentral()
     }
 
@@ -25,9 +25,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.0'
-    compile "com.android.support:support-v4:23.0.0"
-    compile "com.android.support:gridlayout-v7:23.0.0"
-    compile "com.android.support:cardview-v7:23.0.0"
+    compile 'com.android.support:support-v4:23.0.0'
+    compile 'com.android.support:gridlayout-v7:23.0.0'
+    compile 'com.android.support:cardview-v7:23.0.0'
     compile 'com.android.support:recyclerview-v7:23.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.android.support:design:23.0.0'
