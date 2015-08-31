@@ -3,21 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.intern.tmob.activityextreme.WallActivityFragment">
+    tools:context="com.intern.tmob.activityextreme.FavoritesActivityFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/wall_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/myFAB"
+        android:id="@+id/continue_button"
         android:layout_width="@dimen/fab_size"
         android:layout_height="@dimen/fab_size"
         app:elevation="@dimen/fab_elevation"
-        android:src="@drawable/fab_icons"
+        android:src="@drawable/ic_tick"
         android:tint="@android:color/white"
-        app:backgroundTint="@color/fab_color_1"
+        app:backgroundTint="@color/fab_color_2"
         android:layout_gravity="bottom|right"
         android:layout_margin="10dp"/>
 

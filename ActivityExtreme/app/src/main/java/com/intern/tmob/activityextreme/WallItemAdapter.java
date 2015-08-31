@@ -17,6 +17,8 @@ import java.util.List;
 
 public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHolder> {
     List<WallItem> wallItemList;
+    int mLayoutId;
+    boolean isWall;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -30,27 +32,33 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
             cardView = (CardView) itemView.findViewById(R.id.list_item_cardview);
             image = (ImageView) itemView.findViewById(R.id.list_item_image);
             name = (TextView) itemView.findViewById(R.id.list_item_name);
-            sent = (TextView) itemView.findViewById(R.id.list_item_sent);
-            detail = (TextView) itemView.findViewById(R.id.list_item_detail);
+            if(isWall) {
+                sent = (TextView) itemView.findViewById(R.id.list_item_sent);
+                detail = (TextView) itemView.findViewById(R.id.list_item_detail);
+            }
         }
     }
 
 
-    public WallItemAdapter(List<WallItem> wallItemList){
+    public WallItemAdapter(List<WallItem> wallItemList,int layouId){
         this.wallItemList = wallItemList;
+        mLayoutId = layouId;
+        isWall = (layouId == R.layout.list_item_wall);
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_wall,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(mLayoutId,parent,false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(wallItemList.get(position).getname());
-        holder.detail.setText(wallItemList.get(position).getdetail());
-        holder.sent.setText(wallItemList.get(position).getsent());
         holder.image.setImageResource(wallItemList.get(position).getimage());
+        if(isWall) {
+            holder.detail.setText(wallItemList.get(position).getdetail());
+            holder.sent.setText(wallItemList.get(position).getsent());
+        }
     }
 
     @Override

@@ -32,7 +32,7 @@ public class WallActivityFragment extends Fragment {
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Mustafa Erdogan","3 saat once","ornek detay"));
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Lukas Podolski","4 saat once","ornek"));
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Mehmet Ozdemir","5 saat once","ornek detay"));
-        mWallItemAdapter = new WallItemAdapter(mWallItem);
+        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_wall);
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.wall_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma

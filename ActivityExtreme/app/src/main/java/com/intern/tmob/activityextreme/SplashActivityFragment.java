@@ -1,6 +1,7 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,6 +63,14 @@ public class SplashActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
+        FloatingActionButton floatingActionButton = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FavoritesActivity.class);
+                startActivity(intent);
+            }
+        });
         LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
         mCallbackManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
