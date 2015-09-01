@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.intern.tmob.activityextreme.EditProfileActivityFragment">
+    <android.support.v7.widget.CardView
+        android:id="@+id/edit_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            card_view:cardCornerRadius="3dp"
+            card_view:cardElevation="10dp">
+            <ImageView
+                android:id="@+id/edit_image"
+                android:src="@mipmap/ic_launcher"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+            <EditText
+                android:id="@+id/edit_name"
+                android:text="Lukas Podolski"
+                android:hint="Isim"
+                android:layout_toRightOf="@+id/profile_image"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/edit_city"
+                android:text="Istanbul"
+                android:textSize="16sp"
+                android:layout_below="@+id/profile_name"
+                android:layout_toRightOf="@+id/profile_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/edit_about"
+                android:text="Gokdelenler bence bu sehrin mezar taslaridir."
+                android:layout_below="@+id/profile_city"
+                android:layout_toRightOf="@+id/profile_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:background="#E8E8E8"
+        android:layout_below="@+id/edit_card"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/profile_positive"
+            android:text="Kaydet"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
