@@ -11,8 +11,9 @@
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.intern.tmob.activityextreme.SettingsActivity$DataSyncPreferenceFragment"
-        android:title="@string/pref_header_data_sync" />
+        android:title="@string/pref_header_data_sync" >
+        <intent android:action="com.intern.tmob.activityextreme.favoritesactivity" />
+    </header>
 
     <header
         android:fragment="com.intern.tmob.activityextreme.SettingsActivity$AboutPreferenceFragment"
