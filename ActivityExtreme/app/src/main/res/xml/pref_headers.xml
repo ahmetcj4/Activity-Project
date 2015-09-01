@@ -14,4 +14,8 @@
         android:fragment="com.intern.tmob.activityextreme.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
+    <header
+        android:fragment="com.intern.tmob.activityextreme.SettingsActivity$AboutPreferenceFragment"
+        android:title="@string/pref_header_about" />
+
 </preference-headers>
