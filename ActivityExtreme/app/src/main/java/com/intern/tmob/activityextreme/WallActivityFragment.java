@@ -35,13 +35,8 @@ public class WallActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
+        new FetchWallTask().execute(getActivity());
 
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Lukas Podolski","1 saat once","az ornek"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Ahmet Zorer","2 saat once","ornek yazi"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Mustafa Erdogan","3 saat once","ornek detay"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Lukas Podolski","4 saat once","ornek"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Mehmet Ozdemir","5 saat once","ornek detay"));
-        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_wall);
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.wall_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
@@ -68,7 +63,7 @@ public class WallActivityFragment extends Fragment {
             try {
                 for(int i=0;i<20;i++) {
                 //TODO 20 tane cekiyor bunu ayarlariz
-                    Entity res = myApiService.fetchWall("08",i).execute();
+                    Entity res = myApiService.fetchWall(i).execute();
                     if(res!=null)
                         list.add(res);
                     else
@@ -85,9 +80,12 @@ public class WallActivityFragment extends Fragment {
             Log.i("entities", String.valueOf(entities.size()));
             for(Entity e : entities){
                 mWallItem.add(new WallItem(R.mipmap.ic_launcher,
-                        (String) e.getProperties().get("name"),"1 saat once","az ornek"));
-                Log.i("entities", (String) e.getProperties().get("title"));
+                        (String) e.getProperties().get("name"),
+                        (String) e.getProperties().get("date"),
+                        (String) e.getProperties().get("details"),
+                        (String) e.getProperties().get("title")));
             }
+            mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_wall);
         }
     }
 }

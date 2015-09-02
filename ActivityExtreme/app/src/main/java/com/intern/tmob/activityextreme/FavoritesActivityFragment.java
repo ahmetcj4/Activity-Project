@@ -33,12 +33,12 @@ public class FavoritesActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Spor", "", ""));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Kültür Sanat", "", ""));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Gezi", "", ""));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Eğlence", "", ""));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Ders", "", ""));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Vasıta", "", ""));
+        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Spor", "", "",""));
+        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Kültür Sanat", "", "",""));
+        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Gezi", "", "",""));
+        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Eğlence", "", "",""));
+        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Ders", "", "",""));
+        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Vasıta", "", "",""));
         mSelectedItems = new Boolean[mWallItem.size()];
         mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_favorites);
 

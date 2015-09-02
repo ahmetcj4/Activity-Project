@@ -93,17 +93,14 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "fetchWall")
-    public Entity fetchWall(@Named("ID") String ID,@Named("n") int n){
-        List<Entity> result = new ArrayList<>();
-        Entity userInfo = login(ID);
-        result.add(userInfo);
+    public Entity fetchWall(@Named("n") int n){
+
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("Activities");
         PreparedQuery pq = datastore.prepare(q);
         int i = 0;
         for(Entity tmp : pq.asIterable()){
-            result.add(tmp);
             if(i++ == n)
                 return tmp;
         }

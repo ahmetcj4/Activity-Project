@@ -5,13 +5,15 @@ public class WallItem {
     private String name;
     private String sent;
     private String detail;
+    private String header;
     private int image;
 
     public WallItem(int image, String name, String sent,
-                           String detail) {
+                           String detail, String header) {
         this.name = name;
         this.sent = sent;
         this.detail = detail;
+        this.header = header;
         this.image = image;
     }
 
@@ -45,5 +47,13 @@ public class WallItem {
 
     public void setimage(int image) {
         this.image = image;
+    }
+
+    public String getheader() {
+        return header;
+    }
+
+    public void setheader(String header) {
+        this.header = header;
     }
 }
