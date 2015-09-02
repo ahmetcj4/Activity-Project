@@ -26,6 +26,7 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
         TextView name;
         TextView sent;
         TextView detail;
+        TextView header;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -35,6 +36,7 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
             if(isWall) {
                 sent = (TextView) itemView.findViewById(R.id.list_item_sent);
                 detail = (TextView) itemView.findViewById(R.id.list_item_detail);
+                header = (TextView) itemView.findViewById(R.id.list_item_header);
             }
         }
     }
@@ -58,6 +60,7 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
         if(isWall) {
             holder.detail.setText(wallItemList.get(position).getdetail());
             holder.sent.setText(wallItemList.get(position).getsent());
+            holder.header.setText(wallItemList.get(position).getheader());
         }
     }
 
