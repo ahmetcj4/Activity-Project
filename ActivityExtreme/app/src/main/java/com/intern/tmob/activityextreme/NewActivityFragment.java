@@ -39,10 +39,10 @@ public class NewActivityFragment extends Fragment {
     Button newdate,newtime,newcreate;
     static TextView date,time,title,details;
     static String activityType="",activityTitle="", activityDetails="", activityDate="",activityTime="";
-//    static String activityName=SplashActivityFragment.mProfile.getFirstName();
-//    static String activitySurname=SplashActivityFragment.mProfile.getLastName();
-//    static String activityFid=SplashActivityFragment.mProfile.getId();
-    static String activityName="",activitySurname="",activityFid="";
+    static String activityName=SplashActivityFragment.mProfile.getFirstName();
+    static String activitySurname=SplashActivityFragment.mProfile.getLastName();
+    static String activityFid=SplashActivityFragment.mProfile.getId();
+//    static String activityName="",activitySurname="",activityFid="";
     View rootView;
     public NewActivityFragment() {
     }

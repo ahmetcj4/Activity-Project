@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,12 +118,12 @@ public class SplashActivityFragment extends Fragment {
 
             @Override
             public void onCancel() {
-                // App code
+                Toast.makeText(getActivity(),"Cancel",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException exception) {
-                // App code
+                Toast.makeText(getActivity(),"ERRORRRR",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -156,6 +157,7 @@ public class SplashActivityFragment extends Fragment {
             context = params[0];
             try {
                 Entity res = myApiService.login(mProfile.getId()).execute();
+                Log.i("mytags","id"+mProfile.getId());
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(), " ", " ").execute();
                     startActivity(new Intent(getActivity(), FavoritesActivity.class));
