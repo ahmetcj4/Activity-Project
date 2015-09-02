@@ -56,6 +56,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.intern.tmob.activityextreme.ProfileActivity" />
         </activity>
+        <activity
+            android:name=".NewActivity"
+            android:label="@string/title_activity_new"
+            android:parentActivityName=".WallActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.intern.tmob.activityextreme.WallActivity" />
+        </activity>
     </application>
 
 </manifest>

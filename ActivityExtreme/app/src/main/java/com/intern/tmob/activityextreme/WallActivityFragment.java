@@ -1,7 +1,9 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +39,15 @@ public class WallActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         new FetchWallTask().execute(getActivity());
 
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.myFAB);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),NewActivity.class));
+            }
+        });
+
+        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_wall);
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.wall_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
@@ -80,12 +91,13 @@ public class WallActivityFragment extends Fragment {
             Log.i("entities", String.valueOf(entities.size()));
             for(Entity e : entities){
                 mWallItem.add(new WallItem(R.mipmap.ic_launcher,
-                        (String) e.getProperties().get("name"),
-                        (String) e.getProperties().get("date"),
+                        (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
+                        (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
                         (String) e.getProperties().get("details"),
                         (String) e.getProperties().get("title")));
+
             }
-            mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_wall);
+            mWallItemAdapter.notifyDataSetChanged();
         }
     }
 }

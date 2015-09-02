@@ -83,7 +83,7 @@ public class SplashActivityFragment extends Fragment {
         });
         LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
         mCallbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
+        loginButton.setReadPermissions(Arrays.asList("user_friends"));
         // If using in a fragment
         loginButton.setFragment(this);
         // Other app specific specialization
