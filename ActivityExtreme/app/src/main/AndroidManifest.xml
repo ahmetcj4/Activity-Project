@@ -35,7 +35,8 @@
             android:name=".FavoritesActivity"
             android:label="@string/title_activity_favorites" >
             <intent-filter>
-                <action android:name="com.intern.tmob.activityextreme.favoritesactivity"/>
+                <action android:name="com.intern.tmob.activityextreme.favoritesactivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
