@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class FavoritesActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.wall_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
         GridLayoutManager glm = new GridLayoutManager(getActivity(),3);
@@ -79,14 +80,21 @@ public class FavoritesActivityFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        ViewTreeObserver observer = rootView .getViewTreeObserver();
+
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                rootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                restoreSharedPreferences();
+            }
+        });
+
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        restoreSharedPreferences();
-    }
 
     private void selectItem(boolean selected, int position) {
         View v = recyclerView.getChildAt(position);
@@ -101,12 +109,6 @@ public class FavoritesActivityFragment extends Fragment {
                 v.setBackgroundResource(R.color.fab_color_1);
             }
 
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        restoreSharedPreferences();
     }
 
     private void restoreSharedPreferences() {
