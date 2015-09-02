@@ -19,12 +19,17 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.LoggingBehavior;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -92,9 +97,22 @@ public class SplashActivityFragment extends Fragment {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                mProfile = Profile.getCurrentProfile();
-                mAccessToken = AccessToken.getCurrentAccessToken();
-                new SignupTask().execute(getActivity());
+                GraphRequest request = GraphRequest.newMeRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object,
+                                                    GraphResponse response) {
+                                if (BuildConfig.DEBUG) {
+                                    FacebookSdk.setIsDebugEnabled(true);
+                                    FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+                                    mProfile = Profile.getCurrentProfile();
+                                    mAccessToken = AccessToken.getCurrentAccessToken();
+                                    new SignupTask().execute(getActivity());
+                                }
+                            }
+                        });
+                request.executeAsync();
             }
 
             @Override
