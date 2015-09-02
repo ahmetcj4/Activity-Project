@@ -1,5 +1,6 @@
 package com.intern.tmob.activityextreme;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,7 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit) {
+            startActivity(new Intent(this, EditProfileActivity.class));
             return true;
         }
 
