@@ -19,12 +19,18 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -35,7 +41,6 @@ public class SplashActivityFragment extends Fragment {
     private CallbackManager mCallbackManager;
     AccessToken mAccessToken;
     public static Profile mProfile;
-
     private static MyApi myApiService = null;
 
     private AccessTokenTracker mAccessTokenTracker;
@@ -90,7 +95,25 @@ public class SplashActivityFragment extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 mProfile = Profile.getCurrentProfile();
                 mAccessToken = AccessToken.getCurrentAccessToken();
-                new SignupTask().execute(getActivity());
+                Bundle parameters = new Bundle(1);
+                parameters.putString("fields", "location");
+
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        mProfile.getId(),
+                        parameters,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                try {
+                                    Object[] items = {getActivity(),response.getJSONObject().getJSONObject("location").getString("name")};
+                                    new SignupTask().execute(items);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                ).executeAsync();
             }
 
             @Override
@@ -120,22 +143,22 @@ public class SplashActivityFragment extends Fragment {
         mAccessTokenTracker.stopTracking();
         mProfileTracker.stopTracking();
     }
-    class SignupTask extends AsyncTask<Context, Void, Void> {
+    class SignupTask extends AsyncTask<Object, Void, Void> {
 
         private Context context = null;
 
         @Override
-        protected Void doInBackground(Context... params) {
+        protected Void doInBackground(Object... params) {
             if (myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
 
                 myApiService = builder.build();
             }
-            context = params[0];
+            context = (Context) params[0];
             try {
+                String location = (String) params[1];
                 Entity res = myApiService.login(mProfile.getId()).execute();
-                Log.i("mytags","id"+mProfile.getId());
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
                             mProfile.getProfilePictureUri(100,100).toString()).execute();
