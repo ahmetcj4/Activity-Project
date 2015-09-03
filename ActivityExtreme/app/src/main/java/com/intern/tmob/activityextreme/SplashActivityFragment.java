@@ -22,6 +22,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.LoggingBehavior;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
@@ -30,6 +31,7 @@ import com.facebook.login.widget.LoginButton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -89,13 +91,19 @@ public class SplashActivityFragment extends Fragment {
         });
         LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
         mCallbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions(Arrays.asList("user_friends"));
+        loginButton.setReadPermissions(Arrays.asList("user_friends","user_location"));
         // If using in a fragment
         loginButton.setFragment(this);
         // Other app specific specialization
 
         // Callback registration
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            private Bundle getRequestParameters() {
+                Bundle parameters = new Bundle(1);
+                parameters.putString("fields", "id,gender,location,friends");
+                return parameters;
+            }
+
             @Override
             public void onSuccess(LoginResult loginResult) {
                 GraphRequest request = GraphRequest.newMeRequest(
@@ -110,19 +118,35 @@ public class SplashActivityFragment extends Fragment {
                                     mProfile = Profile.getCurrentProfile();
                                     mAccessToken = AccessToken.getCurrentAccessToken();
                                     new SignupTask().execute(getActivity());
-                                }
+
+                                  }
                             }
                         });
                 request.executeAsync();
+
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "me",
+                        getRequestParameters(),
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                Log.d("api",response.toString());
+                            }
+                        }
+                ).executeAsync();
+
+
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(getActivity(),"Cancel",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Cancel", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException exception) {
+                Log.d("error",exception.toString());
                 Toast.makeText(getActivity(),"ERRORRRR",Toast.LENGTH_LONG).show();
             }
         });
