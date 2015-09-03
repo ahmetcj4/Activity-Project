@@ -41,17 +41,9 @@ public class WallActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
-        new FetchWallTask().execute(getActivity());
-
-       /* Button button = (Button) rootView.findViewById(R.id.load);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new FetchWallTask().execute(getActivity());
-            }
-        });
-*/
         srl = (SwipeRefreshLayout)rootView.findViewById(R.id.wall_refresh);
+
+        new FetchWallTask().execute(getActivity());
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,7 +67,6 @@ public class WallActivityFragment extends Fragment {
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(mWallItemAdapter);
-
 
         return rootView;
     }

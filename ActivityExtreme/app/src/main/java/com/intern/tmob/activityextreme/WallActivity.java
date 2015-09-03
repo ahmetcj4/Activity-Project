@@ -41,7 +41,9 @@ public class WallActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }else  if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
+            Intent intent =new Intent(this, ProfileActivity.class);
+            intent.putExtra("fid",SplashActivityFragment.mProfile.getId());
+            startActivity(intent);
             return true;
         }
 
