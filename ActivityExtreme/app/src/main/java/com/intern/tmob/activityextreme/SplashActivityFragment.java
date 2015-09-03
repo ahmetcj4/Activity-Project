@@ -23,17 +23,15 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.facebook.LoggingBehavior;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.internal.ImageRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -78,8 +76,7 @@ public class SplashActivityFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
         FloatingActionButton floatingActionButton = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -89,54 +86,18 @@ public class SplashActivityFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+
         mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("user_friends","user_location"));
-        // If using in a fragment
         loginButton.setFragment(this);
         // Other app specific specialization
-
-        // Callback registration
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            private Bundle getRequestParameters() {
-                Bundle parameters = new Bundle(1);
-                parameters.putString("fields", "id,gender,location,friends");
-                return parameters;
-            }
-
             @Override
             public void onSuccess(LoginResult loginResult) {
-                GraphRequest request = GraphRequest.newMeRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object,
-                                                    GraphResponse response) {
-                                if (BuildConfig.DEBUG) {
-                                    FacebookSdk.setIsDebugEnabled(true);
-                                    FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-                                    mProfile = Profile.getCurrentProfile();
-                                    mAccessToken = AccessToken.getCurrentAccessToken();
-                                    new SignupTask().execute(getActivity());
-
-                                  }
-                            }
-                        });
-                request.executeAsync();
-
-                new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "me",
-                        getRequestParameters(),
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                Log.d("api",response.toString());
-                            }
-                        }
-                ).executeAsync();
-
-
+                mProfile = Profile.getCurrentProfile();
+                mAccessToken = AccessToken.getCurrentAccessToken();
+                new SignupTask().execute(getActivity());
             }
 
             @Override
@@ -146,12 +107,41 @@ public class SplashActivityFragment extends Fragment {
 
             @Override
             public void onError(FacebookException exception) {
-                Log.d("error",exception.toString());
-                Toast.makeText(getActivity(),"ERRORRRR",Toast.LENGTH_LONG).show();
+                Log.d("error", exception.toString());
+                Toast.makeText(getActivity(), "ERRORRRR", Toast.LENGTH_LONG).show();
             }
         });
 
         return rootView;
+    }
+
+    public Account getAccountInfo(String id) {
+        final Account account = new Account(id);
+        account.setPhotoUri(ImageRequest.getProfilePictureUri(id, 100, 100));
+
+        Bundle parameters = new Bundle(1);
+        parameters.putString("fields", "first_name,last_name,location,gender");
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                id,
+                parameters,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        Log.d("api", response.toString());
+                        try {
+                            account.setName(response.getJSONObject().getString("first_name"));
+                            account.setSurname(response.getJSONObject().getString("last_name"));
+                            account.setLocation(response.getJSONObject().getJSONObject("first_name").getString("name"));
+                            account.setGender(response.getJSONObject().getString("gender"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                     }
+                }
+        ).executeAsync();
+        return account;
     }
 
     @Override
