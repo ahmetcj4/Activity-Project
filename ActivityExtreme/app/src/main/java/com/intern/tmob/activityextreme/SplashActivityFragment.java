@@ -137,7 +137,8 @@ public class SplashActivityFragment extends Fragment {
                 Entity res = myApiService.login(mProfile.getId()).execute();
                 Log.i("mytags","id"+mProfile.getId());
                 if(res == null) {
-                    myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(), " ", " ").execute();
+                    myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
+                            mProfile.getProfilePictureUri(100,100).toString()).execute();
                     startActivity(new Intent(getActivity(), FavoritesActivity.class));
                 }
                 else {
