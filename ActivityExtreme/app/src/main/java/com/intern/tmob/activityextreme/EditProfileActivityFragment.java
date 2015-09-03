@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -26,7 +28,11 @@ public class EditProfileActivityFragment extends Fragment {
         EditText city = (EditText) rootView.findViewById(R.id.edit_city);
         EditText about = (EditText) rootView.findViewById(R.id.edit_about);
 
+        Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
+                .into(image);
 
+        name.setText(SplashActivityFragment.mProfile.getFirstName()+" "
+                +SplashActivityFragment.mProfile.getLastName());
 
 
 
