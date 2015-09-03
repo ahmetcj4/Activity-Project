@@ -30,7 +30,7 @@
                 android:id="@+id/edit_name"
                 android:text="Lukas Podolski"
                 android:hint="Isim"
-                android:layout_toRightOf="@+id/profile_image"
+                android:layout_toRightOf="@+id/edit_image"
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -38,15 +38,15 @@
                 android:id="@+id/edit_city"
                 android:text="Istanbul"
                 android:textSize="16sp"
-                android:layout_below="@+id/profile_name"
-                android:layout_toRightOf="@+id/profile_image"
+                android:layout_below="@+id/edit_name"
+                android:layout_toRightOf="@+id/edit_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <EditText
                 android:id="@+id/edit_about"
                 android:text="Gokdelenler bence bu sehrin mezar taslaridir."
-                android:layout_below="@+id/profile_city"
-                android:layout_toRightOf="@+id/profile_image"
+                android:layout_below="@+id/edit_city"
+                android:layout_toRightOf="@+id/edit_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -60,7 +60,7 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/profile_positive"
+            android:id="@+id/edit_positive"
             android:text="Kaydet"
             android:textSize="20sp"
             android:layout_width="wrap_content"

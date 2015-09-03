@@ -5,10 +5,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.intern.tmob.activityextreme.WallActivityFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wall_recyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/wall_recyclerview"
+            android:layout_above="@+id/load"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/load"
+            android:text="Load More"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/myFAB"

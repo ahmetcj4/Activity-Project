@@ -167,27 +167,17 @@ public class NewActivityFragment extends Fragment {
         }
     }
     private class ActivityCreate extends AsyncTask<Context,Void,String> {
-
         Context mContext;
         @Override
         protected String doInBackground(Context... params) {
-            if (myApiService == null) {  // Only do this once
+            if(myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
-
                 myApiService = builder.build();
             }
             mContext = params[0];
 
             try {
-                Log.i("mytags",activityType);
-                Log.i("mytags",activityTitle);
-                Log.i("mytags",activityDetails);
-                Log.i("mytags",activityDate);
-                Log.i("mytags",activityTime);
-                Log.i("mytags",activityName);
-                Log.i("mytags",activitySurname);
-                Log.i("mytags",activityFid);
                 myApiService.createActivity(activityType,activityTitle, activityDetails,activityDate,activityTime,activityName,
                         activitySurname,activityFid).execute();
             } catch (IOException e) {

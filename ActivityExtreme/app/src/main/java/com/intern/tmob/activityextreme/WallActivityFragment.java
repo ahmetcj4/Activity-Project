@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
@@ -30,6 +31,7 @@ public class WallActivityFragment extends Fragment {
     List<WallItem> mWallItem = new ArrayList<>();
     RecyclerView recyclerView;
     WallItemAdapter mWallItemAdapter;
+    static int cnt=0;
     public WallActivityFragment() {
     }
 
@@ -38,6 +40,15 @@ public class WallActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         new FetchWallTask().execute(getActivity());
+
+        Button button = (Button) rootView.findViewById(R.id.load);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FetchWallTask().execute(getActivity());
+            }
+        });
+
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.myFAB);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +83,7 @@ public class WallActivityFragment extends Fragment {
             context = params[0];
             List<Entity> list = new ArrayList<>();
             try {
-                for(int i=0;i<20;i++) {
+                for(int i=0+cnt;i<4+cnt;i++) {
                 //TODO 20 tane cekiyor bunu ayarlariz
                     Entity res = myApiService.fetchWall(i).execute();
                     if(res!=null)
@@ -80,6 +91,7 @@ public class WallActivityFragment extends Fragment {
                     else
                         break;
                 }
+                cnt+=4;
             } catch (IOException e) {
                 e.printStackTrace();
             }

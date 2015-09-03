@@ -21,7 +21,6 @@ public class EditProfileActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-
         ImageView image = (ImageView) rootView.findViewById(R.id.edit_image);
         EditText name = (EditText) rootView.findViewById(R.id.edit_name);
         EditText city = (EditText) rootView.findViewById(R.id.edit_city);
