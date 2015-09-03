@@ -38,13 +38,12 @@ public class MyEndpoint {
 
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
-                       @Named("mail") String mail,@Named("city") String city){
+                       @Named("ppUrl") String ppUrl){
         Entity e = new Entity("Users",ID);
         e.setProperty("ID",ID);
         e.setProperty("name",name);
         e.setProperty("surname",surname);
-        e.setProperty("mail",mail);
-        e.setProperty("city",city);
+        e.setProperty("ppUrl",ppUrl);
         ofy().save().entity(e).now();
     }
 
