@@ -36,17 +36,6 @@ import javax.inject.Named;
 
 public class MyEndpoint {
 
-    /**
-     * A simple endpoint method that takes a name and says Hi back
-     */
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
-        MyBean response = new MyBean();
-        response.setData("Hi, " + name);
-
-        return response;
-    }
-
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
                        @Named("mail") String mail,@Named("city") String city){
@@ -95,25 +84,40 @@ public class MyEndpoint {
 
     @ApiMethod(name = "fetchWall")
     public Entity fetchWall(@Named("n") int n){
-
-
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("Activities");
         PreparedQuery pq = datastore.prepare(q);
         List<Entity> list = new ArrayList<>();
         for(Entity tmp : pq.asIterable())
             list.add(tmp);
-        list.sort(new Comparator<Entity>() {
+        /*list.sort(new Comparator<Entity>() {
             @Override
             public int compare(Entity o1, Entity o2) {
                 return o1.getProperty("date").toString().compareTo(o2.getProperty("date").toString());
             }
-        });
+        });*/
         int i = 0;
         for(Entity tmp : list){
             if(i++ == n)
                 return tmp;
         }
+        return null;
+    }
+
+    @ApiMethod(name="commentUser")
+    public void commentUser(@Named("ID") String id,@Named("comment") String comment){
+        Entity entity = new Entity("commentUser" + id);
+        entity.setProperty("comment",comment);
+        ofy().save().entity(entity).now();
+    }
+    public Entity getCommentsUser(@Named("ID") String id, @Named("n") int n){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query("commentUser"+id);
+        PreparedQuery pq = datastoreService.prepare(query);
+        int i=0;
+        for(Entity tmp : pq.asIterable())
+            if(i++ == n)
+                return tmp;
         return null;
     }
 }
