@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
 import com.facebook.AccessToken;
@@ -20,18 +19,12 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.internal.ImageRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-
-import org.json.JSONException;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -113,35 +106,6 @@ public class SplashActivityFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    public Account getAccountInfo(String id) {
-        final Account account = new Account(id);
-        account.setPhotoUri(ImageRequest.getProfilePictureUri(id, 100, 100));
-
-        Bundle parameters = new Bundle(1);
-        parameters.putString("fields", "first_name,last_name,location,gender");
-
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                id,
-                parameters,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-                        Log.d("api", response.toString());
-                        try {
-                            account.setName(response.getJSONObject().getString("first_name"));
-                            account.setSurname(response.getJSONObject().getString("last_name"));
-                            account.setLocation(response.getJSONObject().getJSONObject("first_name").getString("name"));
-                            account.setGender(response.getJSONObject().getString("gender"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                     }
-                }
-        ).executeAsync();
-        return account;
     }
 
     @Override

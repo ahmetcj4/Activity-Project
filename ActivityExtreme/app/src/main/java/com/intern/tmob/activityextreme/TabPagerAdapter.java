@@ -27,7 +27,6 @@ public class TabPagerAdapter extends PagerAdapter {
         return o == view;
     }
 
-
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitles[position];

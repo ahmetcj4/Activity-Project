@@ -54,7 +54,7 @@ public class ProfileActivityFragment extends Fragment {
         });
 
 
-        String[] tabs = {"FOLLOWING","FAVORITES","HISTORY"};
+        String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
         ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new TabPagerAdapter(getContext(),tabs));
 
