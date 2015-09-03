@@ -16,6 +16,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Named;
@@ -99,8 +100,17 @@ public class MyEndpoint {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("Activities");
         PreparedQuery pq = datastore.prepare(q);
+        List<Entity> list = new ArrayList<>();
+        for(Entity tmp : pq.asIterable())
+            list.add(tmp);
+        list.sort(new Comparator<Entity>() {
+            @Override
+            public int compare(Entity o1, Entity o2) {
+                return o1.getProperty("date").toString().compareTo(o2.getProperty("date").toString());
+            }
+        });
         int i = 0;
-        for(Entity tmp : pq.asIterable()){
+        for(Entity tmp : list){
             if(i++ == n)
                 return tmp;
         }
