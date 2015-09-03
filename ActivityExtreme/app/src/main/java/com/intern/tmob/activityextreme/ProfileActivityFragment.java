@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -28,8 +30,13 @@ public class ProfileActivityFragment extends Fragment {
         TextView about = (TextView) rootView.findViewById(R.id.profile_about);
         TextView edit = (TextView) rootView.findViewById(R.id.profile_edit);
 
-        image.setImageResource(R.mipmap.ic_launcher);
-        name.setText("Lukas Podolski");
+
+        Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
+                .into(image);
+
+        name.setText(SplashActivityFragment.mProfile.getFirstName()+" "
+                +SplashActivityFragment.mProfile.getLastName());
+
         city.setText("Istanbul");
         about.setText("Gokdelenler bence bu sehrin mezar taslaridir.");
         edit.setOnClickListener(new View.OnClickListener() {

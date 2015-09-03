@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class WallActivityFragment extends Fragment {
     RecyclerView recyclerView;
     WallItemAdapter mWallItemAdapter;
     static int cnt=0;
+    SwipeRefreshLayout srl;
     public WallActivityFragment() {
     }
 
@@ -41,14 +43,21 @@ public class WallActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         new FetchWallTask().execute(getActivity());
 
-        Button button = (Button) rootView.findViewById(R.id.load);
+       /* Button button = (Button) rootView.findViewById(R.id.load);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new FetchWallTask().execute(getActivity());
             }
         });
-
+*/
+        srl = (SwipeRefreshLayout)rootView.findViewById(R.id.wall_refresh);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchWallTask().execute(getActivity());
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.myFAB);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +92,7 @@ public class WallActivityFragment extends Fragment {
             context = params[0];
             List<Entity> list = new ArrayList<>();
             try {
-                for(int i=0+cnt;i<4+cnt;i++) {
+                for(int i=0;i<20;i++) {
                 //TODO 20 tane cekiyor bunu ayarlariz
                     Entity res = myApiService.fetchWall(i).execute();
                     if(res!=null)
@@ -91,7 +100,6 @@ public class WallActivityFragment extends Fragment {
                     else
                         break;
                 }
-                cnt+=4;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -101,15 +109,18 @@ public class WallActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Entity> entities) {
             Log.i("entities", String.valueOf(entities.size()));
+            mWallItem.clear();
             for(Entity e : entities){
                 mWallItem.add(new WallItem(R.mipmap.ic_launcher,
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
                         (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
                         (String) e.getProperties().get("details"),
-                        (String) e.getProperties().get("title")));
+                        (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title")));
 
             }
             mWallItemAdapter.notifyDataSetChanged();
+            srl.setRefreshing(false);
+
         }
     }
 }
