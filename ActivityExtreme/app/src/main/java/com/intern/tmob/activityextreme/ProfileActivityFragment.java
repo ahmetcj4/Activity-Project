@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.intern.tmob.activityextreme.view.SlidingTabLayout;
 
 import java.io.IOException;
 
@@ -40,7 +42,6 @@ public class ProfileActivityFragment extends Fragment {
         TextView name = (TextView) rootView.findViewById(R.id.profile_name);
         TextView city = (TextView) rootView.findViewById(R.id.profile_city);
         TextView about = (TextView) rootView.findViewById(R.id.profile_about);
-        TextView edit = (TextView) rootView.findViewById(R.id.profile_edit);
         Button button = (Button) rootView.findViewById(R.id.addComment);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +49,14 @@ public class ProfileActivityFragment extends Fragment {
                 new CommentUserTask().execute();
             }
         });
+
+
+        String[] tabs = {"FOLLOWING","FAVORITES","HISTORY"};
+        ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        mViewPager.setAdapter(new TabPagerAdapter(getContext(),tabs));
+
+        SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(mViewPager);
 
 
         Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
@@ -58,13 +67,6 @@ public class ProfileActivityFragment extends Fragment {
 
         city.setText("Istanbul");
         about.setText("Gokdelenler bence bu sehrin mezar taslaridir.");
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),EditProfileActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         return rootView;
