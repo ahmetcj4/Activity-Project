@@ -7,16 +7,26 @@ public class WallItem {
     private String detail;
     private String header;
     private int image;
+    private String imageLink;
 
-    public WallItem(int image, String name, String sent,
+
+    // image == -1 => wall
+    public WallItem(String image, String name, String sent,
                            String detail, String header) {
         this.name = name;
         this.sent = sent;
         this.detail = detail;
         this.header = header;
-        this.image = image;
+        this.imageLink = image;
+        this.image = -1;
     }
 
+    // image != -1 => favorites
+    public WallItem(int image, String name) {
+        this.name = name;
+        this.image = image;
+        this.imageLink = "";
+    }
     public String getname() {
         return name;
     }
@@ -55,5 +65,13 @@ public class WallItem {
 
     public void setheader(String header) {
         this.header = header;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }
