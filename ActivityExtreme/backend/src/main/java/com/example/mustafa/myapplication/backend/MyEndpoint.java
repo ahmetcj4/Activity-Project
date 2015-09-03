@@ -68,7 +68,7 @@ public class MyEndpoint {
     @ApiMethod(name = "createActivity")
     public void createActivity(@Named("type") String type,@Named("title") String title,@Named("details") String details,
                                @Named("date") String date,@Named("time")String time,@Named("name")String name,
-                               @Named("surname")String surname,@Named("fid")String fid){
+                               @Named("surname")String surname,@Named("fid")String fid,@Named("ppUrl") String ppUrl){
         Entity entity = new Entity("Activities");
         entity.setProperty("type",type);
         entity.setProperty("title",title);
@@ -78,6 +78,7 @@ public class MyEndpoint {
         entity.setProperty("name",name);
         entity.setProperty("surname",surname);
         entity.setProperty("fid",fid);
+        entity.setProperty("ppUrl",ppUrl);
         ofy().save().entity(entity).now();
     }
 
@@ -89,12 +90,6 @@ public class MyEndpoint {
         List<Entity> list = new ArrayList<>();
         for(Entity tmp : pq.asIterable())
             list.add(tmp);
-        /*list.sort(new Comparator<Entity>() {
-            @Override
-            public int compare(Entity o1, Entity o2) {
-                return o1.getProperty("date").toString().compareTo(o2.getProperty("date").toString());
-            }
-        });*/
         int i = 0;
         for(Entity tmp : list){
             if(i++ == n)

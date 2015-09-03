@@ -178,8 +178,10 @@ public class NewActivityFragment extends Fragment {
             mContext = params[0];
 
             try {
-                myApiService.createActivity(activityType,activityTitle, activityDetails,activityDate,activityTime,activityName,
-                        activitySurname,activityFid).execute();
+                Log.i("asdfasdf",SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString());
+                myApiService.createActivity(activityType,activityTitle, activityDetails,
+                        activityDate,activityTime,activityName,activitySurname,activityFid,
+                        SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString()).execute();
             } catch (IOException e) {
                 return "Error";
             }

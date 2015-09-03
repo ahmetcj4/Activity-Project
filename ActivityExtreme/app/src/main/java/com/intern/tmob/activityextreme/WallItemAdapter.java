@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 
@@ -19,6 +22,7 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
     List<WallItem> wallItemList;
     int mLayoutId;
     boolean isWall;
+    Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -49,14 +53,20 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(mLayoutId,parent,false);
+        context = parent.getContext();
+        View v = LayoutInflater.from(context).inflate(mLayoutId,parent,false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(wallItemList.get(position).getname());
-        holder.image.setImageResource(wallItemList.get(position).getimage());
+        Log.i("infoinfoinfo",position + " " + wallItemList.get(position).getImageLink());
+        if(wallItemList.get(position).getimage()==-1)
+            Glide.with(context).load(wallItemList.get(position).getImageLink())
+                .into(holder.image);
+        else
+            Glide.with(context).load(wallItemList.get(position).getimage()).into(holder.image);
         if(isWall) {
             holder.detail.setText(wallItemList.get(position).getdetail());
             holder.sent.setText(wallItemList.get(position).getsent());

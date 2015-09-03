@@ -102,7 +102,8 @@ public class WallActivityFragment extends Fragment {
             Log.i("entities", String.valueOf(entities.size()));
             mWallItem.clear();
             for(Entity e : entities){
-                mWallItem.add(new WallItem(R.mipmap.ic_launcher,
+                Log.i("ppUrl",(String) e.getProperties().get("ppUrl"));
+                mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl"),
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
                         (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
                         (String) e.getProperties().get("details"),
