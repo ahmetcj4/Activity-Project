@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -191,6 +192,11 @@ public class NewActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Toast.makeText(mContext,s,Toast.LENGTH_LONG).show();
+            if(s.equals("Aktivite eklendi.")){
+            //    startActivity(new Intent(getActivity(),WallActivity.class));
+                getActivity().onBackPressed();
+                getActivity().finish();
+            }
         }
     }
 }

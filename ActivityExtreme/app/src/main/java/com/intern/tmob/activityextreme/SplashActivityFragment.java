@@ -75,6 +75,11 @@ public class SplashActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(AccessToken.getCurrentAccessToken()!=null)
+        {
+            startActivity(new Intent(getActivity(),WallActivity.class));
+            getActivity().finish();
+        }
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
         FloatingActionButton floatingActionButton = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +111,7 @@ public class SplashActivityFragment extends Fragment {
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
                                 try {
-                                    Object[] items = {getActivity(),response.getJSONObject().getJSONObject("location").getString("name")};
+                                    Object[] items = {getActivity(), response.getJSONObject().getJSONObject("location").getString("name")};
                                     new SignupTask().execute(items);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -163,9 +168,11 @@ public class SplashActivityFragment extends Fragment {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
                             mProfile.getProfilePictureUri(100,100).toString()).execute();
                     startActivity(new Intent(getActivity(), FavoritesActivity.class));
+                    getActivity().finish();
                 }
                 else {
                     startActivity(new Intent(getActivity(),WallActivity.class));
+                    getActivity().finish();
                     return null;
                 }
             } catch (IOException e) {

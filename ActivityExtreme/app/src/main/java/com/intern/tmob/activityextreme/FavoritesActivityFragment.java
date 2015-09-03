@@ -78,6 +78,7 @@ public class FavoritesActivityFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), WallActivity.class);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 
