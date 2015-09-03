@@ -42,7 +42,7 @@ public class WallActivity extends AppCompatActivity {
             return true;
         }else  if (id == R.id.action_profile) {
             Intent intent =new Intent(this, ProfileActivity.class);
-            intent.putExtra("fib",SplashActivityFragment.mProfile.getId());
+            intent.putExtra("fid",SplashActivityFragment.mProfile.getId());
             startActivity(intent);
             return true;
         }
