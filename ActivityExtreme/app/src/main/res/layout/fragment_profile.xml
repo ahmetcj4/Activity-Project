@@ -100,12 +100,23 @@
         android:layout_height="0px"
         android:layout_weight="1"
         android:background="@android:color/white"/>
-
-
-    <Button
+    
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Yorum yaz"
-        android:id="@+id/addComment"/>
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:id="@+id/profile_comment"
+            android:hint="Yorum yaz.."
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Paylaş"
+            android:id="@+id/addComment"/>
+    </LinearLayout>
 
 </LinearLayout>
