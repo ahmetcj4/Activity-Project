@@ -25,8 +25,7 @@
         <activity
             android:name=".WallActivity"
             android:label="@string/title_activity_wall" >
-            <category android:name="android.intent.category.DEFAULT" />
-        </activity>
+         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -37,6 +36,7 @@
             android:label="@string/title_activity_favorites" >
             <intent-filter>
                 <action android:name="com.intern.tmob.activityextreme.favoritesactivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
