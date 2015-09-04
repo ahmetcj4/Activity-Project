@@ -106,6 +106,7 @@ public class MyEndpoint {
         entity.setProperty("commenterID",commenterID);
         ofy().save().entity(entity).now();
     }
+    @ApiMethod(name="getCommentsUser")
     public Entity getCommentsUser(@Named("ID") String id, @Named("n") int n){
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query query = new Query("commentUser"+id);

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,11 @@ import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.intern.tmob.activityextreme.view.SlidingTabLayout;
+import com.example.mustafa.myapplication.backend.myApi.model.Entity;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -65,14 +69,46 @@ public class ProfileActivityFragment extends Fragment {
         Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
                 .into(image);
 
-        name.setText(SplashActivityFragment.mProfile.getFirstName()+" "
-                +SplashActivityFragment.mProfile.getLastName());
+        name.setText(SplashActivityFragment.mProfile.getFirstName() + " "
+                + SplashActivityFragment.mProfile.getLastName());
 
         city.setText("Istanbul");
         about.setText("Gokdelenler bence bu sehrin mezar taslaridir.");
-
+        new FetchCommentUserTask().execute();
 
         return rootView;
+    }
+    class FetchCommentUserTask extends AsyncTask<Void,Void,List<Entity>> {
+
+        @Override
+        protected List<Entity> doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            List<Entity> list = new ArrayList<>();
+            try {
+                for (int i = 0; i < 20; i++) {
+                    Entity e = myApiService.getCommentsUser(SplashActivityFragment.mProfile.getId(), i).execute();
+                    if(e == null)
+                        break;
+                    else
+                        list.add(e);
+                }
+            }catch (Exception e){
+                Log.i("exception",e.toString());
+            }
+            Log.i("fetchCommentUserTask", String.valueOf(list.size()));
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            for(Entity e : entities){
+                Log.i("fetchCommentUserTask", (String) e.getProperties().get("comment"));
+            }
+        }
     }
 
     class CommentUserTask extends AsyncTask<Void,Void,Void> {
