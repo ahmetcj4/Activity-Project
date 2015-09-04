@@ -163,10 +163,10 @@ public class SplashActivityFragment extends Fragment {
             context = (Context) params[0];
             try {
                 String location = (String) params[1];
-                Entity res = myApiService.login(mProfile.getId()).execute();
+                Entity res = myApiService.getUserInformation(mProfile.getId()).execute();
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
-                            mProfile.getProfilePictureUri(100,100).toString()).execute();
+                            mProfile.getProfilePictureUri(100,100).toString(),location).execute();
                     startActivity(new Intent(getActivity(), FavoritesActivity.class));
                     getActivity().finish();
                 }
