@@ -73,7 +73,7 @@ public class ProfileActivityFragment extends Fragment {
 
         String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
         ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new TabPagerAdapter(getContext(), tabs));
+        mViewPager.setAdapter(new TabPagerAdapter(getContext(), tabs,fid));
 
         SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
