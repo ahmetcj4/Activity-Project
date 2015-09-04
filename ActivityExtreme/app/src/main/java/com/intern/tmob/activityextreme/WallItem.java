@@ -8,17 +8,19 @@ public class WallItem {
     private String header;
     private int image;
     private String imageLink;
+    private String fid;
 
 
     // image == -1 => wall
     public WallItem(String image, String name, String sent,
-                           String detail, String header) {
+                           String detail, String header,String fid) {
         this.name = name;
         this.sent = sent;
         this.detail = detail;
         this.header = header;
         this.imageLink = image;
         this.image = -1;
+        this.fid = fid;
     }
 
     // image != -1 => favorites
@@ -27,6 +29,8 @@ public class WallItem {
         this.image = image;
         this.imageLink = "";
     }
+
+    public String getFid(){ return fid;}
     public String getname() {
         return name;
     }
