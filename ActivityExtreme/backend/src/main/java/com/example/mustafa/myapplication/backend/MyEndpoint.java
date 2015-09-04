@@ -38,17 +38,18 @@ public class MyEndpoint {
 
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
-                       @Named("ppUrl") String ppUrl){
+                       @Named("ppUrl") String ppUrl,@Named("location") String location){
         Entity e = new Entity("Users",ID);
         e.setProperty("ID",ID);
         e.setProperty("name",name);
         e.setProperty("surname",surname);
         e.setProperty("ppUrl",ppUrl);
+        e.setProperty("location",location);
         ofy().save().entity(e).now();
     }
 
-    @ApiMethod(name = "login")
-    public Entity login(@Named("ID") String ID) {
+    @ApiMethod(name = "getUserInformation")
+    public Entity getUserInformation(@Named("ID") String ID) {
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -116,5 +117,15 @@ public class MyEndpoint {
             if(i++ == n)
                 return tmp;
         return null;
+    }
+
+    @ApiMethod(name="commentActivity") // Daha tam degil
+    public void commentActivity(@Named("fid")String fid,@Named("dateTime")String dateTime
+            ,@Named("commenterID") String commenterID,@Named("comment")String comment){
+        Entity entity = new Entity(fid + '_' + dateTime);
+        entity.setProperty("fID",fid);
+        entity.setProperty("commenterID",commenterID);
+        entity.setProperty("comment",comment);
+        ofy().save().entity(entity).now();
     }
 }

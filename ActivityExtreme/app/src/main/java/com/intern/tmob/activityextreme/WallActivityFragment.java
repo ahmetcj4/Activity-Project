@@ -107,8 +107,8 @@ public class WallActivityFragment extends Fragment {
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
                         (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
                         (String) e.getProperties().get("details"),
-                        (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title")));
-
+                        (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title"),
+                        (String) e.getProperties().get("fid")));
             }
             mWallItemAdapter.notifyDataSetChanged();
             srl.setRefreshing(false);
