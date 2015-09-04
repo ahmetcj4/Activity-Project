@@ -59,10 +59,14 @@ public class TabPagerAdapter extends PagerAdapter {
         container.addView(view);
         srl = (SwipeRefreshLayout) view.findViewById(R.id.pager_refresh);
         mWallItem.clear();
-        mWallItem.add(new WallItem("https://graph.facebook.com/10207225423855332/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D"
-                , "Lukas Podolski", "21-3-2015", "Adamdir bu adam.", "Cok onemli", "1232143214"));
-        mWallItem.add(new WallItem("https://graph.facebook.com/10207225423855332/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D"
-                ,"Lukas Podolski","21-3-2015","Adamdir bu adam.","Cok onemli","1232143214"));
+        new FetchCommentUserTask().execute();
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new FetchCommentUserTask().execute();
+            }
+        });
+
         mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_item_item);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.pager_recyclerview);
@@ -71,8 +75,7 @@ public class TabPagerAdapter extends PagerAdapter {
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(mWallItemAdapter);
-        mWallItemAdapter.notifyDataSetChanged();
-        srl.setRefreshing(false);
+
 
         return view;
     }
@@ -104,12 +107,14 @@ public class TabPagerAdapter extends PagerAdapter {
 
         @Override
         protected void onPostExecute(List<Entity> entities) {
+            mWallItem.clear();
             for(Entity e : entities){
-                Log.i("fetchCommentUserTask", (String) e.getProperties().get("comment"));
                 mWallItem.add(new WallItem("https://graph.facebook.com/10207225423855332/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D"
-                        , "Lukas Podolski", "21-3-2015", (String) e.getProperties().get("comment"), "Cok onemli",
+                        , "Lukas Podolski", "21-3-2015", (String) e.getProperties().get("comment"), " ",
                         (String) e.getProperties().get("commenterID")));
             }
+            mWallItemAdapter.notifyDataSetChanged();
+            srl.setRefreshing(false);
         }
     }
 
