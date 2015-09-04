@@ -82,14 +82,6 @@ public class SplashActivityFragment extends Fragment {
             getActivity().finish();
         }
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
-        FloatingActionButton floatingActionButton = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FavoritesActivity.class);
-                startActivity(intent);
-            }
-        });
 
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
