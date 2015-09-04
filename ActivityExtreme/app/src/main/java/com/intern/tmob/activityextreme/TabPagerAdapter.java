@@ -2,15 +2,24 @@ package com.intern.tmob.activityextreme;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TabPagerAdapter extends PagerAdapter {
     String[] mTitles;
     Context mContext;
-
+    List<WallItem> mWallItem = new ArrayList<>();
+    RecyclerView recyclerView;
+    WallItemAdapter mWallItemAdapter;
+    SwipeRefreshLayout srl;
     TabPagerAdapter(Context c, String[] titles){
         mContext = c;
         mTitles = titles;
@@ -37,8 +46,23 @@ public class TabPagerAdapter extends PagerAdapter {
         View view = LayoutInflater.from(mContext).inflate(R.layout.pager_item,
                 container, false);
         container.addView(view);
-        TextView title = (TextView) view.findViewById(R.id.item_title);
-        title.setText(mTitles[position]);
+        srl = (SwipeRefreshLayout) view.findViewById(R.id.pager_refresh);
+
+        mWallItem.add(new WallItem("https://graph.facebook.com/10207225423855332/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D"
+                ,"Lukas Podolski","21-3-2015","Adamdir bu adam.","Cok onemli","1232143214"));
+        mWallItem.add(new WallItem("https://graph.facebook.com/10207225423855332/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D"
+                ,"Lukas Podolski","21-3-2015","Adamdir bu adam.","Cok onemli","1232143214"));
+        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_item_item);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.pager_recyclerview);
+        recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(llm);
+
+        recyclerView.setAdapter(mWallItemAdapter);
+        mWallItemAdapter.notifyDataSetChanged();
+        srl.setRefreshing(false);
+
         return view;
     }
 

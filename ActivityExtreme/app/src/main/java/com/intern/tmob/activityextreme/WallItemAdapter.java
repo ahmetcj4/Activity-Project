@@ -21,7 +21,7 @@ import java.util.List;
 public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHolder> {
     List<WallItem> wallItemList;
     int mLayoutId;
-    boolean isWall;
+    boolean isWall,isPager;
     Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,13 +34,24 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.list_item_cardview);
-            image = (ImageView) itemView.findViewById(R.id.list_item_image);
-            name = (TextView) itemView.findViewById(R.id.list_item_name);
-            if(isWall) {
-                sent = (TextView) itemView.findViewById(R.id.list_item_sent);
-                detail = (TextView) itemView.findViewById(R.id.list_item_detail);
-                header = (TextView) itemView.findViewById(R.id.list_item_header);
+            if(isPager){
+                cardView = (CardView) itemView.findViewById(R.id.pager_item_cardview);
+                image = (ImageView) itemView.findViewById(R.id.pager_item_image);
+                name = (TextView) itemView.findViewById(R.id.pager_item_name);
+                if (isWall) {
+                    sent = (TextView) itemView.findViewById(R.id.pager_item_sent);
+                    detail = (TextView) itemView.findViewById(R.id.pager_item_detail);
+                    header = (TextView) itemView.findViewById(R.id.pager_item_header);
+                }
+            } else {
+                cardView = (CardView) itemView.findViewById(R.id.list_item_cardview);
+                image = (ImageView) itemView.findViewById(R.id.list_item_image);
+                name = (TextView) itemView.findViewById(R.id.list_item_name);
+                if (isWall) {
+                    sent = (TextView) itemView.findViewById(R.id.list_item_sent);
+                    detail = (TextView) itemView.findViewById(R.id.list_item_detail);
+                    header = (TextView) itemView.findViewById(R.id.list_item_header);
+                }
             }
         }
     }
@@ -49,7 +60,8 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
     public WallItemAdapter(List<WallItem> wallItemList,int layouId){
         this.wallItemList = wallItemList;
         mLayoutId = layouId;
-        isWall = (layouId == R.layout.list_item_wall);
+        isWall = (layouId == R.layout.list_item_wall || layouId == R.layout.pager_item_item);
+        isPager = (layouId == R.layout.pager_item_item);
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
