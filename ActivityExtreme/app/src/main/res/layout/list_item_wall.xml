@@ -27,33 +27,39 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_marginRight="4dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="pictureIsClicked"/>
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="0.7"
                     android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:onClick="onItemClicked">
                     <TextView
                         android:text="Lukas Podolski"
                         android:id="@+id/list_item_name"
                         android:textSize="20sp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="pictureIsClicked"/>
                     <TextView
                         android:text="Baslik"
                         android:id="@+id/list_item_header"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="onItemClicked"/>
                     <TextView
                         android:text="2 saat once"
                         android:id="@+id/list_item_sent"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="onItemClicked"/>
                     <TextView
                         android:text="aktivite detaylari burada olacak uzun uzun hatta bir kac satir ornek yazayim da daha belirgin olsun ornek"
                         android:id="@+id/list_item_detail"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="onItemClicked"/>
                 </LinearLayout>
             </LinearLayout>
 

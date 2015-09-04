@@ -1,6 +1,7 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +19,27 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 
-public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHolder> {
+public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHolder> implements View.OnClickListener{
     List<WallItem> wallItemList;
     int mLayoutId;
     boolean isWall,isPager;
     Context context;
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        Log.d("iddd", id + ", " + R.id.list_item_layout);
+        switch (id){
+            case R.id.list_item_image: break;
+            case R.id.list_item_name:break;
+            case R.id.list_item_like:break;
+            case R.id.list_item_comment:break;
+            case R.id.list_item_share:break;
+            default:
+                v.getContext().startActivity(new Intent(v.getContext(), DetailActivity.class));
+                break;
+        }
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;

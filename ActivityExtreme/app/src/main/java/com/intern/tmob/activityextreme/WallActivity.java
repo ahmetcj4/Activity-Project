@@ -10,12 +10,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.example.mustafa.myapplication.backend.myApi.model.Entity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class WallActivity extends AppCompatActivity {
-
+    static Entity mEntity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,5 +52,33 @@ public class WallActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onItemClicked(View v) {
+        int id = v.getId();
+        Log.d("iddd", id + ", " + R.id.list_item_layout);
+        switch (id){
+            case R.id.list_item_image: break;
+            case R.id.list_item_name:break;
+            case R.id.list_item_like:break;
+            case R.id.list_item_comment:break;
+            case R.id.list_item_share:break;
+            default:
+                startActivity(new Intent(this, DetailActivity.class));
+                break;
+        }
+    }
+
+    public void pictureIsClicked(View view) {
+
+        Intent intent =new Intent(this, ProfileActivity.class);
+        intent.putExtra("fid",(String)mEntity.getProperties().get("fid"));
+        intent.putExtra("name",(String)mEntity.getProperties().get("name"));
+        intent.putExtra("surname",(String)mEntity.getProperties().get("surname"));
+        intent.putExtra("ppUrl",(String)mEntity.getProperties().get("ppUrl"));
+        intent.putExtra("location",(String)mEntity.getProperties().get("location"));
+        Log.d("loccc", "loccc " + (String) mEntity.getProperties().get("location"));
+        startActivity(intent);
+
     }
 }

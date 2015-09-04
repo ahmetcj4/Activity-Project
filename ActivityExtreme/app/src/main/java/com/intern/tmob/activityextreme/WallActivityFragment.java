@@ -34,6 +34,8 @@ public class WallActivityFragment extends Fragment {
     WallItemAdapter mWallItemAdapter;
     static int cnt=0;
     SwipeRefreshLayout srl;
+    private List<Entity> mEntities;
+
     public WallActivityFragment() {
     }
 
@@ -66,26 +68,17 @@ public class WallActivityFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(mWallItemAdapter);
-
         recyclerView.addOnItemTouchListener(
-            new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View v, int position) {
-                    int id = v.getId();
-                    switch (id){
-                        case R.id.list_item_image: break;
-                        case R.id.list_item_name:break;
-                        case R.id.list_item_like:break;
-                        case R.id.list_item_comment:break;
-                        case R.id.list_item_share:break;
-                        default:
-                            startActivity(new Intent(getActivity(),DetailActivity.class));
-                            break;
+                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        WallActivity.mEntity = mEntities.get(position);
+                        return;
                     }
 
-                }
-            })
+                })
         );
+
         return rootView;
     }
 
@@ -119,6 +112,7 @@ public class WallActivityFragment extends Fragment {
         protected void onPostExecute(List<Entity> entities) {
             Log.i("entities", String.valueOf(entities.size()));
             mWallItem.clear();
+            mEntities = entities;
             for(Entity e : entities){
                 Log.i("ppUrl",(String) e.getProperties().get("ppUrl"));
                 mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl"),

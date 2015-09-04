@@ -161,8 +161,8 @@ public class SplashActivityFragment extends Fragment {
             }
             context = (Context) params[0];
             try {
-                SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
-                String location = settings.getString("location", "dff");
+                SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
+                String location = settings.getString("location", "konum bulunamadı");
                 Entity res = myApiService.getUserInformation(mProfile.getId()).execute();
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),

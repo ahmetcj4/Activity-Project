@@ -1,7 +1,11 @@
 package com.intern.tmob.activityextreme;
 
 
-public class WallItem {
+import android.content.Intent;
+import android.util.Log;
+import android.view.View;
+
+public class WallItem{
     private String name;
     private String sent;
     private String detail;
@@ -78,4 +82,5 @@ public class WallItem {
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
     }
+
 }

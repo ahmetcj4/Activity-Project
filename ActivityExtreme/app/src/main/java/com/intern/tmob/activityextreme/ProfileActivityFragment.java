@@ -68,7 +68,11 @@ public class ProfileActivityFragment extends Fragment {
                     + SplashActivityFragment.mProfile.getLastName());
             city.setText(settings.getString("location", "def"));
         } else {
-            new ProfileInformation().execute(getContext());
+            name.setText(intent.getStringExtra("name") + " "
+                    + intent.getStringExtra("surname"));
+            Glide.with(getContext()).load(intent.getStringExtra("ppUrl")).into(image);
+            city.setText(intent.getStringExtra("location"));
+            Log.d("loccc","loccc " + intent.getStringExtra("location"));
         }
 
         String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
@@ -134,34 +138,4 @@ public class ProfileActivityFragment extends Fragment {
         }
     }
 
-    class ProfileInformation extends AsyncTask<Object, Void, Entity> {
-
-        private Context context = null;
-
-        @Override
-        protected Entity doInBackground(Object... params) {
-            if (myApiService == null) {  // Only do this once
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
-
-                myApiService = builder.build();
-            }
-            context = (Context) params[0];
-            Entity res=null;
-            try {
-                res = myApiService.getUserInformation(fid).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return res;
-        }
-        protected void onPostExecute(Entity e) {
-                name.setText((String) e.getProperties().get("name") + " "
-                        + (String) e.getProperties().get("surname"));
-                Glide.with(getContext()).load((String) e.getProperties().get("ppUrl"))
-                        .into(image);
-                city.setText((String) e.getProperties().get("location"));
-        }
-
-    }
 }
