@@ -25,7 +25,7 @@
         <activity
             android:name=".WallActivity"
             android:label="@string/title_activity_wall" >
-         </activity>
+        </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -36,6 +36,7 @@
             android:label="@string/title_activity_favorites" >
             <intent-filter>
                 <action android:name="com.intern.tmob.activityextreme.favoritesactivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -54,14 +55,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.intern.tmob.activityextreme.ProfileActivity" />
+
             <intent-filter>
                 <action android:name="com.intern.tmob.activityextreme.editprofileactivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".NewActivity"
             android:label="@string/title_activity_new"
+            android:parentActivityName=".WallActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.intern.tmob.activityextreme.WallActivity" />
+        </activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/title_activity_detail"
             android:parentActivityName=".WallActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
