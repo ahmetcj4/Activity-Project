@@ -1,5 +1,6 @@
 package com.intern.tmob.activityextreme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,8 @@ public class ProfileActivityFragment extends Fragment {
     private static MyApi myApiService = null;
     String fid;
     static String acomment="";
+    TextView name,city,about;
+    ImageView image;
     public ProfileActivityFragment() {
     }
 
@@ -43,10 +46,10 @@ public class ProfileActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         fid = intent.getStringExtra("fid");
 
-        ImageView image = (ImageView) rootView.findViewById(R.id.profile_image);
-        TextView name = (TextView) rootView.findViewById(R.id.profile_name);
-        TextView city = (TextView) rootView.findViewById(R.id.profile_city);
-        TextView about = (TextView) rootView.findViewById(R.id.profile_about);
+        image = (ImageView) rootView.findViewById(R.id.profile_image);
+        name = (TextView) rootView.findViewById(R.id.profile_name);
+        city = (TextView) rootView.findViewById(R.id.profile_city);
+        about = (TextView) rootView.findViewById(R.id.profile_about);
         Button button = (Button) rootView.findViewById(R.id.addComment);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,28 +59,29 @@ public class ProfileActivityFragment extends Fragment {
                 new CommentUserTask().execute();
             }
         });
-
+        if(fid.equals(SplashActivityFragment.mProfile.getId())){
+            Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
+                    .into(image);
+            name.setText(SplashActivityFragment.mProfile.getFirstName() + " "
+                    + SplashActivityFragment.mProfile.getLastName());
+            city.setText(SplashActivityFragment.mLocation);
+        } else {
+            new ProfileInformation().execute(getContext());
+        }
 
         String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
         ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new TabPagerAdapter(getContext(),tabs));
+        mViewPager.setAdapter(new TabPagerAdapter(getContext(), tabs));
 
         SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
 
-
-        Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
-                .into(image);
-
-        name.setText(SplashActivityFragment.mProfile.getFirstName() + " "
-                + SplashActivityFragment.mProfile.getLastName());
-
-        city.setText("Istanbul");
         about.setText("Gokdelenler bence bu sehrin mezar taslaridir.");
         new FetchCommentUserTask().execute();
 
         return rootView;
     }
+
     class FetchCommentUserTask extends AsyncTask<Void,Void,List<Entity>> {
 
         @Override
@@ -126,5 +130,36 @@ public class ProfileActivityFragment extends Fragment {
             }
             return null;
         }
+    }
+
+    class ProfileInformation extends AsyncTask<Object, Void, Entity> {
+
+        private Context context = null;
+
+        @Override
+        protected Entity doInBackground(Object... params) {
+            if (myApiService == null) {  // Only do this once
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+
+                myApiService = builder.build();
+            }
+            context = (Context) params[0];
+            Entity res=null;
+            try {
+                res = myApiService.getUserInformation(fid).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return res;
+        }
+        protected void onPostExecute(Entity e) {
+                name.setText((String) e.getProperties().get("name") + " "
+                        + (String) e.getProperties().get("surname"));
+                Glide.with(getContext()).load((String) e.getProperties().get("ppUrl"))
+                        .into(image);
+                city.setText((String) e.getProperties().get("location"));
+        }
+
     }
 }

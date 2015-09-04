@@ -41,6 +41,7 @@ public class SplashActivityFragment extends Fragment {
     private CallbackManager mCallbackManager;
     AccessToken mAccessToken;
     public static Profile mProfile;
+    public static String mLocation = "";
     private static MyApi myApiService = null;
 
     private AccessTokenTracker mAccessTokenTracker;
@@ -163,6 +164,7 @@ public class SplashActivityFragment extends Fragment {
             context = (Context) params[0];
             try {
                 String location = (String) params[1];
+                mLocation = location;
                 Entity res = myApiService.getUserInformation(mProfile.getId()).execute();
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),

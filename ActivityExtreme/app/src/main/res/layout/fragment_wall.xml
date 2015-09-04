@@ -14,21 +14,6 @@
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <!--RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <Button
-            android:id="@+id/load"
-            android:text="Load More"
-            android:layout_alignParentBottom="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout-->
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/myFAB"
         android:layout_width="@dimen/fab_size"
