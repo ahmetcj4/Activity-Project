@@ -2,6 +2,7 @@ package com.intern.tmob.activityextreme;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -41,7 +42,6 @@ public class SplashActivityFragment extends Fragment {
     private CallbackManager mCallbackManager;
     AccessToken mAccessToken;
     public static Profile mProfile;
-    public static String mLocation = "";
     private static MyApi myApiService = null;
 
     private AccessTokenTracker mAccessTokenTracker;
@@ -76,13 +76,15 @@ public class SplashActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(AccessToken.getCurrentAccessToken()!=null)
+        SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
+        if(!settings.getBoolean("first_login", true))
         {
+            mProfile = Profile.getCurrentProfile();
+            mAccessToken = AccessToken.getCurrentAccessToken();
             startActivity(new Intent(getActivity(),WallActivity.class));
             getActivity().finish();
         }
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
-
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("user_friends","user_location"));
@@ -104,11 +106,15 @@ public class SplashActivityFragment extends Fragment {
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
                                 try {
-                                    Object[] items = {getActivity(), response.getJSONObject().getJSONObject("location").getString("name")};
-                                    new SignupTask().execute(items);
+                                    SharedPreferences.Editor sPEditor = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE).edit();
+                                    sPEditor.putString("location", response.getJSONObject().getJSONObject("location").getString("name"));
+                                    sPEditor.putBoolean("first_login", false);
+                                    sPEditor.commit();
+                                    new SignupTask().execute(getActivity());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
                             }
                         }
                 ).executeAsync();
@@ -155,8 +161,8 @@ public class SplashActivityFragment extends Fragment {
             }
             context = (Context) params[0];
             try {
-                String location = (String) params[1];
-                mLocation = location;
+                SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
+                String location = settings.getString("location", "dff");
                 Entity res = myApiService.getUserInformation(mProfile.getId()).execute();
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
