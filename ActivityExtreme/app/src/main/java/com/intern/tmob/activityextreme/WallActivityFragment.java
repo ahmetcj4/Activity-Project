@@ -65,9 +65,27 @@ public class WallActivityFragment extends Fragment {
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
-
         recyclerView.setAdapter(mWallItemAdapter);
 
+        recyclerView.addOnItemTouchListener(
+            new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    int id = v.getId();
+                    switch (id){
+                        case R.id.list_item_image: break;
+                        case R.id.list_item_name:break;
+                        case R.id.list_item_like:break;
+                        case R.id.list_item_comment:break;
+                        case R.id.list_item_share:break;
+                        default:
+                            startActivity(new Intent(getActivity(),DetailActivity.class));
+                            break;
+                    }
+
+                }
+            })
+        );
         return rootView;
     }
 
