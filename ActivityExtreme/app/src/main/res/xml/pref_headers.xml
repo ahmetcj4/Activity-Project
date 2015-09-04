@@ -3,8 +3,9 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.intern.tmob.activityextreme.SettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/pref_header_general" />
+        android:title="@string/pref_header_general" >
+        <intent android:action="com.intern.tmob.activityextreme.editprofileactivity" />
+    </header>
 
     <header
         android:fragment="com.intern.tmob.activityextreme.SettingsActivity$NotificationPreferenceFragment"
