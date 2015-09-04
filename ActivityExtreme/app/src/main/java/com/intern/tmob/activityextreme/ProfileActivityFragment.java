@@ -2,6 +2,7 @@ package com.intern.tmob.activityextreme;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -59,12 +60,13 @@ public class ProfileActivityFragment extends Fragment {
                 new CommentUserTask().execute();
             }
         });
+        SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
         if(fid.equals(SplashActivityFragment.mProfile.getId())){
             Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
                     .into(image);
             name.setText(SplashActivityFragment.mProfile.getFirstName() + " "
                     + SplashActivityFragment.mProfile.getLastName());
-            city.setText(SplashActivityFragment.mLocation);
+            city.setText(settings.getString("location", "def"));
         } else {
             new ProfileInformation().execute(getContext());
         }
