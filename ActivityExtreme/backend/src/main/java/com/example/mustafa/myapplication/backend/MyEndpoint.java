@@ -69,7 +69,8 @@ public class MyEndpoint {
     @ApiMethod(name = "createActivity")
     public void createActivity(@Named("type") String type,@Named("title") String title,@Named("details") String details,
                                @Named("date") String date,@Named("time")String time,@Named("name")String name,
-                               @Named("surname")String surname,@Named("fid")String fid,@Named("ppUrl") String ppUrl){
+                               @Named("surname")String surname,@Named("fid")String fid,@Named("ppUrl") String ppUrl,
+                               @Named("location") String location){
         Entity entity = new Entity("Activities");
         entity.setProperty("type",type);
         entity.setProperty("title",title);
@@ -80,6 +81,7 @@ public class MyEndpoint {
         entity.setProperty("surname",surname);
         entity.setProperty("fid",fid);
         entity.setProperty("ppUrl",ppUrl);
+        entity.setProperty("location",location);
         ofy().save().entity(entity).now();
     }
 
