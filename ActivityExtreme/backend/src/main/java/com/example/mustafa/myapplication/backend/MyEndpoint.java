@@ -36,6 +36,8 @@ import javax.inject.Named;
 
 public class MyEndpoint {
 
+    static List<Entity> list = new ArrayList<>();
+
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
                        @Named("ppUrl") String ppUrl,@Named("location") String location){
@@ -85,17 +87,17 @@ public class MyEndpoint {
 
     @ApiMethod(name = "fetchWall")
     public Entity fetchWall(@Named("n") int n){
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query q = new Query("Activities");
-        PreparedQuery pq = datastore.prepare(q);
-        List<Entity> list = new ArrayList<>();
-        for(Entity tmp : pq.asIterable())
-            list.add(tmp);
-        int i = 0;
-        for(Entity tmp : list){
-            if(i++ == n)
-                return tmp;
+
+        if(n == 0) {
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+            Query q = new Query("Activities");
+            PreparedQuery pq = datastore.prepare(q);
+
+            for (Entity tmp : pq.asIterable())
+                list.add(tmp);
         }
+        if(list.size()>n)
+            return list.get(n);
         return null;
     }
 
