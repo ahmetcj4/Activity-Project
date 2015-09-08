@@ -1,5 +1,6 @@
 package com.intern.tmob.activityextreme;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,11 +30,6 @@ public class FavoritesActivityFragment extends Fragment {
     WallItemAdapter mWallItemAdapter;
 
     public FavoritesActivityFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Spor"));
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Kültür Sanat"));
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Gezi"));
@@ -45,10 +41,21 @@ public class FavoritesActivityFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        return getFavoritesView(inflater, container);
+    }
+
+    public View getFavoritesView(LayoutInflater inflater, final ViewGroup container) {
         final View rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.wall_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
@@ -67,7 +74,7 @@ public class FavoritesActivityFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor sPEditor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+                /*SharedPreferences.Editor sPEditor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
                 sPEditor.putBoolean("spor", mSelectedItems[0]);
                 sPEditor.putBoolean("kultur", mSelectedItems[1]);
                 sPEditor.putBoolean("gezi", mSelectedItems[2]);
@@ -78,7 +85,7 @@ public class FavoritesActivityFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), WallActivity.class);
                 startActivity(intent);
-                getActivity().finish();
+                getActivity().finish();*/
             }
         });
 
@@ -89,10 +96,9 @@ public class FavoritesActivityFragment extends Fragment {
             @Override
             public void onGlobalLayout() {
                 rootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                restoreSharedPreferences();
+               // restoreSharedPreferences();
             }
         });
-
         return rootView;
     }
 

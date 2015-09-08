@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
@@ -75,7 +78,7 @@ public class SplashActivityFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
         if(!settings.getBoolean("first_login", true))
         {
@@ -131,7 +134,15 @@ public class SplashActivityFragment extends Fragment {
                 Toast.makeText(getActivity(), "ERRORRRR", Toast.LENGTH_LONG).show();
             }
         });
-
+        final BottomSheetLayout bottomSheet = (BottomSheetLayout) rootView.findViewById(R.id.bottom_sheet_layout);
+        FloatingActionButton fab = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoritesActivityFragment favoritesActivityFragment = new FavoritesActivityFragment();
+                bottomSheet.showWithSheetView(favoritesActivityFragment.getFavoritesView(getActivity().getLayoutInflater(),bottomSheet));
+            }
+        });
         return rootView;
     }
 
