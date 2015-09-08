@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -179,10 +180,11 @@ public class NewActivityFragment extends Fragment {
             mContext = params[0];
 
             try {
+                SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
                 Log.i("asdfasdf",SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString());
                 myApiService.createActivity(activityType,activityTitle, activityDetails,
                         activityDate,activityTime,activityName,activitySurname,activityFid,
-                        SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString()).execute();
+                        SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString(),settings.getString("location","def")).execute();
             } catch (IOException e) {
                 return "Error";
             }
