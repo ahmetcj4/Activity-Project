@@ -2,6 +2,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#3f51b5</item>
         <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorAccent">#00bcd4</item>
+        <item name="colorAccent">#E8993A</item>
     </style>
 </resources>

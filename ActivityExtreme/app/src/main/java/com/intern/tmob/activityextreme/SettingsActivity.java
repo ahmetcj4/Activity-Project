@@ -17,6 +17,8 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
+import com.flipboard.bottomsheet.BottomSheetLayout;
+
 import java.util.List;
 
 
@@ -147,13 +149,15 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
+            BottomSheetLayout bottomSheet = (BottomSheetLayout) getActivity().findViewById(R.id.bottom_sheet_layout);
+
+            //  addPreferencesFromResource(R.xml.pref_notification);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         }
     }
 

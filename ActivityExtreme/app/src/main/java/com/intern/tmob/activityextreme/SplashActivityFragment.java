@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +49,9 @@ public class SplashActivityFragment extends Fragment {
 
     private ProfileTracker mProfileTracker;
 
+    FavoritesActivityFragment favoritesActivityFragment;
+    static BottomSheetLayout bottomSheet;
+
     public SplashActivityFragment() {
     }
 
@@ -75,6 +76,8 @@ public class SplashActivityFragment extends Fragment {
 
         mAccessTokenTracker.startTracking();
         mProfileTracker.startTracking();
+
+        favoritesActivityFragment = new FavoritesActivityFragment();
     }
 
     @Override
@@ -90,7 +93,7 @@ public class SplashActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("user_friends","user_location"));
+        loginButton.setReadPermissions(Arrays.asList("user_friends", "user_location"));
         loginButton.setFragment(this);
         // Other app specific specialization
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -134,13 +137,22 @@ public class SplashActivityFragment extends Fragment {
                 Toast.makeText(getActivity(), "ERRORRRR", Toast.LENGTH_LONG).show();
             }
         });
-        final BottomSheetLayout bottomSheet = (BottomSheetLayout) rootView.findViewById(R.id.bottom_sheet_layout);
+        bottomSheet = (BottomSheetLayout) rootView.findViewById(R.id.bottom_sheet_layout);
+        bottomSheet.setOnSheetStateChangeListener(new BottomSheetLayout.OnSheetStateChangeListener() {
+            @Override
+            public void onSheetStateChanged(BottomSheetLayout.State state) {
+                if(state.equals(BottomSheetLayout.State.HIDDEN)) {
+                    Intent intent = new Intent(getActivity(), WallActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                }
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FavoritesActivityFragment favoritesActivityFragment = new FavoritesActivityFragment();
-                bottomSheet.showWithSheetView(favoritesActivityFragment.getFavoritesView(getActivity().getLayoutInflater(),bottomSheet));
+                bottomSheet.showWithSheetView(favoritesActivityFragment.getFavoritesView(getActivity().getLayoutInflater(), bottomSheet,getContext()));
             }
         });
         return rootView;
@@ -158,9 +170,24 @@ public class SplashActivityFragment extends Fragment {
         mAccessTokenTracker.stopTracking();
         mProfileTracker.stopTracking();
     }
-    class SignupTask extends AsyncTask<Object, Void, Void> {
+    public void dismiss(){
+        bottomSheet.dismissSheet();
+        Intent intent = new Intent(getActivity(),WallActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().finish();
 
+    }
+    class SignupTask extends AsyncTask<Object, Void, Void> {
+        SharedPreferences settings;
+        boolean isSignup;
         private Context context = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            settings = getActivity().getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
+            isSignup = false;
+        }
 
         @Override
         protected Void doInBackground(Object... params) {
@@ -172,14 +199,13 @@ public class SplashActivityFragment extends Fragment {
             }
             context = (Context) params[0];
             try {
-                SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
                 String location = settings.getString("location", "konum bulunamadı");
                 Entity res = myApiService.getUserInformation(mProfile.getId()).execute();
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
                             mProfile.getProfilePictureUri(100,100).toString(),location).execute();
-                    startActivity(new Intent(getActivity(), FavoritesActivity.class));
-                    getActivity().finish();
+                    //startActivity(new Intent(getActivity(), FavoritesActivity.class));
+                    isSignup = true;
                 }
                 else {
                     startActivity(new Intent(getActivity(),WallActivity.class));
@@ -193,6 +219,13 @@ public class SplashActivityFragment extends Fragment {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(isSignup){
+                bottomSheet.showWithSheetView(favoritesActivityFragment.getFavoritesView(getActivity().getLayoutInflater(),bottomSheet,getContext()));
+            }
+        }
     }
 
 }

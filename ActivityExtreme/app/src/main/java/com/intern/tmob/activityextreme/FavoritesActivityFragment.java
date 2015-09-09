@@ -1,21 +1,18 @@
 package com.intern.tmob.activityextreme;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Toast;
+
+import com.flipboard.bottomsheet.BottomSheetLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +25,7 @@ public class FavoritesActivityFragment extends Fragment {
     Boolean[] mSelectedItems;
     RecyclerView recyclerView;
     WallItemAdapter mWallItemAdapter;
+    private String favorites = "Favorites";
 
     public FavoritesActivityFragment() {
         mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Spor"));
@@ -52,10 +50,10 @@ public class FavoritesActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return getFavoritesView(inflater, container);
+        return getFavoritesView(inflater, container,getContext());
     }
 
-    public View getFavoritesView(LayoutInflater inflater, final ViewGroup container) {
+    public View getFavoritesView(LayoutInflater inflater, final ViewGroup container, final Context context) {
         final View rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.wall_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
@@ -74,7 +72,7 @@ public class FavoritesActivityFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*SharedPreferences.Editor sPEditor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+                SharedPreferences.Editor sPEditor = context.getSharedPreferences(favorites, Context.MODE_PRIVATE).edit();
                 sPEditor.putBoolean("spor", mSelectedItems[0]);
                 sPEditor.putBoolean("kultur", mSelectedItems[1]);
                 sPEditor.putBoolean("gezi", mSelectedItems[2]);
@@ -82,10 +80,13 @@ public class FavoritesActivityFragment extends Fragment {
                 sPEditor.putBoolean("ders", mSelectedItems[4]);
                 sPEditor.putBoolean("vasıta", mSelectedItems[5]);
                 sPEditor.commit();
+                if(SplashActivityFragment.bottomSheet.getState().equals(BottomSheetLayout.State.HIDDEN)){
+                    getActivity().onBackPressed();
+                    getActivity().finish();
+                }else{
+                    SplashActivityFragment.bottomSheet.dismissSheet();
+                }
 
-                Intent intent = new Intent(getActivity(), WallActivity.class);
-                startActivity(intent);
-                getActivity().finish();*/
             }
         });
 
@@ -96,7 +97,7 @@ public class FavoritesActivityFragment extends Fragment {
             @Override
             public void onGlobalLayout() {
                 rootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-               // restoreSharedPreferences();
+                restoreSharedPreferences(context);
             }
         });
         return rootView;
@@ -109,17 +110,17 @@ public class FavoritesActivityFragment extends Fragment {
             if (selected) {
                 mSelectedItems[position] = false;
                 v.setSelected(false);
-                v.setBackgroundResource(R.color.white);
+                v.setBackgroundResource(R.color.indigo_300);
             } else {
                 mSelectedItems[position] = true;
                 v.setSelected(true);
-                v.setBackgroundResource(R.color.fab_color_1);
+                v.setBackgroundResource(R.color.green);
             }
 
     }
 
-    private void restoreSharedPreferences() {
-        SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
+    private void restoreSharedPreferences(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(favorites,Context.MODE_PRIVATE);
         mSelectedItems[0] = settings.getBoolean("spor", false);
         mSelectedItems[1] = settings.getBoolean("kultur", false);
         mSelectedItems[2] = settings.getBoolean("gezi", false);
