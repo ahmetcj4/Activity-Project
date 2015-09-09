@@ -196,7 +196,7 @@ public class SplashActivityFragment extends Fragment {
                 Entity res = myApiService.getUserInformation(mProfile.getId()).execute();
                 if(res == null) {
                     myApiService.signup(mProfile.getId(), mProfile.getFirstName(), mProfile.getLastName(),
-                            mProfile.getProfilePictureUri(100,100).toString(),location).execute();
+                            mProfile.getProfilePictureUri(200,200).toString(),location).execute();
                     //startActivity(new Intent(getActivity(), FavoritesActivity.class));
                     isSignup = true;
                 }
