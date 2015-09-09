@@ -43,33 +43,54 @@
     <ScrollView
         android:nestedScrollingEnabled="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:elevation="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:src="@mipmap/ic_launcher"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/detail_header"
+                android:textSize="30dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:text="Lukas Podolski"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/detail_pp"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.15"
                     android:layout_height="wrap_content" />
-                <TextView
-                    android:text="21-12-2012 21:30"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.9"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Lukas Podolski"
+                        android:textSize="20dp"
+                        android:id="@+id/detail_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="21-12-2012 21:30"
+                        android:textSize="20dp"
+                        android:id="@+id/detail_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-
-
 
     </ScrollView>
 
