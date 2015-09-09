@@ -36,6 +36,8 @@ import javax.inject.Named;
 
 public class MyEndpoint {
 
+    private Entity entity;
+
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
                        @Named("ppUrl") String ppUrl,@Named("location") String location){
@@ -117,13 +119,25 @@ public class MyEndpoint {
         return result;
     }
 
+    // An activity's id is the concatenation of creator's id, "_" and create time.
     @ApiMethod(name="commentActivity") // Daha tam degil
     public void commentActivity(@Named("fid")String fid,@Named("dateTime")String dateTime
             ,@Named("commenterID") String commenterID,@Named("comment")String comment){
-        Entity entity = new Entity(fid + '_' + dateTime);
-        entity.setProperty("fID",fid);
+        Entity entity = new Entity("activityComment" + fid + '_' + dateTime);
+        entity.setProperty("fid",fid);
         entity.setProperty("commenterID",commenterID);
         entity.setProperty("comment",comment);
         ofy().save().entity(entity).now();
+    }
+
+    @ApiMethod(name="getCommentsActivity")
+    public List<Entity> getCommentsActivity(@Named("fid")String fid,@Named("dateTime") String dateTime){
+        List<Entity> result = new ArrayList<>();
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query("activityComment" + fid + "_" + dateTime);
+        PreparedQuery pq = datastoreService.prepare(query);
+        for(Entity e : pq.asIterable())
+            result.add(e);
+        return result;
     }
 }

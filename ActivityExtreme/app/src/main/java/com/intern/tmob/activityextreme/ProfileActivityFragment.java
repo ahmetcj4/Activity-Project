@@ -37,6 +37,7 @@ public class ProfileActivityFragment extends Fragment {
     String fid;
     TextView name,city,about;
     ImageView image;
+    WallItem activity;
     public ProfileActivityFragment() {
     }
 
@@ -67,11 +68,10 @@ public class ProfileActivityFragment extends Fragment {
                     + SplashActivityFragment.mProfile.getLastName());
             city.setText(settings.getString("location", "def"));
         } else {
-            name.setText(intent.getStringExtra("name") + " "
-                    + intent.getStringExtra("surname"));
-            Glide.with(getContext()).load(intent.getStringExtra("ppUrl")).into(image);
+            activity = (WallItem) intent.getSerializableExtra("object");
+            name.setText(activity.getname());
+            Glide.with(getContext()).load(activity.getImageLink()).into(image);
             city.setText(intent.getStringExtra("location"));
-            Log.d("loccc","loccc " + intent.getStringExtra("location"));
         }
 
 
