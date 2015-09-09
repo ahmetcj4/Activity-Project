@@ -74,12 +74,12 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(wallItemList.get(position).getname());
-        Log.i("infoinfoinfo",position + " " + wallItemList.get(position).getImageLink());
+        Log.i("infoinfoinfo", position + " " + wallItemList.get(position).getImageLink());
         if(wallItemList.get(position).getimage()==-1)
-            Glide.with(context).load(wallItemList.get(position).getImageLink())
+            Glide.with(context).load(wallItemList.get(position).getImageLink()).placeholder(R.color.placeholder)
                 .into(holder.image);
         else
-            Glide.with(context).load(wallItemList.get(position).getimage()).into(holder.image);
+            Glide.with(context).load(wallItemList.get(position).getimage()).placeholder(R.color.placeholder).into(holder.image);
         if(isWall) {
             holder.detail.setText(wallItemList.get(position).getdetail());
             holder.sent.setText(wallItemList.get(position).getsent());
