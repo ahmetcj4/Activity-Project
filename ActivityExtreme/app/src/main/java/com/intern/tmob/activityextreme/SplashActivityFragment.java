@@ -148,13 +148,6 @@ public class SplashActivityFragment extends Fragment {
                 }
             }
         });
-        FloatingActionButton fab = (FloatingActionButton)rootView.findViewById(R.id.contiue_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheet.showWithSheetView(favoritesActivityFragment.getFavoritesView(getActivity().getLayoutInflater(), bottomSheet,getContext()));
-            }
-        });
         return rootView;
     }
 

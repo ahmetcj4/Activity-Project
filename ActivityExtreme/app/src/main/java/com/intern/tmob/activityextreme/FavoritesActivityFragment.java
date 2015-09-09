@@ -110,7 +110,7 @@ public class FavoritesActivityFragment extends Fragment {
             if (selected) {
                 mSelectedItems[position] = false;
                 v.setSelected(false);
-                v.setBackgroundResource(R.color.indigo_300);
+                v.setBackgroundResource(R.color.indigo_500);
             } else {
                 mSelectedItems[position] = true;
                 v.setSelected(true);
