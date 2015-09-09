@@ -77,6 +77,7 @@ public class WallActivityFragment extends Fragment {
                     public void onItemClick(View v, int position) {
                         Intent intent = new Intent(getActivity(),DetailActivity.class);
                         intent.putExtra("object", mWallItem.get(position));
+                        intent.putExtra("location",(String)mEntities.get(position).getProperties().get("location"));
                         startActivity(intent);
 
                         return;
