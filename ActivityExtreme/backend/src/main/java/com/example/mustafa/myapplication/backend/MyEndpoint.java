@@ -91,8 +91,10 @@ public class MyEndpoint {
     public Entity fetchWall(@Named("n") int n){
 
         if(n == 0) {
+            list.clear();
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            Query q = new Query("Activities");
+            Query q = new Query("Activities")
+                    .addSort("date", Query.SortDirection.ASCENDING);
             PreparedQuery pq = datastore.prepare(q);
 
             for (Entity tmp : pq.asIterable())
@@ -101,6 +103,17 @@ public class MyEndpoint {
         if(list.size()>n)
             return list.get(n);
         return null;
+    }
+
+    @ApiMethod(name = "fetchWall2")
+    public List<Entity> fetchWall2(){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("Activities");
+        PreparedQuery pq = datastoreService.prepare(q);
+        List<Entity> list = new ArrayList<>();
+        for(Entity tmp : pq.asIterable())
+            list.add(tmp);
+        return list;
     }
 
     @ApiMethod(name="commentUser")
