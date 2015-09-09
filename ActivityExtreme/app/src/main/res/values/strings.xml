@@ -12,4 +12,5 @@
     <string name="title_activity_edit_profile">EditProfileActivity</string>
     <string name="title_activity_new">NewActivity</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_test">Test</string>
 </resources>
