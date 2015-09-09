@@ -18,6 +18,7 @@ import android.widget.Button;
 
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
+import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
@@ -96,13 +97,9 @@ public class WallActivityFragment extends Fragment {
             context = params[0];
             List<Entity> list = new ArrayList<>();
             try {
-                for(int i=0;i<20;i++) {
-                //TODO 20 tane cekiyor bunu ayarlariz
-                    Entity res = myApiService.fetchWall(i).execute();
-                    if(res!=null)
-                        list.add(res);
-                    else
-                        break;
+                EntityCollection x = myApiService.fetchWall().execute();
+                for(int i=0;i<x.getItems().size();i++){
+                    list.add(x.getItems().get(i));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
