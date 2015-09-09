@@ -116,10 +116,17 @@ public class NewActivityFragment extends Fragment {
             return false;
         }
         Calendar c = Calendar.getInstance();
-        String sDate = c.get(Calendar.YEAR) + "-" + c.get(Calendar.MONTH)
-                + "-" + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.HOUR_OF_DAY)
-                + ":" + c.get(Calendar.MINUTE);
+        String sMonth = (c.get(Calendar.MONTH)<10?"0":"") + c.get(Calendar.MONTH);
+        String sDayOfMonth = (Calendar.DAY_OF_MONTH<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+        String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                + "." + sDayOfMonth + " " + sHourOfDay
+                + ":" + sMinute;
+
         if(sDate.compareTo(activityDate + ' ' + activityTime)>0){
+            Log.i("newActivityFragment",sDate);
+            Log.i("newActivityFragment",activityDate + ' ' + activityTime);
             Toast.makeText(getActivity(), "Gecmis tarih giremezsiniz", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -143,7 +150,7 @@ public class NewActivityFragment extends Fragment {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // Do something with the time chosen by the user
-            activityTime = "" + hourOfDay + ":" + minute;
+            activityTime = "" + (hourOfDay<10?"0":"") + hourOfDay + ":" +(minute<10?"0":"")+ minute;
             time.setText(activityTime);
         }
     }
@@ -164,8 +171,8 @@ public class NewActivityFragment extends Fragment {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
-            activityDate = "" + year + "-" + month + "-" + day;
-            date.setText("" + day + "." + month + "." + year);
+            activityDate = "" + year + "." + (month+1<10? "0":"") + (month+1) + "." + (day<10?"0":"") + day;
+            date.setText((day<10?"0":"") + day + "." + (month+1<10? "0":"") + (month+1) + "." + year);
         }
     }
     private class ActivityCreate extends AsyncTask<Context,Void,String> {
@@ -181,12 +188,11 @@ public class NewActivityFragment extends Fragment {
 
             try {
                 SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
-                Log.i("asdfasdf",SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString());
                 myApiService.createActivity(activityType,activityTitle, activityDetails,
                         activityDate,activityTime,activityName,activitySurname,activityFid,
-                        SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString(),settings.getString("location","def")).execute();
+                        SplashActivityFragment.mProfile.getProfilePictureUri(100,100).toString(),settings.getString("location", "def")).execute();
             } catch (IOException e) {
-                return "Error";
+                return "ActivityCreate asynctask error";
             }
             return "Aktivite eklendi.";
         }

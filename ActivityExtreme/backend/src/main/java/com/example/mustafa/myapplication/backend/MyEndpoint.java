@@ -103,6 +103,17 @@ public class MyEndpoint {
         return null;
     }
 
+    @ApiMethod(name = "fetchWall2")
+    public List<Entity> fetchWall2(){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("Activities");
+        PreparedQuery pq = datastoreService.prepare(q);
+        List<Entity> list = new ArrayList<>();
+        for(Entity tmp : pq.asIterable())
+            list.add(tmp);
+        return list;
+    }
+
     @ApiMethod(name="commentUser")
     public void commentUser(@Named("ID") String id,@Named("commenterID") String commenterID,
                             @Named("comment") String comment){
