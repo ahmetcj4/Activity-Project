@@ -74,44 +74,8 @@ public class ProfileActivityFragment extends Fragment {
             city.setText(intent.getStringExtra("location"));
         }
 
-
-
         about.setText("Gokdelenler bence bu sehrin mezar taslaridir.");
-        new FetchCommentUserTask().execute();
 
         return rootView;
     }
-
-
-    class FetchCommentUserTask extends AsyncTask<Void,Void,List<Entity>> {
-
-        @Override
-        protected List<Entity> doInBackground(Void... params) {
-            if(myApiService == null){
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
-                myApiService = builder.build();
-            }
-            List<Entity> list = new ArrayList<>();
-            try {
-                EntityCollection x = myApiService.getCommentsUser(SplashActivityFragment.mProfile.getId()).execute();
-                for(int i=0;i<x.getItems().size();i++)
-                    list.add(x.getItems().get(i));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.i("fetchCommentUserTask", String.valueOf(list.size()));
-            return list;
-        }
-
-        @Override
-        protected void onPostExecute(List<Entity> entities) {
-            for(Entity e : entities){
-                Log.i("fetchCommentUserTask", (String) e.getProperties().get("comment"));
-            }
-        }
-    }
-
-
-
 }

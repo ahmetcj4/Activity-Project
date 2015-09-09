@@ -1,6 +1,7 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -122,8 +123,10 @@ public class TabPagerAdapter extends PagerAdapter {
         protected void onPostExecute(List<Entity> entities) {
             mWallItem.clear();
             for(Entity e : entities){
-                mWallItem.add(new WallItem("https://graph.facebook.com/10207225423855332/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D"
-                        , "Lukas Podolski", "21-3-2015", (String) e.getProperties().get("comment"), " ",
+                mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl")
+                        , (String)e.getProperties().get("name")+" "+(String)e.getProperties().get("surname"),
+                        (String)e.getProperties().get("date")+" "+(String)e.getProperties().get("time"),
+                        (String) e.getProperties().get("comment"), " ",
                         (String) e.getProperties().get("commenterID")));
             }
             mWallItemAdapter.notifyDataSetChanged();
@@ -140,7 +143,12 @@ public class TabPagerAdapter extends PagerAdapter {
                 myApiService = builder.build();
             }
             try {
-                myApiService.commentUser(fid, SplashActivityFragment.mProfile.getId(),acomment).execute();
+                SharedPreferences settings = mContext.getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
+                myApiService.commentUser(fid, SplashActivityFragment.mProfile.getId(),acomment,
+                        SplashActivityFragment.mProfile.getProfilePictureUri(200,200).toString(),
+                        settings.getString("location", "def"),
+                        "21-12-2015","21:30",SplashActivityFragment.mProfile.getFirstName(),
+                        SplashActivityFragment.mProfile.getLastName()).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
