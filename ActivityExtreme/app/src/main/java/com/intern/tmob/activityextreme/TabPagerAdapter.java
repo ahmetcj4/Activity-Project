@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
@@ -24,6 +26,7 @@ import java.util.List;
 
 public class TabPagerAdapter extends PagerAdapter {
     String[] mTitles;
+    static String acomment="";
     Context mContext;
     List<WallItem> mWallItem = new ArrayList<>();
     RecyclerView recyclerView;
@@ -56,7 +59,7 @@ public class TabPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.pager_item,
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.pager_item,
                 container, false);
         container.addView(view);
         srl = (SwipeRefreshLayout) view.findViewById(R.id.pager_refresh);
@@ -78,6 +81,16 @@ public class TabPagerAdapter extends PagerAdapter {
 
         recyclerView.setAdapter(mWallItemAdapter);
 
+        Button button = (Button) view.findViewById(R.id.addComment);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText comment = (EditText) view.findViewById(R.id.profile_comment);
+                acomment = comment.getText().toString();
+                comment.setText("");
+                new CommentUserTask().execute();
+            }
+        });
 
         return view;
     }
@@ -118,6 +131,22 @@ public class TabPagerAdapter extends PagerAdapter {
         }
     }
 
+    class CommentUserTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                myApiService.commentUser(fid, SplashActivityFragment.mProfile.getId(),acomment).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);

@@ -3,16 +3,13 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/pager_item_layout"
-    android:padding="3dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"
-        card_view:cardCornerRadius="3dp"
-        card_view:cardElevation="10dp"
+        android:layout_margin="@dimen/activity_mini_margin"
+        card_view:cardElevation="2dp"
         android:id="@+id/pager_item_cardview">
         <LinearLayout
             android:orientation="vertical"
