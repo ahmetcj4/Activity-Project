@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
+import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.intern.tmob.activityextreme.view.SlidingTabLayout;
@@ -99,15 +100,11 @@ public class ProfileActivityFragment extends Fragment {
             }
             List<Entity> list = new ArrayList<>();
             try {
-                for (int i = 0; i < 20; i++) {
-                    Entity e = myApiService.getCommentsUser(SplashActivityFragment.mProfile.getId(), i).execute();
-                    if(e == null)
-                        break;
-                    else
-                        list.add(e);
-                }
-            }catch (Exception e){
-                Log.i("exception",e.toString());
+                EntityCollection x = myApiService.getCommentsUser(SplashActivityFragment.mProfile.getId()).execute();
+                for(int i=0;i<x.getItems().size();i++)
+                    list.add(x.getItems().get(i));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             Log.i("fetchCommentUserTask", String.valueOf(list.size()));
             return list;

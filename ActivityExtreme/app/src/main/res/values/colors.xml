@@ -20,4 +20,11 @@
     <color name="fab_color_1_muted">#ff8080</color>
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
+
+    <color name="indigo_300">#7986cb</color>
+    <color name="indigo_500">#3f51f5</color>
+    <color name="indigo_700">#303f9f</color>
+    <color name="pink_a200">#FF4081</color>
+    <color name="green">#42DB00</color>
+
 </resources>

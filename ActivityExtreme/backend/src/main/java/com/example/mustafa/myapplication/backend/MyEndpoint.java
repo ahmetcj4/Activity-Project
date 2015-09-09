@@ -36,8 +36,6 @@ import javax.inject.Named;
 
 public class MyEndpoint {
 
-    static List<Entity> list = new ArrayList<>();
-
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
                        @Named("ppUrl") String ppUrl,@Named("location") String location){
@@ -88,27 +86,12 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "fetchWall")
-    public Entity fetchWall(@Named("n") int n){
-
-        if(n == 0) {
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            Query q = new Query("Activities");
-            PreparedQuery pq = datastore.prepare(q);
-
-            for (Entity tmp : pq.asIterable())
-                list.add(tmp);
-        }
-        if(list.size()>n)
-            return list.get(n);
-        return null;
-    }
-
-    @ApiMethod(name = "fetchWall2")
-    public List<Entity> fetchWall2(){
-        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Query q = new Query("Activities");
-        PreparedQuery pq = datastoreService.prepare(q);
+    public List<Entity> fetchWall(){
         List<Entity> list = new ArrayList<>();
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("Activities")
+                .addSort("date", Query.SortDirection.ASCENDING);
+        PreparedQuery pq = datastoreService.prepare(q);
         for(Entity tmp : pq.asIterable())
             list.add(tmp);
         return list;
@@ -123,15 +106,15 @@ public class MyEndpoint {
         ofy().save().entity(entity).now();
     }
     @ApiMethod(name="getCommentsUser")
-    public Entity getCommentsUser(@Named("ID") String id, @Named("n") int n){
+    public List<Entity> getCommentsUser(@Named("ID") String id){
+        List<Entity> result = new ArrayList<>();
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query query = new Query("commentUser"+id);
         PreparedQuery pq = datastoreService.prepare(query);
         int i=0;
         for(Entity tmp : pq.asIterable())
-            if(i++ == n)
-                return tmp;
-        return null;
+                result.add(tmp);
+        return result;
     }
 
     @ApiMethod(name="commentActivity") // Daha tam degil

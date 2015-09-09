@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
+import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,17 +92,15 @@ public class TabPagerAdapter extends PagerAdapter {
                 myApiService = builder.build();
             }
             List<Entity> list = new ArrayList<>();
+
             try {
-                for (int i = 0; i < 20; i++) {
-                    Entity e = myApiService.getCommentsUser(fid, i).execute();
-                    if(e == null)
-                        break;
-                    else
-                        list.add(e);
-                }
-            }catch (Exception e){
-                Log.i("exception", e.toString());
+                EntityCollection x = myApiService.getCommentsUser(fid).execute();
+                for(int i=0;i<x.getItems().size();i++)
+                    list.add(x.getItems().get(i));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
             Log.i("fetchCommentUserTask", String.valueOf(list.size()));
             return list;
         }
