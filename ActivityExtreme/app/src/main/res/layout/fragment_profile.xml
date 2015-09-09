@@ -19,6 +19,7 @@
             app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
             app:expandedTitleMarginStart="72dp"
+            app:collapsedTitleGravity="center"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <LinearLayout
                 android:orientation="vertical"
@@ -38,9 +39,10 @@
                             android:id="@+id/profile_image"
                             android:src="@mipmap/ic_launcher"
                             android:layout_width="200dp"
-                            android:elevation="3dp"
+                            android:background="@color/white"
                             android:layout_height="200dp"
-                            android:layout_margin="10dp" />
+                            android:layout_margin="10dp"
+                            android:padding="2dp"/>
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -107,12 +109,8 @@
                             android:layout_margin="5dp" />
                     </LinearLayout>
 
-                                 </RelativeLayout>
-                <com.intern.tmob.activityextreme.view.SlidingTabLayout
-                    android:id="@+id/sliding_tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                </RelativeLayout>
+
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
@@ -129,14 +127,28 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:nestedScrollingEnabled="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_below="@+id/sliding_tabs"
-        android:id="@+id/viewpager"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/white"/>
+        android:nestedScrollingEnabled="true"
+        android:layout_below="@id/app_bar_layout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_gravity="center_horizontal">
+
+        <com.intern.tmob.activityextreme.view.SlidingTabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"/>
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
