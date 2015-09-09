@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
-public class WallItem{
+import java.io.Serializable;
+
+public class WallItem implements Serializable{
     private String name;
     private String sent;
     private String detail;

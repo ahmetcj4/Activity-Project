@@ -74,7 +74,10 @@ public class WallActivityFragment extends Fragment {
                 new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-                        WallActivity.mEntity = mEntities.get(position);
+                        Intent intent = new Intent(getActivity(),DetailActivity.class);
+                        intent.putExtra("object", mWallItem.get(position));
+                        startActivity(intent);
+
                         return;
                     }
 
