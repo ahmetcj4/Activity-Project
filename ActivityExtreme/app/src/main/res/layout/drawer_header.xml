@@ -1,63 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="320dp"
-    android:background="@drawable/drawer_background"
-    android:paddingTop="@dimen/status_bar_height"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:id="@+id/profile_ll"
-        android:orientation="vertical"
-        android:gravity="bottom|center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile_ll"
+    android:orientation="vertical"
+    android:gravity="bottom|center"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:background="?colorPrimary"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-        <com.intern.tmob.activityextreme.view.CircularImageView
-            android:id="@+id/profile_image"
-            android:layout_width="144dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_height="144dp"
-            app:border="true"
-            app:border_width="3dp"
-            app:border_color="@color/divider"
-            android:layout_margin="10dp" />
-        <TextView
-            android:id="@+id/profile_name"
-            android:text="Lukas Podolski"
-            android:layout_toRightOf="@+id/profile_ll"
-            android:textSize="24sp"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentEnd="false"
-            android:layout_margin="10dp"
-            android:textColor="@color/white" />
-        <TextView
-            android:id="@+id/profile_city"
-            android:text="Istanbul"
-            android:textSize="16sp"
-            android:layout_below="@+id/profile_name"
-            android:layout_toRightOf="@+id/profile_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentEnd="false"
-            android:layout_margin="5dp"
-            android:textColor="@color/white" />
-        <TextView
-            android:id="@+id/profile_about"
-            android:text="Gokdelenler bence bu sehrin mezar taslaridir."
-            android:layout_below="@+id/profile_city"
-            android:layout_toRightOf="@+id/profile_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentEnd="false"
-            android:layout_margin="5dp"
-            android:textColor="@color/white" />
-    </LinearLayout>
+    <com.intern.tmob.activityextreme.view.CircularImageView
+        android:id="@+id/profile_image"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        app:border="true"
+        app:border_width="3dp"
+        app:border_color="@color/primary_light"
+        android:layout_margin="6dp"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:id="@+id/profile_name"
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/white" />
+    <TextView
+        android:id="@+id/profile_city"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginBottom="16dp"/>
 
-</RelativeLayout>
+</LinearLayout>
+

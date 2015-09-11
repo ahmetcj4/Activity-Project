@@ -14,6 +14,7 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_test">Test</string>
     <string name="profile">Profile</string>
+    <string name="wall">Wall</string>
     <string name="favourites">Favourites</string>
     <string name="downloaded">Downloaded</string>
     <string name="settings">Settings</string>

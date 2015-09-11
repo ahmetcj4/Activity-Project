@@ -5,6 +5,12 @@
         android:checkableBehavior="single">
 
         <item
+            android:id="@+id/drawer_wall"
+            android:checked="true"
+            android:icon="@drawable/ic_menu"
+            android:title="@string/wall"/>
+
+        <item
             android:id="@+id/drawer_profile"
             android:checked="true"
             android:icon="@drawable/ic_profile"

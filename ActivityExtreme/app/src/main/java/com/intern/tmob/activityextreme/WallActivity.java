@@ -1,6 +1,8 @@
 package com.intern.tmob.activityextreme;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
@@ -53,15 +56,26 @@ public class WallActivity extends AppCompatActivity {
 
     private void setupDrawer(){
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        //drawer header setup
+        TextView name = (TextView) findViewById(R.id.profile_name);
+        name.setText(SplashActivityFragment.mProfile.getName());
+        SharedPreferences settings = getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
+        TextView location = (TextView) findViewById(R.id.profile_city);
+        location.setText(settings.getString("location", "def"));
         ImageView avatar = (ImageView) findViewById(R.id.profile_image);
         Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200))
                 .placeholder(R.color.placeholder).into(avatar);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
+                    case R.id.drawer_wall:
+                        startActivity(new Intent(WallActivity.this,WallActivity.class));
+                        return true;
                     case R.id.drawer_profile:
                         Intent intent =new Intent(WallActivity.this, ProfileActivity.class);
                         intent.putExtra("fid",SplashActivityFragment.mProfile.getId());
