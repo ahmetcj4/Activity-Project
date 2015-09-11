@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -71,16 +73,28 @@ public class WallActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
+  @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        final int action = MotionEventCompat.getActionMasked(ev);
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (findViewById(R.id.wall_refresh) != null) {
+                    if (WallActivityFragment.index == 0) {
+                        findViewById(R.id.wall_refresh).setEnabled(true);
+                    } else {
+                        findViewById(R.id.wall_refresh).setEnabled(false);
+                    }
+                }
+                break;
+        }
         try {
             return super.dispatchTouchEvent(ev);
         } catch (Exception e) {
             return false;
         }
     }
-
 
     /*
     *   Burasi gerekli yere tasinacak.

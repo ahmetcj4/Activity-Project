@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.intern.tmob.activityextreme.ProfileActivityFragment">
+    tools:context="com.intern.tmob.activityextreme.ProfileActivityFragment"
+    style="@style/Theme.AppCompat.NoActionBar">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
@@ -110,13 +111,17 @@
                     </LinearLayout>
 
                 </RelativeLayout>
-
+                <com.intern.tmob.activityextreme.view.SlidingTabLayout
+                    android:id="@+id/sliding_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="80dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:navigationIcon="@drawable/ic_menu"
                 app:contentInsetStart="72dp"
@@ -127,28 +132,13 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="true"
-        android:layout_below="@id/app_bar_layout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_gravity="center_horizontal">
-
-        <com.intern.tmob.activityextreme.view.SlidingTabLayout
-            android:id="@+id/sliding_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
         <android.support.v4.view.ViewPager
+            android:nestedScrollingEnabled="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/white"/>
-
-    </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

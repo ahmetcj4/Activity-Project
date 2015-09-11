@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,7 +35,7 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ProfileActivityFragment extends Fragment {
+public class ProfileActivityFragment extends Fragment{
 
     private static MyApi myApiService = null;
     String fid;
@@ -78,4 +82,5 @@ public class ProfileActivityFragment extends Fragment {
 
         return rootView;
     }
+
 }

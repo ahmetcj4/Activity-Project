@@ -32,7 +32,6 @@ public class TabPagerAdapter extends PagerAdapter {
     List<WallItem> mWallItem = new ArrayList<>();
     RecyclerView recyclerView;
     WallItemAdapter mWallItemAdapter;
-    SwipeRefreshLayout srl;
     String fid;
     private static MyApi myApiService = null;
 
@@ -63,15 +62,8 @@ public class TabPagerAdapter extends PagerAdapter {
         final View view = LayoutInflater.from(mContext).inflate(R.layout.pager_item,
                 container, false);
         container.addView(view);
-        srl = (SwipeRefreshLayout) view.findViewById(R.id.pager_refresh);
         mWallItem.clear();
         new FetchCommentUserTask().execute();
-        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new FetchCommentUserTask().execute();
-            }
-        });
 
         mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_item_item);
 
@@ -93,6 +85,7 @@ public class TabPagerAdapter extends PagerAdapter {
             }
         });
 
+        new FetchCommentUserTask().execute();
         return view;
     }
 
@@ -130,7 +123,6 @@ public class TabPagerAdapter extends PagerAdapter {
                         (String) e.getProperties().get("commenterID")));
             }
             mWallItemAdapter.notifyDataSetChanged();
-            srl.setRefreshing(false);
         }
     }
 

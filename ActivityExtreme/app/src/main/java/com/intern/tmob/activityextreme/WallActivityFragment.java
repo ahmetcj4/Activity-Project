@@ -3,6 +3,7 @@ package com.intern.tmob.activityextreme;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -29,11 +30,12 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class WallActivityFragment extends Fragment {
+public class WallActivityFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
     private static MyApi myApiService = null;
     List<WallItem> mWallItem = new ArrayList<>();
     RecyclerView recyclerView;
     WallItemAdapter mWallItemAdapter;
+    private AppBarLayout appBarLayout;
     static int cnt=0;
     SwipeRefreshLayout srl;
     private List<Entity> mEntities;
@@ -46,6 +48,7 @@ public class WallActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         ((CollapsingToolbarLayout) rootView.findViewById(R.id.collapsing_toolbar_layout)).setTitle(getString(R.string.app_name));
+        appBarLayout = (AppBarLayout) rootView.findViewById(R.id.app_bar_layout);
         srl = (SwipeRefreshLayout)rootView.findViewById(R.id.wall_refresh);
 
         new FetchWallTask().execute(getActivity());
@@ -88,7 +91,22 @@ public class WallActivityFragment extends Fragment {
 
         return rootView;
     }
+    static int index = 0;
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        index = i;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        appBarLayout.addOnOffsetChangedListener(this);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        appBarLayout.removeOnOffsetChangedListener(this);
+    }
     class FetchWallTask extends AsyncTask<Context,Void, List<Entity>> {
         Context context;
         @Override

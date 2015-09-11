@@ -1,6 +1,7 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Intent;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -47,4 +48,29 @@ public class ProfileActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    /*
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        final int action = MotionEventCompat.getActionMasked(ev);
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (findViewById(R.id.pager_refresh) != null) {
+                    if (ProfileActivityFragment.index == 1) {
+                        findViewById(R.id.pager_refresh).setEnabled(true);
+                    } else {
+                        findViewById(R.id.pager_refresh).setEnabled(false);
+                    }
+                }
+                break;
+        }
+        try {
+            return super.dispatchTouchEvent(ev);
+        } catch (Exception e) {
+            return false;
+        }
+    }*/
+
 }
