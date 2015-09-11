@@ -26,5 +26,6 @@
     <color name="indigo_700">#303f9f</color>
     <color name="pink_a200">#FF4081</color>
     <color name="green">#42DB00</color>
+    <color name="placeholder">#ddd</color>
 
 </resources>

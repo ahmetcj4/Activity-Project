@@ -42,8 +42,29 @@ public class DetailActivityFragment extends Fragment {
         TextView detail = (TextView) rootView.findViewById(R.id.detail_details);
         TextView header = (TextView) rootView.findViewById(R.id.detail_header);
         ImageView image = (ImageView) rootView.findViewById(R.id.detail_pp);
+        ImageView cover = (ImageView) rootView.findViewById(R.id.detail_cover);
 
-        Glide.with(getContext()).load(activity.getImageLink())
+        if(activity.getheader().startsWith("S")) {
+            Glide.with(getContext()).load(R.drawable.spor).placeholder(R.color.placeholder)
+                    .into(cover);
+        } else if (activity.getheader().startsWith("K")){
+            Glide.with(getContext()).load(R.drawable.kultur_sanat).placeholder(R.color.placeholder)
+                    .into(cover);
+        } else if (activity.getheader().startsWith("G")){
+            Glide.with(getContext()).load(R.drawable.gezi).placeholder(R.color.placeholder)
+                    .into(cover);
+        } else if (activity.getheader().startsWith("E")){
+            Glide.with(getContext()).load(R.drawable.eglence).placeholder(R.color.placeholder)
+                    .into(cover);
+        } else if (activity.getheader().startsWith("D")){
+            Glide.with(getContext()).load(R.drawable.ders).placeholder(R.color.placeholder)
+                    .into(cover);
+        } else if (activity.getheader().startsWith("A")){
+            Glide.with(getContext()).load(R.drawable.arac).placeholder(R.color.placeholder)
+                    .into(cover);
+        }
+
+        Glide.with(getContext()).load(activity.getImageLink()).placeholder(R.color.placeholder)
                 .into(image);
         header.setText(activity.getheader());
         name.setText(activity.getname());
