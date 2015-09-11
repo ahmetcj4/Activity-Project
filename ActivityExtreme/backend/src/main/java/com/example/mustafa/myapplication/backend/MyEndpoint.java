@@ -101,10 +101,19 @@ public class MyEndpoint {
 
     @ApiMethod(name="commentUser")
     public void commentUser(@Named("ID") String id,@Named("commenterID") String commenterID,
-                            @Named("comment") String comment){
+                            @Named("comment") String comment,@Named("ppUrl") String ppUrl,
+                            @Named("location") String location,@Named("date") String date,
+                            @Named("time")String time,@Named("name")String name,
+                            @Named("surname")String surname){
         Entity entity = new Entity("commentUser" + id);
         entity.setProperty("comment",comment);
         entity.setProperty("commenterID",commenterID);
+        entity.setProperty("ppUrl",ppUrl);
+        entity.setProperty("location",location);
+        entity.setProperty("date",date);
+        entity.setProperty("time",time);
+        entity.setProperty("name",name);
+        entity.setProperty("surname",surname);
         ofy().save().entity(entity).now();
     }
     @ApiMethod(name="getCommentsUser")

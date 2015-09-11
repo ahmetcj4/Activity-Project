@@ -35,7 +35,6 @@ public class ProfileActivityFragment extends Fragment {
 
     private static MyApi myApiService = null;
     String fid;
-    static String acomment="";
     TextView name,city,about;
     ImageView image;
     WallItem activity;
@@ -53,19 +52,18 @@ public class ProfileActivityFragment extends Fragment {
         name = (TextView) rootView.findViewById(R.id.profile_name);
         city = (TextView) rootView.findViewById(R.id.profile_city);
         about = (TextView) rootView.findViewById(R.id.profile_about);
-        Button button = (Button) rootView.findViewById(R.id.addComment);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText comment = (EditText) rootView.findViewById(R.id.profile_comment);
-                acomment = comment.getText().toString();
-                new CommentUserTask().execute();
-            }
-        });
+
+        String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TabPagerAdapter(getContext(), tabs, fid));
+
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
+        slidingTabLayout.setViewPager(viewPager);
+
         SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
         if(fid.equals(SplashActivityFragment.mProfile.getId())){
-            Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(100,100))
-                    .into(image);
+            Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200))
+                    .placeholder(R.color.placeholder).into(image);
             name.setText(SplashActivityFragment.mProfile.getFirstName() + " "
                     + SplashActivityFragment.mProfile.getLastName());
             city.setText(settings.getString("location", "def"));
@@ -76,63 +74,8 @@ public class ProfileActivityFragment extends Fragment {
             city.setText(intent.getStringExtra("location"));
         }
 
-        String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
-        ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new TabPagerAdapter(getContext(), tabs,fid));
-
-        SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
-
         about.setText("Gokdelenler bence bu sehrin mezar taslaridir.");
-        new FetchCommentUserTask().execute();
 
         return rootView;
     }
-
-    class FetchCommentUserTask extends AsyncTask<Void,Void,List<Entity>> {
-
-        @Override
-        protected List<Entity> doInBackground(Void... params) {
-            if(myApiService == null){
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
-                myApiService = builder.build();
-            }
-            List<Entity> list = new ArrayList<>();
-            try {
-                EntityCollection x = myApiService.getCommentsUser(SplashActivityFragment.mProfile.getId()).execute();
-                for(int i=0;i<x.getItems().size();i++)
-                    list.add(x.getItems().get(i));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.i("fetchCommentUserTask", String.valueOf(list.size()));
-            return list;
-        }
-
-        @Override
-        protected void onPostExecute(List<Entity> entities) {
-            for(Entity e : entities){
-                Log.i("fetchCommentUserTask", (String) e.getProperties().get("comment"));
-            }
-        }
-    }
-
-    class CommentUserTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            if(myApiService == null){
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
-                myApiService = builder.build();
-            }
-            try {
-                myApiService.commentUser(fid, SplashActivityFragment.mProfile.getId(),acomment).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
 }
