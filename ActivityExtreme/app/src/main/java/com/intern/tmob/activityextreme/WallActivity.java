@@ -17,7 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
 import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
@@ -51,10 +53,14 @@ public class WallActivity extends AppCompatActivity {
 
     private void setupDrawer(){
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ImageView avatar = (ImageView) findViewById(R.id.profile_image);
+        Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200))
+                .placeholder(R.color.placeholder).into(avatar);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
+                drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_profile:
                         Intent intent =new Intent(WallActivity.this, ProfileActivity.class);
@@ -67,10 +73,8 @@ public class WallActivity extends AppCompatActivity {
                     case R.id.drawer_favourites:
                         startActivity(new Intent(WallActivity.this, FavoritesActivity.class));
                         return true;
-
                 }
                 menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
                 return true;
             }
         });
