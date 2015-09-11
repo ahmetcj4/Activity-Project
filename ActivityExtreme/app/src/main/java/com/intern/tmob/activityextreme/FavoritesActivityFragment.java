@@ -28,12 +28,12 @@ public class FavoritesActivityFragment extends Fragment {
     private String favorites = "Favorites";
 
     public FavoritesActivityFragment() {
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Spor"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Kültür Sanat"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Gezi"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Eğlence"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Ders"));
-        mWallItem.add(new WallItem(R.mipmap.ic_launcher, "Vasıta"));
+        mWallItem.add(new WallItem(R.drawable.spor, "Spor"));
+        mWallItem.add(new WallItem(R.drawable.kultur_sanat, "Kültür Sanat"));
+        mWallItem.add(new WallItem(R.drawable.gezi, "Gezi"));
+        mWallItem.add(new WallItem(R.drawable.eglence, "Eğlence"));
+        mWallItem.add(new WallItem(R.drawable.ders, "Ders"));
+        mWallItem.add(new WallItem(R.drawable.arac, "Vasıta"));
         mSelectedItems = new Boolean[mWallItem.size()];
         mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.list_item_favorites);
 
@@ -110,7 +110,7 @@ public class FavoritesActivityFragment extends Fragment {
             if (selected) {
                 mSelectedItems[position] = false;
                 v.setSelected(false);
-                v.setBackgroundResource(R.color.indigo_500);
+                v.setBackgroundResource(R.color.white);
             } else {
                 mSelectedItems[position] = true;
                 v.setSelected(true);

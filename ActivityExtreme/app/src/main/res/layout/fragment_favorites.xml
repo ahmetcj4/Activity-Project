@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.intern.tmob.activityextreme.FavoritesActivityFragment"
-    android:background="@color/indigo_500">
+    tools:context="com.intern.tmob.activityextreme.FavoritesActivityFragment">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/continue_button"

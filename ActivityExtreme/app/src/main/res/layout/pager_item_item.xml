@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/pager_item_layout"
     android:layout_width="match_parent"
@@ -19,15 +20,18 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
+
+                <com.intern.tmob.activityextreme.view.CircularImageView
                     android:id="@+id/pager_item_image"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.3"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
                     android:layout_marginRight="4dp"
-                    android:layout_height="wrap_content" />
+                    app:border="true"
+                    app:border_width="3dp"
+                    app:border_color="@color/divider" />
+
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="0.7"
+                    android:layout_width="wrap_content"
                     android:orientation="vertical"
                     android:layout_height="wrap_content">
                     <TextView

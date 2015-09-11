@@ -3,35 +3,18 @@ package com.intern.tmob.activityextreme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
-import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.intern.tmob.activityextreme.view.SlidingTabLayout;
-import com.example.mustafa.myapplication.backend.myApi.model.Entity;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A placeholder fragment containing a simple view.
  */
