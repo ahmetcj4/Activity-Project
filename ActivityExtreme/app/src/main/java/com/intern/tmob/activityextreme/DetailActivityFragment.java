@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.intern.tmob.activityextreme.view.SlidingTabLayout;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -28,7 +30,12 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         activity = (WallItem) getActivity().getIntent().getSerializableExtra("object");
         location = getActivity().getIntent().getStringExtra("location");
+        String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TabPagerAdapter(getContext(), tabs, SplashActivityFragment.mProfile.getId()));
 
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
+        slidingTabLayout.setViewPager(viewPager);
         ((CollapsingToolbarLayout) rootView.findViewById(R.id.detail_collapsing_toolbar_layout)).setTitle(activity.getheader());
         TextView name = (TextView) rootView.findViewById(R.id.detail_name);
         TextView date = (TextView) rootView.findViewById(R.id.detail_date);
