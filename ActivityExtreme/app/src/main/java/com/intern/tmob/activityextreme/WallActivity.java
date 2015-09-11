@@ -55,8 +55,20 @@ public class WallActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                Snackbar.make(findViewById(R.id.coordinator_layout),
-                        menuItem.getTitle() + " pressed", Snackbar.LENGTH_LONG).show();
+                switch (menuItem.getItemId()) {
+                    case R.id.drawer_profile:
+                        Intent intent =new Intent(WallActivity.this, ProfileActivity.class);
+                        intent.putExtra("fid",SplashActivityFragment.mProfile.getId());
+                        startActivity(intent);
+                        return true;
+                    case R.id.drawer_settings:
+                        startActivity(new Intent(WallActivity.this, SettingsActivity.class));
+                        return true;
+                    case R.id.drawer_favourites:
+                        startActivity(new Intent(WallActivity.this, FavoritesActivity.class));
+                        return true;
+
+                }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 return true;
@@ -64,12 +76,12 @@ public class WallActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_wall, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_wall, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
