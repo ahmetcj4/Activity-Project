@@ -18,8 +18,10 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Filter;
 
 import javax.inject.Named;
+import javax.xml.crypto.Data;
 
 /**
  * An endpoint class we are exposing
@@ -35,8 +37,6 @@ import javax.inject.Named;
 )
 
 public class MyEndpoint {
-
-    private Entity entity;
 
     @ApiMethod(name = "signup")
     public void signup(@Named("ID") String ID,@Named("name") String name,@Named("surname") String surname,
@@ -149,4 +149,46 @@ public class MyEndpoint {
             result.add(e);
         return result;
     }
+
+    @ApiMethod(name="isLiked")
+    public Entity isLiked(@Named("fid")String fid,@Named("dateTime")String dateTime,
+                           @Named("userId")String userId){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter nameFilter =
+                new Query.FilterPredicate("userId",
+                        Query.FilterOperator.EQUAL,
+                        userId);
+        Query q = new Query("likes_" + fid + "_" + dateTime)
+                .setFilter(nameFilter);
+        PreparedQuery pq = datastoreService.prepare(q);
+        for(Entity e: pq.asIterable())
+            return e;
+        return null;
+    }
+
+    // fid is id of creator of activity, dateTime is date + time of activity.
+    @ApiMethod(name="likeUnlikeActivity")
+    public void likeUnlikeActivity(@Named("fid")String fid,@Named("dateTime")String dateTime
+            ,@Named("userId")String userId){
+        DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+        Entity entity = new Entity("likes_" + fid + "_" + dateTime,fid+"_"+dateTime);
+        entity.setProperty("userId",userId);
+        Entity res = isLiked(fid, dateTime, userId);
+        if(res == null)
+            dataStore.put(entity);
+        else
+            dataStore.delete(res.getKey());
+    }
+
+    @ApiMethod(name="getLikes")
+    public List<Entity> a(@Named("fid") String fid, @Named("dateTime") String dateTime){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("likes_" + fid + "_" + dateTime);
+        PreparedQuery pq = datastoreService.prepare(q);
+        List<Entity> res = new ArrayList<>();
+        for(Entity e:pq.asIterable())
+            res.add(e);
+        return res;
+    }
+
 }

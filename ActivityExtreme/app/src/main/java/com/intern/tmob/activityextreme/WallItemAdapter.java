@@ -76,7 +76,7 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
         holder.name.setText(wallItemList.get(position).getname());
         Log.i("infoinfoinfo", position + " " + wallItemList.get(position).getImageLink());
         if(wallItemList.get(position).getimage()==-1)
-            Glide.with(context).load(wallItemList.get(position).getImageLink()).placeholder(R.color.placeholder)
+            Glide.with(context).load(wallItemList.get(position).getImageLink())
                 .into(holder.image);
         else
             Glide.with(context).load(wallItemList.get(position).getimage()).placeholder(R.color.placeholder).into(holder.image);

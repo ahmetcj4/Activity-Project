@@ -1,17 +1,13 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.MotionEventCompat;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,12 +21,8 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 public class WallActivity extends AppCompatActivity {
-    static Entity mEntity;
     private static MyApi myApiService = null;
 
     @Override
@@ -99,10 +91,17 @@ public class WallActivity extends AppCompatActivity {
     /*
     *   Burasi gerekli yere tasinacak.
     * */
-
+/*
     class CommentActivityTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... params) {
+            *//*
+                fid : the guy's id who creates activity
+                date: date of activity
+                time: time of activity
+                commenterID: id of commenter
+                comment: comment message
+            *//*
             if(myApiService == null){
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
@@ -110,7 +109,9 @@ public class WallActivity extends AppCompatActivity {
             }
             try {
                 Log.i("commentActivityTask","girdi");
-                myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();
+                *//*myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();*//*
+                myApiService.commentActivity(fid,date + " " + time,commenterID,comment);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.i("commentActivityTask","Error");
@@ -120,6 +121,11 @@ public class WallActivity extends AppCompatActivity {
     }
 
     class GetCommentActivityTask extends AsyncTask<Void,Void,Void>{
+        *//*
+            fid : the guy's id who creates activity
+            date: date of activity
+            time: time of activity
+         *//*
         @Override
         protected Void doInBackground(Void... params) {
             if(myApiService == null){
@@ -128,7 +134,8 @@ public class WallActivity extends AppCompatActivity {
                 myApiService = builder.build();
             }
             try {
-                EntityCollection res = myApiService.getCommentsActivity("707265706085188", "2015.09.09-13:40").execute();
+                *//*EntityCollection res = myApiService.getCommentsActivity("707265706085188", "2015.09.09-13:40").execute();*//*
+                EntityCollection res = myApiService.getCommentsActivity(fid,date + " " + time);
                 for(int i=0;i<res.getItems().size();i++)
                     Log.i("GetCommentActivityTask", (String) res.getItems().get(i).getProperties().get("comment"));
             } catch (IOException e) {
@@ -137,4 +144,36 @@ public class WallActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    class LikeUnlikeActivity extends AsyncTask<Void,Void,Void>{
+
+        *//*
+            fid : the guy's id who creates activity
+            date: date of activity
+            time: time of activity
+            commenterID: id of commenter
+         *//*
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                *//*if(myApiService.isLiked("123","2015.09.09 14:14","123").execute()==null)*//*
+                if(myApiService.isLiked(fid,date + " " + time,commenterID).execute() == null)
+                    Log.i("likeUnlike","not liked");
+                else
+                    Log.i("likeUnlike","liked");
+                *//*myApiService.likeUnlikeActivity("123","2015.09.09 14:14","123").execute();*//*
+                myApiService.likeUnlikeActivity(fid,date + " " + time,commenterID).execute();
+                Log.i("likeUnlike","liked");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }*/
 }
