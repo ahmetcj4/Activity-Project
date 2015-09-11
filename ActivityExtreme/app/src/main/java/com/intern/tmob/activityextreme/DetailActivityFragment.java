@@ -21,13 +21,16 @@ import com.intern.tmob.activityextreme.view.SlidingTabLayout;
 public class DetailActivityFragment extends Fragment {
     WallItem activity;
     String location;
+    ImageView cover,image;
+    TextView name,date,detail,header;
+    View rootView;
     public DetailActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         activity = (WallItem) getActivity().getIntent().getSerializableExtra("object");
         location = getActivity().getIntent().getStringExtra("location");
         String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
@@ -37,34 +40,46 @@ public class DetailActivityFragment extends Fragment {
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         slidingTabLayout.setViewPager(viewPager);
         ((CollapsingToolbarLayout) rootView.findViewById(R.id.detail_collapsing_toolbar_layout)).setTitle(activity.getheader());
-        TextView name = (TextView) rootView.findViewById(R.id.detail_name);
-        TextView date = (TextView) rootView.findViewById(R.id.detail_date);
-        TextView detail = (TextView) rootView.findViewById(R.id.detail_details);
-        TextView header = (TextView) rootView.findViewById(R.id.detail_header);
-        ImageView image = (ImageView) rootView.findViewById(R.id.detail_pp);
-        ImageView cover = (ImageView) rootView.findViewById(R.id.detail_cover);
 
-        if(activity.getheader().startsWith("S")) {
-            Glide.with(getContext()).load(R.drawable.spor).placeholder(R.color.placeholder)
+        findAndFill();
+        return rootView;
+    }
+    private void findAndFill(){
+        name = (TextView) rootView.findViewById(R.id.detail_name);
+        date = (TextView) rootView.findViewById(R.id.detail_date);
+        detail = (TextView) rootView.findViewById(R.id.detail_details);
+        header = (TextView) rootView.findViewById(R.id.detail_header);
+        image = (ImageView) rootView.findViewById(R.id.detail_pp);
+        cover = (ImageView) rootView.findViewById(R.id.detail_cover);
+
+        switch (activity.getheader().charAt(0)){
+            case 'S':
+                Glide.with(getContext()).load(R.drawable.spor).placeholder(R.color.placeholder)
                     .into(cover);
-        } else if (activity.getheader().startsWith("K")){
-            Glide.with(getContext()).load(R.drawable.kultur_sanat).placeholder(R.color.placeholder)
-                    .into(cover);
-        } else if (activity.getheader().startsWith("G")){
-            Glide.with(getContext()).load(R.drawable.gezi).placeholder(R.color.placeholder)
-                    .into(cover);
-        } else if (activity.getheader().startsWith("E")){
-            Glide.with(getContext()).load(R.drawable.eglence).placeholder(R.color.placeholder)
-                    .into(cover);
-        } else if (activity.getheader().startsWith("D")){
-            Glide.with(getContext()).load(R.drawable.ders).placeholder(R.color.placeholder)
-                    .into(cover);
-        } else if (activity.getheader().startsWith("A")){
-            Glide.with(getContext()).load(R.drawable.arac).placeholder(R.color.placeholder)
-                    .into(cover);
+                break;
+            case 'K':
+                Glide.with(getContext()).load(R.drawable.kultur_sanat).placeholder(R.color.placeholder)
+                        .into(cover);
+                break;
+            case 'G':
+                Glide.with(getContext()).load(R.drawable.gezi).placeholder(R.color.placeholder)
+                        .into(cover);
+                break;
+            case 'E':
+                Glide.with(getContext()).load(R.drawable.eglence).placeholder(R.color.placeholder)
+                        .into(cover);
+                break;
+            case 'D':
+                Glide.with(getContext()).load(R.drawable.ders).placeholder(R.color.placeholder)
+                        .into(cover);
+                break;
+            case 'A':
+                Glide.with(getContext()).load(R.drawable.arac).placeholder(R.color.placeholder)
+                        .into(cover);
+                break;
         }
 
-        Glide.with(getContext()).load(activity.getImageLink()).placeholder(R.color.placeholder)
+        Glide.with(getContext()).load(activity.getImageLink())
                 .into(image);
         header.setText(activity.getheader());
         name.setText(activity.getname());
@@ -84,9 +99,7 @@ public class DetailActivityFragment extends Fragment {
             }
         });
 
-        return rootView;
     }
-
     private void openProfile() {
         Intent intent =new Intent(getActivity(), ProfileActivity.class);
         intent.putExtra("fid", activity.getFid());
