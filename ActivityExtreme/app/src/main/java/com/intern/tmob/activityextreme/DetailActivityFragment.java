@@ -35,9 +35,8 @@ public class DetailActivityFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         activity = (WallItem) getActivity().getIntent().getSerializableExtra("object");
         location = getActivity().getIntent().getStringExtra("location");
-        String[] tabs = {"DETAYLAR","KATILANLAR","YORUMLAR"};
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabPagerAdapter(getContext(),null));
+        viewPager.setAdapter(new TabPagerAdapter(getContext(), getViews(container)));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         slidingTabLayout.setViewPager(viewPager);
@@ -46,6 +45,22 @@ public class DetailActivityFragment extends Fragment {
         findAndFill();
         return rootView;
     }
+
+    private View[] getViews(ViewGroup container) {
+        String[] tabs = {"DETAYLAR","KATILANLAR","YORUMLAR"};
+        int[] layouts = {R.layout.fragment_detail_tab_0,R.layout.fragment_detail_tab_1,R.layout.fragment_detail_tab_2};
+        View[] views = new View[3];
+
+        for(int i = 0; i<views.length; i++){
+            views[i] = LayoutInflater.from(getContext()).inflate(layouts[i],container,false);
+            views[i].setTag(tabs[i]);
+        }
+        TextView detail =(TextView)views[0].findViewById(R.id.text_detail);
+        detail.setText(activity.getdetail());
+
+        return views;
+    }
+
     private void findAndFill(){
         name = (TextView) rootView.findViewById(R.id.detail_name);
         date = (TextView) rootView.findViewById(R.id.detail_date);
