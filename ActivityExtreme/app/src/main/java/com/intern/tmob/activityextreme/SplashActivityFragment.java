@@ -112,10 +112,10 @@ public class SplashActivityFragment extends Fragment {
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
                                 try {
-                                    SharedPreferences.Editor sPEditor = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE).edit();
-                                    sPEditor.putString("location", response.getJSONObject().getJSONObject("location").getString("name"));
+                                    SharedPreferences.Editor sPEditor = getActivity().getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE).edit();
                                     sPEditor.putBoolean("first_login", false);
                                     sPEditor.commit();
+                                    saveProfiletoPreferences(response.getJSONObject().getJSONObject("location").getString("name"));
                                     new SignupTask().execute(getActivity());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -149,6 +149,17 @@ public class SplashActivityFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void saveProfiletoPreferences(String location) {
+        SharedPreferences.Editor sPEditor = getActivity().getSharedPreferences("Profile", Context.MODE_PRIVATE).edit();
+        sPEditor.putString("first_name", mProfile.getFirstName());
+        sPEditor.putString("last_name",mProfile.getLastName());
+        sPEditor.putString("id",mProfile.getId());
+        sPEditor.putString("pp_url", String.valueOf(mProfile.getProfilePictureUri(200, 200)));
+        sPEditor.putString("middle_name",mProfile.getMiddleName());
+        sPEditor.putString("location",location);
+        sPEditor.commit();
     }
 
     @Override
