@@ -1,14 +1,16 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/detail_coordinator_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.intern.tmob.activityextreme.DetailActivityFragment">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/detail_app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="168dp"
+        android:layout_height="wrap_content"
         android:background="?colorPrimary">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -20,18 +22,65 @@
             app:expandedTitleMarginStart="72dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/detail_cover"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="parallax"
-                android:scaleType="centerCrop"
-                android:src="@drawable/arac" />
+                android:layout_height="wrap_content">
 
+                <LinearLayout
+                    android:id="@+id/detail_cover"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.intern.tmob.activityextreme.view.CircularImageView
+                        android:id="@+id/detail_pp"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_margin="8dp"
+                        app:border="true"
+                        app:border_width="3dp"
+                        app:border_color="@color/primary_light" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/detail_header"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"/>
+                        <TextView
+                            android:text="Lukas Podolski"
+                            android:textSize="16sp"
+                            android:id="@+id/detail_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"/>
+
+                        <TextView
+                            android:text="21-12-2012 21:30"
+                            android:textSize="12sp"
+                            android:id="@+id/detail_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.intern.tmob.activityextreme.view.SlidingTabLayout
+                    android:id="@+id/sliding_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:theme="@style/ProfileTheme" />
+            </LinearLayout>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="100dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:navigationIcon="@drawable/ic_arrow_back"
                 app:contentInsetStart="72dp"
@@ -40,63 +89,24 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:nestedScrollingEnabled="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical"
+    <LinearLayout
+        android:nestedScrollingEnabled="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/detail_details"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/detail_header"
-                android:textSize="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="21-12-2012 21:30"
-                android:textSize="20dp"
-                android:id="@+id/detail_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/detail_pp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.15"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:text="Lukas Podolski"
-                    android:textSize="20dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/detail_name"
-                    android:layout_weight="0.9"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/detail_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <com.intern.tmob.activityextreme.view.SlidingTabLayout
-                android:id="@+id/sliding_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <android.support.v4.view.ViewPager
-                android:nestedScrollingEnabled="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"/>
-        </LinearLayout>
+            android:layout_height="0dp" />
 
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"/>
 
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

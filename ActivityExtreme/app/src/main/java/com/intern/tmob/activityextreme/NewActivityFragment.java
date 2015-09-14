@@ -117,7 +117,7 @@ public class NewActivityFragment extends Fragment {
         }
         Calendar c = Calendar.getInstance();
         String sMonth = (c.get(Calendar.MONTH)<10?"0":"") + c.get(Calendar.MONTH);
-        String sDayOfMonth = (Calendar.DAY_OF_MONTH<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
         String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
         String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
         String sDate = c.get(Calendar.YEAR) + "." + sMonth

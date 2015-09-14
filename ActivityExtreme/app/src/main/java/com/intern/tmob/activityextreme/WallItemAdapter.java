@@ -1,16 +1,12 @@
 package com.intern.tmob.activityextreme;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,8 +57,8 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
     public WallItemAdapter(List<WallItem> wallItemList,int layouId){
         this.wallItemList = wallItemList;
         mLayoutId = layouId;
-        isWall = (layouId == R.layout.list_item_wall || layouId == R.layout.pager_item_item);
-        isPager = (layouId == R.layout.pager_item_item);
+        isWall = (layouId == R.layout.list_item_wall || layouId == R.layout.pager_comment_item);
+        isPager = (layouId == R.layout.pager_comment_item);
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

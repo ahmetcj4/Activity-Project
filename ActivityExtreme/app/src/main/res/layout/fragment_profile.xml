@@ -40,11 +40,11 @@
                             android:src="@mipmap/ic_launcher"
                             android:layout_height="200dp"
                             app:border="true"
-                            app:border_width="3dp"
-                            app:border_color="@color/divider"
+                            app:border_width="5dp"
+                            app:border_color="@color/primary_light"
                             android:layout_margin="10dp" />
 
-                        <LinearLayout
+                        <!--LinearLayout
                             android:orientation="horizontal"
                             android:gravity="center"
                             android:layout_width="match_parent"
@@ -76,7 +76,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:background="?android:attr/selectableItemBackground"/>
-                        </LinearLayout>
+                        </LinearLayout-->
+
                         <TextView
                             android:id="@+id/profile_name"
                             android:text="Lukas Podolski"

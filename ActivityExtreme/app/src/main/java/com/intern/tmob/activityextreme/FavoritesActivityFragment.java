@@ -128,8 +128,6 @@ public class FavoritesActivityFragment extends Fragment {
         mSelectedItems[4] = settings.getBoolean("ders", false);
         mSelectedItems[5] = settings.getBoolean("vasıta", false);
         for(int i = 0; i<mWallItem.size();i++){
-            //TODO bu hatayı düzelt
-
             selectItem(!mSelectedItems[i],i);
         }
     }

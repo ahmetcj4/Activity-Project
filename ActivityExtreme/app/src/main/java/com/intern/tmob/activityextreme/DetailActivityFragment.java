@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,7 +22,8 @@ import com.intern.tmob.activityextreme.view.SlidingTabLayout;
 public class DetailActivityFragment extends Fragment {
     WallItem activity;
     String location;
-    ImageView cover,image;
+    LinearLayout cover;
+    ImageView image;
     TextView name,date,detail,header;
     View rootView;
     public DetailActivityFragment() {
@@ -33,14 +35,14 @@ public class DetailActivityFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         activity = (WallItem) getActivity().getIntent().getSerializableExtra("object");
         location = getActivity().getIntent().getStringExtra("location");
-        String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
+        String[] tabs = {"DETAYLAR","KATILANLAR","YORUMLAR"};
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         viewPager.setAdapter(new TabPagerAdapter(getContext(), tabs, SplashActivityFragment.mProfile.getId()));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         slidingTabLayout.setViewPager(viewPager);
-        ((CollapsingToolbarLayout) rootView.findViewById(R.id.detail_collapsing_toolbar_layout)).setTitle(activity.getheader());
-
+        ((CollapsingToolbarLayout) rootView.findViewById(R.id.detail_collapsing_toolbar_layout)).setTitle("");//activity.getheader());
+//invisible olsun sonra animation ile visible olsun.
         findAndFill();
         return rootView;
     }
@@ -50,37 +52,31 @@ public class DetailActivityFragment extends Fragment {
         detail = (TextView) rootView.findViewById(R.id.detail_details);
         header = (TextView) rootView.findViewById(R.id.detail_header);
         image = (ImageView) rootView.findViewById(R.id.detail_pp);
-        cover = (ImageView) rootView.findViewById(R.id.detail_cover);
-
+        cover = (LinearLayout) rootView.findViewById(R.id.detail_cover);
+        int coverDrawable = -1;
         switch (activity.getheader().charAt(0)){
             case 'S':
-                Glide.with(getContext()).load(R.drawable.spor).placeholder(R.color.placeholder)
-                    .into(cover);
+                coverDrawable =  R.drawable.spor;
                 break;
             case 'K':
-                Glide.with(getContext()).load(R.drawable.kultur_sanat).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable =  R.drawable.kultur_sanat;
                 break;
             case 'G':
-                Glide.with(getContext()).load(R.drawable.gezi).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable = R.drawable.gezi;
                 break;
             case 'E':
-                Glide.with(getContext()).load(R.drawable.eglence).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable = R.drawable.eglence;
                 break;
             case 'D':
-                Glide.with(getContext()).load(R.drawable.ders).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable = R.drawable.ders;
                 break;
             case 'A':
-                Glide.with(getContext()).load(R.drawable.arac).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable =  R.drawable.arac;
                 break;
         }
-
-        Glide.with(getContext()).load(activity.getImageLink())
-                .into(image);
+       // Glide.with(getContext()).load(coverDrawable).placeholder(R.color.placeholder).into(cover);
+       // cover.setBackgroundResource(coverDrawable);
+        Glide.with(getContext()).load(activity.getImageLink()).into(image);
         header.setText(activity.getheader());
         name.setText(activity.getname());
         date.setText(activity.getsent());
