@@ -114,7 +114,8 @@ public class SplashActivityFragment extends Fragment {
                                 try {
                                     SharedPreferences.Editor sPEditor = getActivity().getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE).edit();
                                     sPEditor.putBoolean("first_login", false);
-                                    sPEditor.commit();
+                                    sPEditor.putString("location", response.getJSONObject().getJSONObject("location").getString("name"));
+                                    sPEditor.apply();
                                     saveProfiletoPreferences(response.getJSONObject().getJSONObject("location").getString("name"));
                                     new SignupTask().execute(getActivity());
                                 } catch (JSONException e) {
@@ -159,7 +160,7 @@ public class SplashActivityFragment extends Fragment {
         sPEditor.putString("pp_url", String.valueOf(mProfile.getProfilePictureUri(200, 200)));
         sPEditor.putString("middle_name",mProfile.getMiddleName());
         sPEditor.putString("location",location);
-        sPEditor.commit();
+        sPEditor.apply();
     }
 
     @Override

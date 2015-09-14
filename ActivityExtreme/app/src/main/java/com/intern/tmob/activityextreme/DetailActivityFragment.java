@@ -51,36 +51,29 @@ public class DetailActivityFragment extends Fragment {
         header = (TextView) rootView.findViewById(R.id.detail_header);
         image = (ImageView) rootView.findViewById(R.id.detail_pp);
         cover = (ImageView) rootView.findViewById(R.id.detail_cover);
-
+        int coverDrawable = -1;
         switch (activity.getheader().charAt(0)){
             case 'S':
-                Glide.with(getContext()).load(R.drawable.spor).placeholder(R.color.placeholder)
-                    .into(cover);
+                coverDrawable =  R.drawable.spor;
                 break;
             case 'K':
-                Glide.with(getContext()).load(R.drawable.kultur_sanat).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable =  R.drawable.kultur_sanat;
                 break;
             case 'G':
-                Glide.with(getContext()).load(R.drawable.gezi).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable = R.drawable.gezi;
                 break;
             case 'E':
-                Glide.with(getContext()).load(R.drawable.eglence).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable = R.drawable.eglence;
                 break;
             case 'D':
-                Glide.with(getContext()).load(R.drawable.ders).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable = R.drawable.ders;
                 break;
             case 'A':
-                Glide.with(getContext()).load(R.drawable.arac).placeholder(R.color.placeholder)
-                        .into(cover);
+                coverDrawable =  R.drawable.arac;
                 break;
         }
-
-        Glide.with(getContext()).load(activity.getImageLink())
-                .into(image);
+        Glide.with(getContext()).load(coverDrawable).placeholder(R.color.placeholder).into(cover);
+        Glide.with(getContext()).load(activity.getImageLink()).into(image);
         header.setText(activity.getheader());
         name.setText(activity.getname());
         date.setText(activity.getsent());
