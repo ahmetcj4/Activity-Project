@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
@@ -23,6 +22,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TabPagerAdapter extends PagerAdapter {
@@ -59,33 +59,47 @@ public class TabPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        final View view = LayoutInflater.from(mContext).inflate(R.layout.pager_item,
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.pager_comment,
                 container, false);
         container.addView(view);
         mWallItem.clear();
-        new FetchCommentUserTask().execute();
-
-        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_item_item);
+        LinearLayout buttons = (LinearLayout) view.findViewById(R.id.buttons);
+        buttons.setVisibility(View.INVISIBLE);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.pager_recyclerview);
         recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(llm);
 
+        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_comment_item);
         recyclerView.setAdapter(mWallItemAdapter);
 
-        Button button = (Button) view.findViewById(R.id.addComment);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText comment = (EditText) view.findViewById(R.id.profile_comment);
-                acomment = comment.getText().toString();
-                comment.setText("");
-                new CommentUserTask().execute();
-            }
-        });
+        switch (position){
+            case 0:
+                buttons.setVisibility(View.VISIBLE);
+                new FetchCommentUserTask().execute();
+                Button button = (Button) view.findViewById(R.id.addComment);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText comment = (EditText) view.findViewById(R.id.profile_comment);
+                        acomment = comment.getText().toString();
+                        comment.setText("");
+                        new CommentUserTask().execute();
+                    }
+                });
+                break;
+            case 1:
+                buttons.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                buttons.setVisibility(View.INVISIBLE);
+                break;
+        }
 
-        new FetchCommentUserTask().execute();
+
+
+
         return view;
     }
 
@@ -135,11 +149,20 @@ public class TabPagerAdapter extends PagerAdapter {
                 myApiService = builder.build();
             }
             try {
+                Calendar c = Calendar.getInstance();
+                String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+                String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+                String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+                String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+                String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                        + "." + sDayOfMonth + " " + sHourOfDay
+                        + ":" + sMinute;
                 SharedPreferences settings = mContext.getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
                 myApiService.commentUser(fid, SplashActivityFragment.mProfile.getId(),acomment,
                         SplashActivityFragment.mProfile.getProfilePictureUri(200,200).toString(),
                         settings.getString("location", "def"),
-                        "21-12-2015","21:30",SplashActivityFragment.mProfile.getFirstName(),
+                        c.get(Calendar.YEAR) + "." + sMonth + "." + sDayOfMonth,
+                        sHourOfDay + ":" + sMinute,SplashActivityFragment.mProfile.getFirstName(),
                         SplashActivityFragment.mProfile.getLastName()).execute();
             } catch (IOException e) {
                 e.printStackTrace();
