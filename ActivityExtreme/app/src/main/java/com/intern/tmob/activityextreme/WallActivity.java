@@ -74,7 +74,7 @@ public class WallActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_wall:
-                        startActivity(new Intent(WallActivity.this,WallActivity.class));
+                    //    startActivity(new Intent(WallActivity.this,WallActivity.class));
                         return true;
                     case R.id.drawer_profile:
                         Intent intent =new Intent(WallActivity.this, ProfileActivity.class);
