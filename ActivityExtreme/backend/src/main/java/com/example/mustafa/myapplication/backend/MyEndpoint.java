@@ -16,12 +16,15 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Filter;
 
 import javax.inject.Named;
 import javax.xml.crypto.Data;
+
+import sun.rmi.runtime.Log;
 
 /**
  * An endpoint class we are exposing
@@ -74,6 +77,7 @@ public class MyEndpoint {
                                @Named("surname")String surname,@Named("fid")String fid,@Named("ppUrl") String ppUrl,
                                @Named("location") String location){
         Entity entity = new Entity("Activities");
+        entity.setProperty("id",fid+"_"+date+"_"+time);
         entity.setProperty("type",type);
         entity.setProperty("title",title);
         entity.setProperty("details",details);
@@ -180,6 +184,7 @@ public class MyEndpoint {
             dataStore.delete(res.getKey());
     }
 
+    // It is not working now.
     @ApiMethod(name="getLikes")
     public List<Entity> a(@Named("fid") String fid, @Named("dateTime") String dateTime){
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
@@ -191,4 +196,67 @@ public class MyEndpoint {
         return res;
     }
 
+    @ApiMethod(name="attendActivity",path="attendActivity")
+    public void attendActivity(@Named("fid")String fid,@Named("activityID") String activityId){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Entity e = new Entity("attend_"+fid);
+        e.setProperty("activityID",activityId);
+        datastore.put(e);
+    }
+
+    @ApiMethod(name="getAttendedActivities",path="getAttendedActivities")
+    public List<Entity> getAttendedActivities(@Named("fid") String fid){
+        Calendar c = Calendar.getInstance();
+        String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+        String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                + "." + sDayOfMonth ;
+        String sTime = sHourOfDay + ":" + sMinute;
+        List<Entity> res = new ArrayList<>();
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("attend_"+fid);
+        PreparedQuery pq = datastoreService.prepare(q);
+        for(Entity e: pq.asIterable()){
+            Entity x = getActivity((String) e.getProperty("activityID"));
+            String s =(String)x.getProperty("date")+(String)x.getProperty("time");
+            if(s.compareTo(sDate+sTime)<0)
+                res.add(x);
+        }
+        return res;
+    }
+
+    @ApiMethod(name="getActivity",path="getActivity")
+    public Entity getActivity(@Named("id")String  id){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter filter = new Query.FilterPredicate("id", Query.FilterOperator.EQUAL,id);
+        Query q = new Query("Activities").setFilter(filter);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity e: pq.asIterable())
+            return e;
+        return null;
+    }
+
+    @ApiMethod(name="getOncomingActivities",path="getOncomingActivities")
+    public List<Entity> getOncomingActivities(@Named("fid") String fid){
+        Calendar c = Calendar.getInstance();
+        String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+        String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                + "." + sDayOfMonth ;
+        String sTime = sHourOfDay + ":" + sMinute;
+        List<Entity> res = new ArrayList<>();
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("attend_"+fid);
+        PreparedQuery pq = datastoreService.prepare(q);
+        for(Entity e: pq.asIterable()){
+            Entity x = getActivity((String) e.getProperty("activityID"));
+            if(((String)x.getProperty("date")+(String)x.getProperty("time")).compareTo(sDate+sTime)>0)
+                res.add(x);
+        }
+        return res;
+    }
 }
