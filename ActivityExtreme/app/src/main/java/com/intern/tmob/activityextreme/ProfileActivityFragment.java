@@ -49,8 +49,7 @@ public class ProfileActivityFragment extends Fragment{
 
         SharedPreferences settings = getActivity().getSharedPreferences("SplashActivityFragment",Context.MODE_PRIVATE);
         if(fid.equals(SplashActivityFragment.mProfile.getId())){
-            Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200))
-                    .placeholder(R.color.placeholder).into(image);
+            Glide.with(getContext()).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200)).into(image);
             name.setText(SplashActivityFragment.mProfile.getFirstName() + " "
                     + SplashActivityFragment.mProfile.getLastName());
             city.setText(settings.getString("location", "def"));
