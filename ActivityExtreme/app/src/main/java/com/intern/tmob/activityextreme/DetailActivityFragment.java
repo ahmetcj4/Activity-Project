@@ -37,7 +37,7 @@ public class DetailActivityFragment extends Fragment {
         location = getActivity().getIntent().getStringExtra("location");
         String[] tabs = {"DETAYLAR","KATILANLAR","YORUMLAR"};
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabPagerAdapter(getContext(), tabs, SplashActivityFragment.mProfile.getId()));
+        viewPager.setAdapter(new TabPagerAdapter(getContext(),null));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         slidingTabLayout.setViewPager(viewPager);

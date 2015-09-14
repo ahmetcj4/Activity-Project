@@ -3,18 +3,36 @@ package com.intern.tmob.activityextreme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
+import com.example.mustafa.myapplication.backend.myApi.model.Entity;
+import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.intern.tmob.activityextreme.view.SlidingTabLayout;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -39,10 +57,8 @@ public class ProfileActivityFragment extends Fragment{
         name = (TextView) rootView.findViewById(R.id.profile_name);
         city = (TextView) rootView.findViewById(R.id.profile_city);
         about = (TextView) rootView.findViewById(R.id.profile_about);
-
-        String[] tabs = {"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabPagerAdapter(getContext(), tabs, fid));
+        viewPager.setAdapter(new TabPagerAdapter(getContext(), getTabs(container)));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
         slidingTabLayout.setViewPager(viewPager);
@@ -65,4 +81,120 @@ public class ProfileActivityFragment extends Fragment{
         return rootView;
     }
 
+    List<WallItem> mWallItem;
+    WallItemAdapter mWallItemAdapter;
+    String acomment;
+
+    private View[] getTabs(ViewGroup container) {
+
+        final View view0 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
+                container, false);
+        view0.setTag("YORUMLAR");
+        mWallItem = new ArrayList<>();
+        RecyclerView recyclerView = (RecyclerView) view0.findViewById(R.id.pager_recyclerview);
+        recyclerView.setHasFixedSize(true);//bunu silmeyi unutma
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(llm);
+
+        mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_comment_item);
+        recyclerView.setAdapter(mWallItemAdapter);
+        new FetchCommentUserTask().execute();
+        Button button = (Button) view0.findViewById(R.id.addComment);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText comment = (EditText) view0.findViewById(R.id.profile_comment);
+                acomment = comment.getText().toString();
+                comment.setText("");
+                new CommentUserTask().execute();
+            }
+        });
+
+//        View view1 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
+//                container, false);
+//        view1.setTag("YAKLAŞAN ETKİNLİKLER");
+//        List<WallItem> mWallItem1 = new ArrayList<>();
+//
+//        RecyclerView recyclerView1 = (RecyclerView) view1.findViewById(R.id.pager_recyclerview);
+//        recyclerView1.setHasFixedSize(true);//bunu silmeyi unutma
+//        LinearLayoutManager llm1 = new LinearLayoutManager(getContext());
+//        recyclerView.setLayoutManager(llm1);
+//
+//        WallItemAdapter mWallItemAdapter1 = new WallItemAdapter(mWallItem1,R.layout.pager_comment_item);
+//        recyclerView.setAdapter(mWallItemAdapter1);
+
+
+        View[] views = {view0};
+        return views;
+    }
+
+    class FetchCommentUserTask extends AsyncTask<Void,Void,List<Entity>> {
+
+        @Override
+        protected List<Entity> doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            List<Entity> list = new ArrayList<>();
+
+            try {
+                EntityCollection x = myApiService.getCommentsUser(fid).execute();
+                for(int i=0;i<x.getItems().size();i++)
+                    list.add(x.getItems().get(i));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Log.i("fetchCommentUserTask", String.valueOf(list.size()));
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            mWallItem.clear();
+
+            for(Entity e : entities){
+                mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl")
+                        , (String)e.getProperties().get("name")+" "+(String)e.getProperties().get("surname"),
+                        (String)e.getProperties().get("date")+" "+(String)e.getProperties().get("time"),
+                        (String) e.getProperties().get("comment"), " ",
+                        (String) e.getProperties().get("commenterID")));
+            }
+            mWallItemAdapter.notifyDataSetChanged();
+            Toast.makeText(getContext(),"finished " + mWallItem.size(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    class CommentUserTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                Calendar c = Calendar.getInstance();
+                String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+                String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+                String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+                String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+                String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                        + "." + sDayOfMonth + " " + sHourOfDay
+                        + ":" + sMinute;
+                SharedPreferences settings = getContext().getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
+                myApiService.commentUser(fid, SplashActivityFragment.mProfile.getId(),acomment,
+                        SplashActivityFragment.mProfile.getProfilePictureUri(200,200).toString(),
+                        settings.getString("location", "def"),
+                        c.get(Calendar.YEAR) + "." + sMonth + "." + sDayOfMonth,
+                        sHourOfDay + ":" + sMinute,SplashActivityFragment.mProfile.getFirstName(),
+                        SplashActivityFragment.mProfile.getLastName()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 }
