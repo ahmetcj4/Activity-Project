@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,8 +50,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView location = (TextView) findViewById(R.id.profile_city);
         location.setText(settings.getString("location", "def"));
         ImageView avatar = (ImageView) findViewById(R.id.profile_image);
-        Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200))
-                .placeholder(R.color.placeholder).into(avatar);
+        Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200)).into(avatar);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.detail_navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -59,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_wall:
-                        startActivity(new Intent(DetailActivity.this, WallActivity.class));
+                        onBackPressed();
                         return true;
                     case R.id.drawer_profile:
                         Intent intent = new Intent(DetailActivity.this, ProfileActivity.class);
@@ -73,6 +73,7 @@ public class DetailActivity extends AppCompatActivity {
                         startActivity(new Intent(DetailActivity.this, FavoritesActivity.class));
                         return true;
                 }
+                finish();
                 menuItem.setChecked(true);
                 return true;
             }
@@ -91,4 +92,14 @@ public class DetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        try {
+            return super.dispatchTouchEvent(ev);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }
