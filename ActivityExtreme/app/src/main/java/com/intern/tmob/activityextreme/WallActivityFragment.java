@@ -131,11 +131,9 @@ public class WallActivityFragment extends Fragment implements AppBarLayout.OnOff
 
         @Override
         protected void onPostExecute(List<Entity> entities) {
-            Log.i("entities", String.valueOf(entities.size()));
             mWallItem.clear();
             mEntities = entities;
             for(Entity e : entities){
-                Log.i("ppUrl",(String) e.getProperties().get("ppUrl"));
                 mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl"),
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
                         (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),

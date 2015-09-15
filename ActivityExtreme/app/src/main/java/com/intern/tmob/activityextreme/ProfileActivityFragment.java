@@ -43,6 +43,7 @@ public class ProfileActivityFragment extends Fragment{
     TextView name,city,about;
     ImageView image;
     WallItem activity;
+    Button pos;
     public ProfileActivityFragment() {
     }
 
@@ -52,6 +53,18 @@ public class ProfileActivityFragment extends Fragment{
         final View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         Intent intent = getActivity().getIntent();
         fid = intent.getStringExtra("fid");
+
+        pos = (Button) rootView.findViewById(R.id.profile_positive);
+        new GetLikesPerson().execute();
+
+        pos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new LikePerson().execute();
+                new GetLikesPerson().execute();
+            }
+        });
+
 
         image = (ImageView) rootView.findViewById(R.id.profile_image);
         name = (TextView) rootView.findViewById(R.id.profile_name);
@@ -86,6 +99,7 @@ public class ProfileActivityFragment extends Fragment{
 
     private View[] getTabs(ViewGroup container) {
 
+        String[] tags={"YORUMLAR","YAKLAŞAN ETKİNLİKLER","GEÇMİŞ"};
         final View view0 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
                 container, false);
         view0.setTag("YORUMLAR");
@@ -112,8 +126,10 @@ public class ProfileActivityFragment extends Fragment{
         View view1 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
                 container, false);
         view1.setTag("YAKLAŞAN ETKİNLİKLER");
+
         LinearLayout comment = (LinearLayout) view1.findViewById(R.id.comment);
         comment.setVisibility(View.GONE);
+
         mWallItem1 = new ArrayList<>();
 
         RecyclerView recyclerView1 = (RecyclerView) view1.findViewById(R.id.pager_recyclerview);
@@ -235,14 +251,12 @@ public class ProfileActivityFragment extends Fragment{
             List<Entity> list = new ArrayList<>();
 
             try {
-                EntityCollection x = myApiService.getCommentsUser(fid).execute();
-                for(int i=0;i<x.getItems().size();i++)
-                    list.add(x.getItems().get(i));
+                EntityCollection ec = myApiService.getCommentsUser(fid).execute();
+                list = ec.getItems();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Log.i("fetchCommentUserTask", String.valueOf(list.size()));
             return list;
         }
 
@@ -285,6 +299,56 @@ public class ProfileActivityFragment extends Fragment{
                         c.get(Calendar.YEAR) + "." + sMonth + "." + sDayOfMonth,
                         sHourOfDay + ":" + sMinute,SplashActivityFragment.mProfile.getFirstName(),
                         SplashActivityFragment.mProfile.getLastName()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    class GetLikesPerson extends AsyncTask<Void,Void,List<Entity>> {
+        @Override
+        protected List<Entity> doInBackground(Void... params) {
+            /*
+            fid : the guy's id who creates activity
+            date: date of activity
+            */
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            List<Entity> list= null;
+            try {
+
+                EntityCollection ec = myApiService.getLikesPerson(fid).execute();
+                list = ec.getItems();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            if(entities!=null)
+                pos.setText("+" + entities.size());
+            else pos.setText("+0");
+        }
+    }
+    class LikePerson extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            /*
+            fid : the guy's id who creates activity
+            date: date of activity
+            */
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                myApiService.likeUnlikePerson(fid, SplashActivityFragment.mProfile.getId()).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
