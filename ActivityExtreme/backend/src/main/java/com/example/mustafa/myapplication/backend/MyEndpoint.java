@@ -144,7 +144,7 @@ public class MyEndpoint {
         String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
         String sDate = c.get(Calendar.YEAR) + "." + sMonth
                 + "." + sDayOfMonth + " " + sHourOfDay
-                + ":" + sMinute;
+                + ":" + sMinute + "." + c.get(Calendar.SECOND);
 
         Entity entity = new Entity("activityComment" + fid + '_' + dateTime);
         entity.setProperty("dateTime",sDate);
@@ -162,7 +162,8 @@ public class MyEndpoint {
     public List<Entity> getCommentsActivity(@Named("fid")String fid,@Named("dateTime") String dateTime){
         List<Entity> result = new ArrayList<>();
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Query query = new Query("activityComment" + fid + "_" + dateTime).addSort("dateTime", Query.SortDirection.ASCENDING);
+        Query query = new Query("activityComment" + fid + "_" + dateTime)
+                .addSort("dateTime", Query.SortDirection.ASCENDING);
         PreparedQuery pq = datastoreService.prepare(query);
         for(Entity e : pq.asIterable())
             result.add(e);
