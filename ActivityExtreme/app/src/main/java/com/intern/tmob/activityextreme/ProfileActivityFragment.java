@@ -80,9 +80,9 @@ public class ProfileActivityFragment extends Fragment{
 
         return rootView;
     }
-
+    List<WallItem> mWallItem1;
     List<WallItem> mWallItem;
-    WallItemAdapter mWallItemAdapter;
+    WallItemAdapter mWallItemAdapter,mWallItemAdapter1;
     String acomment;
 
     private View[] getTabs(ViewGroup container) {
@@ -110,22 +110,63 @@ public class ProfileActivityFragment extends Fragment{
             }
         });
 
-//        View view1 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
-//                container, false);
-//        view1.setTag("YAKLAŞAN ETKİNLİKLER");
-//        List<WallItem> mWallItem1 = new ArrayList<>();
-//
-//        RecyclerView recyclerView1 = (RecyclerView) view1.findViewById(R.id.pager_recyclerview);
-//        recyclerView1.setHasFixedSize(true);//bunu silmeyi unutma
-//        LinearLayoutManager llm1 = new LinearLayoutManager(getContext());
-//        recyclerView.setLayoutManager(llm1);
-//
-//        WallItemAdapter mWallItemAdapter1 = new WallItemAdapter(mWallItem1,R.layout.pager_comment_item);
-//        recyclerView.setAdapter(mWallItemAdapter1);
+        View view1 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
+                container, false);
+        view1.setTag("YAKLAŞAN ETKİNLİKLER");
+        LinearLayout comment = (LinearLayout) view1.findViewById(R.id.comment);
+        comment.setVisibility(View.INVISIBLE);
+        mWallItem1 = new ArrayList<>();
 
+        RecyclerView recyclerView1 = (RecyclerView) view1.findViewById(R.id.pager_recyclerview);
+        recyclerView1.setHasFixedSize(true);//bunu silmeyi unutma
+        LinearLayoutManager llm1 = new LinearLayoutManager(getContext());
+        recyclerView1.setLayoutManager(llm1);
 
-        View[] views = {view0};
+        mWallItemAdapter1 = new WallItemAdapter(mWallItem1,R.layout.pager_comment_item);
+        recyclerView1.setAdapter(mWallItemAdapter1);
+        new FetchWallTask().execute(getContext());
+
+        View[] views = {view0,view1};
         return views;
+    }
+    class FetchWallTask extends AsyncTask<Context,Void, List<Entity>> {
+        Context context;
+        @Override
+        protected List<Entity> doInBackground(Context... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            context = params[0];
+            List<Entity> list = new ArrayList<>();
+            try {
+                EntityCollection x = myApiService.fetchWall().execute();
+                for(int i=0;i<x.getItems().size();i++){
+                    list.add(x.getItems().get(i));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            Log.i("entities", String.valueOf(entities.size()));
+            mWallItem1.clear();
+            for(Entity e : entities){
+                Log.i("ppUrl",(String) e.getProperties().get("ppUrl"));
+                mWallItem1.add(new WallItem((String)e.getProperties().get("ppUrl"),
+                        (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
+                        (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
+                        (String) e.getProperties().get("details"),
+                        (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title"),
+                        (String) e.getProperties().get("fid")));
+            }
+            mWallItemAdapter1.notifyDataSetChanged();
+
+        }
     }
 
     class FetchCommentUserTask extends AsyncTask<Void,Void,List<Entity>> {
