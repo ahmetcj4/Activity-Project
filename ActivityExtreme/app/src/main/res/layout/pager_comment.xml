@@ -19,7 +19,7 @@
         android:background="?android:attr/dividerHorizontal"/>
 
     <LinearLayout
-        android:id="@+id/buttons"
+        android:id="@+id/comment"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
