@@ -140,7 +140,7 @@ public class MyEndpoint {
         entity.setProperty("fid",fid);
         entity.setProperty("commenterID",commenterID);
         entity.setProperty("comment", comment);
-        Entity x = getUserInformation(fid);
+        Entity x = getUserInformation(commenterID);
         entity.setProperty("ppUrl",x.getProperty("ppUrl"));
         entity.setProperty("name",x.getProperty("name"));
         entity.setProperty("surname",x.getProperty("surname"));
@@ -207,7 +207,7 @@ public class MyEndpoint {
     @ApiMethod(name="likeUnlikePerson")
     public void likeUnlikePerson(@Named("fid")String fid,@Named("userId")String userId){
         DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
-        Entity entity = new Entity("likes_" + fid,fid);
+        Entity entity = new Entity("likes_" + fid,userId);
         entity.setProperty("userId",userId);
         Entity res = isLikedPerson(fid, userId);
         if(res == null)

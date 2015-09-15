@@ -195,14 +195,15 @@ public class WallActivity extends AppCompatActivity {
         }
     }
 */
+/*
 
     class GetOncomingActivitiesTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            *//*
             fid : the guy's id who creates activity
             date: date of activity
-            *//*
+
+
             if(myApiService == null){
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
@@ -220,7 +221,8 @@ public class WallActivity extends AppCompatActivity {
 
             try {
                 Log.i("getoncomingactivity","girdi");
-                *//*myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();*//*
+myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();
+
                 EntityCollection ec = myApiService.getOncomingActivities(fid).execute();
                 List<Entity> list = ec.getItems();
                 if(list == null){
@@ -230,9 +232,9 @@ public class WallActivity extends AppCompatActivity {
                 for(int i=0;i<list.size();i++){
                     Log.i("listlist","aaaa" + (String)list.get(i).getProperties().get("date")+list.get(i).getProperties().get("time"));
                     Log.i("listlist","bbbb" + sDate+sTime);
-                    *//*
                     Burada bir seyler yapilacak.
-                     *//*
+
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -240,7 +242,8 @@ public class WallActivity extends AppCompatActivity {
             }
             return null;
         }
-    }*/
+    }
+*/
     /*
     *   Burasi gerekli yere tasinacak.
     * */

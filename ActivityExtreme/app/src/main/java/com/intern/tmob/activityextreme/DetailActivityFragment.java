@@ -153,14 +153,19 @@ public class DetailActivityFragment extends Fragment {
             }
             try {
                 Log.i("commentActivityTask", "girdi");
-                /*myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();*/
-                myApiService.commentActivity(fid,activity.getsent(),SplashActivityFragment.mProfile.getId(),acomment);
+                //myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();
                 Log.i("commentActivityTask",fid+" " + activity.getsent()+ " " +SplashActivityFragment.mProfile.getId() + " " + acomment);
+                myApiService.commentActivity(fid, activity.getsent(), SplashActivityFragment.mProfile.getId(), acomment).execute();
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.i("commentActivityTask","Error");
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            new GetCommentActivityTask().execute();
         }
     }
 
@@ -177,6 +182,7 @@ public class DetailActivityFragment extends Fragment {
 
             try {
                 EntityCollection x = myApiService.getCommentsActivity(fid, activity.getsent()).execute();
+                Log.i("commentActivityTask",fid+ " " + activity.getsent());
                 list = x.getItems();
             } catch (IOException e) {
                 e.printStackTrace();
