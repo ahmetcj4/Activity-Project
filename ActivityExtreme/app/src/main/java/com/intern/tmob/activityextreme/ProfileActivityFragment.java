@@ -272,7 +272,6 @@ public class ProfileActivityFragment extends Fragment{
                         (String) e.getProperties().get("commenterID")));
             }
             mWallItemAdapter.notifyDataSetChanged();
-            Toast.makeText(getContext(),"finished " + mWallItem.size(),Toast.LENGTH_SHORT).show();
         }
     }
 

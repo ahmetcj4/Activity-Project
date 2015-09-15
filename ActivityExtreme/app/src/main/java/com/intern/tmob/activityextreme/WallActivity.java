@@ -196,6 +196,51 @@ public class WallActivity extends AppCompatActivity {
     }
 */
 
+    class GetOncomingActivitiesTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            *//*
+            fid : the guy's id who creates activity
+            date: date of activity
+            *//*
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+
+            Calendar c = Calendar.getInstance();
+            String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+            String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+            String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+            String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+            String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                    + "." + sDayOfMonth ;
+            String sTime = sHourOfDay + ":" + sMinute;
+
+            try {
+                Log.i("getoncomingactivity","girdi");
+                *//*myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();*//*
+                EntityCollection ec = myApiService.getOncomingActivities(fid).execute();
+                List<Entity> list = ec.getItems();
+                if(list == null){
+                    Log.i("listlist","null");
+                    return null;
+                }
+                for(int i=0;i<list.size();i++){
+                    Log.i("listlist","aaaa" + (String)list.get(i).getProperties().get("date")+list.get(i).getProperties().get("time"));
+                    Log.i("listlist","bbbb" + sDate+sTime);
+                    *//*
+                    Burada bir seyler yapilacak.
+                     *//*
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("commentActivityTask","Error");
+            }
+            return null;
+        }
+    }*/
     /*
     *   Burasi gerekli yere tasinacak.
     * */
