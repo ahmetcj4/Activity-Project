@@ -139,7 +139,11 @@ public class MyEndpoint {
         Entity entity = new Entity("activityComment" + fid + '_' + dateTime);
         entity.setProperty("fid",fid);
         entity.setProperty("commenterID",commenterID);
-        entity.setProperty("comment",comment);
+        entity.setProperty("comment", comment);
+        Entity x = getUserInformation(fid);
+        entity.setProperty("ppUrl",x.getProperty("ppUrl"));
+        entity.setProperty("name",x.getProperty("name"));
+        entity.setProperty("name",x.getProperty("surname"));
         ofy().save().entity(entity).now();
     }
 
@@ -198,10 +202,28 @@ public class MyEndpoint {
 
     @ApiMethod(name="attendActivity",path="attendActivity")
     public void attendActivity(@Named("fid")String fid,@Named("activityID") String activityId){
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity e = new Entity("attend_"+fid);
         e.setProperty("activityID",activityId);
         datastore.put(e);
+
+        e = new Entity("whoAttends_"+activityId);
+        e.setProperty("fid",fid);
+        datastore.put(e);
+    }
+
+    @ApiMethod(name="whoAttends",path = "whoAttends")
+    public List<Entity> whoAttends(@Named("activityID") String activityID){
+        List<Entity> res = new ArrayList<>();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("whoAttends_"+activityID);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity e : pq.asIterable()){
+            Entity x = getUserInformation((String) e.getProperty("fid"));
+            res.add(x);
+        }
+        return res;
     }
 
     @ApiMethod(name="getAttendedActivities",path="getAttendedActivities")
@@ -259,4 +281,5 @@ public class MyEndpoint {
         }
         return res;
     }
+
 }
