@@ -136,7 +136,18 @@ public class MyEndpoint {
     @ApiMethod(name="commentActivity") // Daha tam degil
     public void commentActivity(@Named("fid")String fid,@Named("dateTime")String dateTime
             ,@Named("commenterID") String commenterID,@Named("comment")String comment){
+
+        Calendar c = Calendar.getInstance();
+        String sMonth = (c.get(Calendar.MONTH)<10?"0":"") + c.get(Calendar.MONTH);
+        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+        String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                + "." + sDayOfMonth + " " + sHourOfDay
+                + ":" + sMinute + "." + c.get(Calendar.SECOND);
+
         Entity entity = new Entity("activityComment" + fid + '_' + dateTime);
+        entity.setProperty("dateTime",sDate);
         entity.setProperty("fid",fid);
         entity.setProperty("commenterID",commenterID);
         entity.setProperty("comment", comment);
@@ -151,7 +162,8 @@ public class MyEndpoint {
     public List<Entity> getCommentsActivity(@Named("fid")String fid,@Named("dateTime") String dateTime){
         List<Entity> result = new ArrayList<>();
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Query query = new Query("activityComment" + fid + "_" + dateTime);
+        Query query = new Query("activityComment" + fid + "_" + dateTime)
+                .addSort("dateTime", Query.SortDirection.ASCENDING);
         PreparedQuery pq = datastoreService.prepare(query);
         for(Entity e : pq.asIterable())
             result.add(e);
@@ -203,6 +215,21 @@ public class MyEndpoint {
         return null;
     }
 
+    @ApiMethod(name="isDislikedPerson")
+    public Entity isDislikedPerson(@Named("fid")String fid,@Named("userId")String userId){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter nameFilter =
+                new Query.FilterPredicate("userId",
+                        Query.FilterOperator.EQUAL,
+                        userId);
+        Query q = new Query("dislikes_" + fid)
+                .setFilter(nameFilter);
+        PreparedQuery pq = datastoreService.prepare(q);
+        for(Entity e: pq.asIterable())
+            return e;
+        return null;
+    }
+
     // fid is id of creator of activity, dateTime is date + time of activity.
     @ApiMethod(name="likeUnlikePerson")
     public void likeUnlikePerson(@Named("fid")String fid,@Named("userId")String userId){
@@ -210,8 +237,26 @@ public class MyEndpoint {
         Entity entity = new Entity("likes_" + fid,userId);
         entity.setProperty("userId",userId);
         Entity res = isLikedPerson(fid, userId);
-        if(res == null)
+        if(res == null) {
+            if(isDislikedPerson(fid,userId)!=null)
+                dislikeUndislikePerson(fid,userId);
             dataStore.put(entity);
+        }
+        else
+            dataStore.delete(res.getKey());
+    }
+
+    @ApiMethod(name="dislikeUndislikePerson",path = "dislike")
+    public void dislikeUndislikePerson(@Named("fid")String fid,@Named("userId")String userId){
+        DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+        Entity entity = new Entity("dislikes_" + fid);
+        entity.setProperty("userId",userId);
+        Entity res = isDislikedPerson(fid, userId);
+        if(res == null) {
+            if(isLikedPerson(fid,userId)!=null)
+                likeUnlikePerson(fid,userId);
+            dataStore.put(entity);
+        }
         else
             dataStore.delete(res.getKey());
     }
@@ -221,6 +266,16 @@ public class MyEndpoint {
     public List<Entity> getLikesPerson(@Named("fid") String fid){
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("likes_" + fid);
+        PreparedQuery pq = datastoreService.prepare(q);
+        List<Entity> res = new ArrayList<>();
+        for(Entity e:pq.asIterable())
+            res.add(e);
+        return res;
+    }
+    @ApiMethod(name="getDislikesPerson",path = "getDislikesPerson")
+    public List<Entity> getDislikesPerson(@Named("fid") String fid){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("dislikes_" + fid);
         PreparedQuery pq = datastoreService.prepare(q);
         List<Entity> res = new ArrayList<>();
         for(Entity e:pq.asIterable())
