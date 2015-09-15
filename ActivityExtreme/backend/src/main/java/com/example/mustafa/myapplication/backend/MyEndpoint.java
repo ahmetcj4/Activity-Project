@@ -136,7 +136,18 @@ public class MyEndpoint {
     @ApiMethod(name="commentActivity") // Daha tam degil
     public void commentActivity(@Named("fid")String fid,@Named("dateTime")String dateTime
             ,@Named("commenterID") String commenterID,@Named("comment")String comment){
+
+        Calendar c = Calendar.getInstance();
+        String sMonth = (c.get(Calendar.MONTH)<10?"0":"") + c.get(Calendar.MONTH);
+        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+        String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                + "." + sDayOfMonth + " " + sHourOfDay
+                + ":" + sMinute;
+
         Entity entity = new Entity("activityComment" + fid + '_' + dateTime);
+        entity.setProperty("dateTime",sDate);
         entity.setProperty("fid",fid);
         entity.setProperty("commenterID",commenterID);
         entity.setProperty("comment", comment);
@@ -151,7 +162,7 @@ public class MyEndpoint {
     public List<Entity> getCommentsActivity(@Named("fid")String fid,@Named("dateTime") String dateTime){
         List<Entity> result = new ArrayList<>();
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Query query = new Query("activityComment" + fid + "_" + dateTime);
+        Query query = new Query("activityComment" + fid + "_" + dateTime).addSort("dateTime", Query.SortDirection.ASCENDING);
         PreparedQuery pq = datastoreService.prepare(query);
         for(Entity e : pq.asIterable())
             result.add(e);
