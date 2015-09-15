@@ -143,7 +143,7 @@ public class MyEndpoint {
         Entity x = getUserInformation(fid);
         entity.setProperty("ppUrl",x.getProperty("ppUrl"));
         entity.setProperty("name",x.getProperty("name"));
-        entity.setProperty("name",x.getProperty("surname"));
+        entity.setProperty("surname",x.getProperty("surname"));
         ofy().save().entity(entity).now();
     }
 
@@ -182,6 +182,34 @@ public class MyEndpoint {
         Entity entity = new Entity("likes_" + fid + "_" + dateTime,fid+"_"+dateTime);
         entity.setProperty("userId",userId);
         Entity res = isLiked(fid, dateTime, userId);
+        if(res == null)
+            dataStore.put(entity);
+        else
+            dataStore.delete(res.getKey());
+    }
+
+    @ApiMethod(name="isLikedPerson")
+    public Entity isLikedPerson(@Named("fid")String fid,@Named("userId")String userId){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter nameFilter =
+                new Query.FilterPredicate("userId",
+                        Query.FilterOperator.EQUAL,
+                        userId);
+        Query q = new Query("likes_" + fid)
+                .setFilter(nameFilter);
+        PreparedQuery pq = datastoreService.prepare(q);
+        for(Entity e: pq.asIterable())
+            return e;
+        return null;
+    }
+
+    // fid is id of creator of activity, dateTime is date + time of activity.
+    @ApiMethod(name="likeUnlikePerson")
+    public void likeUnlikePerson(@Named("fid")String fid,@Named("userId")String userId){
+        DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+        Entity entity = new Entity("likes_" + fid,fid);
+        entity.setProperty("userId",userId);
+        Entity res = isLikedPerson(fid, userId);
         if(res == null)
             dataStore.put(entity);
         else
