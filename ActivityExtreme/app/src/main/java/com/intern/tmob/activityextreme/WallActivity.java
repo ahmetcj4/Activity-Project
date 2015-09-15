@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class WallActivity extends AppCompatActivity {
+    private static MyApi myApiService = null;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     @Override
@@ -193,6 +194,7 @@ public class WallActivity extends AppCompatActivity {
             return null;
         }
     }
+*/
 
     class GetOncomingActivitiesTask extends AsyncTask<Void,Void,Void> {
         @Override
@@ -239,5 +241,92 @@ public class WallActivity extends AppCompatActivity {
             return null;
         }
     }*/
+    /*
+    *   Burasi gerekli yere tasinacak.
+    * */
+/*
+    class CommentActivityTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            *//*
+                fid : the guy's id who creates activity
+                date: date of activity
+                time: time of activity
+                commenterID: id of commenter
+                comment: comment message
+            *//*
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                Log.i("commentActivityTask","girdi");
+                *//*myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();*//*
+                myApiService.commentActivity(fid,date + " " + time,commenterID,comment);
 
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("commentActivityTask","Error");
+            }
+            return null;
+        }
+    }
+
+    class GetCommentActivityTask extends AsyncTask<Void,Void,Void>{
+        *//*
+            fid : the guy's id who creates activity
+            date: date of activity
+            time: time of activity
+         *//*
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                *//*EntityCollection res = myApiService.getCommentsActivity("707265706085188", "2015.09.09-13:40").execute();*//*
+                EntityCollection res = myApiService.getCommentsActivity(fid,date + " " + time);
+                for(int i=0;i<res.getItems().size();i++)
+                    Log.i("GetCommentActivityTask", (String) res.getItems().get(i).getProperties().get("comment"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    class LikeUnlikeActivity extends AsyncTask<Void,Void,Void>{
+
+        *//*
+            fid : the guy's id who creates activity
+            date: date of activity
+            time: time of activity
+            commenterID: id of commenter
+         *//*
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                *//*if(myApiService.isLiked("123","2015.09.09 14:14","123").execute()==null)*//*
+                if(myApiService.isLiked(fid,date + " " + time,commenterID).execute() == null)
+                    Log.i("likeUnlike","not liked");
+                else
+                    Log.i("likeUnlike","liked");
+                *//*myApiService.likeUnlikeActivity("123","2015.09.09 14:14","123").execute();*//*
+                myApiService.likeUnlikeActivity(fid,date + " " + time,commenterID).execute();
+                Log.i("likeUnlike","liked");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }*/
 }

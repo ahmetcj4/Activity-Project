@@ -139,7 +139,11 @@ public class MyEndpoint {
         Entity entity = new Entity("activityComment" + fid + '_' + dateTime);
         entity.setProperty("fid",fid);
         entity.setProperty("commenterID",commenterID);
-        entity.setProperty("comment",comment);
+        entity.setProperty("comment", comment);
+        Entity x = getUserInformation(fid);
+        entity.setProperty("ppUrl",x.getProperty("ppUrl"));
+        entity.setProperty("name",x.getProperty("name"));
+        entity.setProperty("surname",x.getProperty("surname"));
         ofy().save().entity(entity).now();
     }
 
@@ -184,9 +188,48 @@ public class MyEndpoint {
             dataStore.delete(res.getKey());
     }
 
+    @ApiMethod(name="isLikedPerson")
+    public Entity isLikedPerson(@Named("fid")String fid,@Named("userId")String userId){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter nameFilter =
+                new Query.FilterPredicate("userId",
+                        Query.FilterOperator.EQUAL,
+                        userId);
+        Query q = new Query("likes_" + fid)
+                .setFilter(nameFilter);
+        PreparedQuery pq = datastoreService.prepare(q);
+        for(Entity e: pq.asIterable())
+            return e;
+        return null;
+    }
+
+    // fid is id of creator of activity, dateTime is date + time of activity.
+    @ApiMethod(name="likeUnlikePerson")
+    public void likeUnlikePerson(@Named("fid")String fid,@Named("userId")String userId){
+        DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+        Entity entity = new Entity("likes_" + fid,fid);
+        entity.setProperty("userId",userId);
+        Entity res = isLikedPerson(fid, userId);
+        if(res == null)
+            dataStore.put(entity);
+        else
+            dataStore.delete(res.getKey());
+    }
+
     // It is not working now.
-    @ApiMethod(name="getLikes")
-    public List<Entity> a(@Named("fid") String fid, @Named("dateTime") String dateTime){
+    @ApiMethod(name="getLikesPerson",path = "getLikesPerson")
+    public List<Entity> getLikesPerson(@Named("fid") String fid){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("likes_" + fid);
+        PreparedQuery pq = datastoreService.prepare(q);
+        List<Entity> res = new ArrayList<>();
+        for(Entity e:pq.asIterable())
+            res.add(e);
+        return res;
+    }
+    // It is not working now.
+    @ApiMethod(name="getLikesActivity",path = "getLikes")
+    public List<Entity> getLikesActivity(@Named("fid") String fid,@Named("dateTime")String dateTime){
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("likes_" + fid + "_" + dateTime);
         PreparedQuery pq = datastoreService.prepare(q);
@@ -195,13 +238,30 @@ public class MyEndpoint {
             res.add(e);
         return res;
     }
-
     @ApiMethod(name="attendActivity",path="attendActivity")
     public void attendActivity(@Named("fid")String fid,@Named("activityID") String activityId){
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity e = new Entity("attend_"+fid);
         e.setProperty("activityID",activityId);
         datastore.put(e);
+
+        e = new Entity("whoAttends_"+activityId);
+        e.setProperty("fid",fid);
+        datastore.put(e);
+    }
+
+    @ApiMethod(name="whoAttends",path = "whoAttends")
+    public List<Entity> whoAttends(@Named("activityID") String activityID){
+        List<Entity> res = new ArrayList<>();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("whoAttends_"+activityID);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity e : pq.asIterable()){
+            Entity x = getUserInformation((String) e.getProperty("fid"));
+            res.add(x);
+        }
+        return res;
     }
 
     @ApiMethod(name="getAttendedActivities",path="getAttendedActivities")
@@ -259,4 +319,5 @@ public class MyEndpoint {
         }
         return res;
     }
+
 }
