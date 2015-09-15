@@ -217,8 +217,19 @@ public class MyEndpoint {
     }
 
     // It is not working now.
-    @ApiMethod(name="getLikes")
-    public List<Entity> a(@Named("fid") String fid, @Named("dateTime") String dateTime){
+    @ApiMethod(name="getLikesPerson",path = "getLikesPerson")
+    public List<Entity> getLikesPerson(@Named("fid") String fid){
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("likes_" + fid);
+        PreparedQuery pq = datastoreService.prepare(q);
+        List<Entity> res = new ArrayList<>();
+        for(Entity e:pq.asIterable())
+            res.add(e);
+        return res;
+    }
+    // It is not working now.
+    @ApiMethod(name="getLikesActivity",path = "getLikes")
+    public List<Entity> getLikesActivity(@Named("fid") String fid,@Named("dateTime")String dateTime){
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("likes_" + fid + "_" + dateTime);
         PreparedQuery pq = datastoreService.prepare(q);
@@ -227,7 +238,6 @@ public class MyEndpoint {
             res.add(e);
         return res;
     }
-
     @ApiMethod(name="attendActivity",path="attendActivity")
     public void attendActivity(@Named("fid")String fid,@Named("activityID") String activityId){
 
