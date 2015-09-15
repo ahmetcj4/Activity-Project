@@ -80,9 +80,8 @@ public class ProfileActivityFragment extends Fragment{
 
         return rootView;
     }
-    List<WallItem> mWallItem1;
-    List<WallItem> mWallItem;
-    WallItemAdapter mWallItemAdapter,mWallItemAdapter1;
+    List<WallItem> mWallItem,mWallItem1,mWallItem2;
+    WallItemAdapter mWallItemAdapter,mWallItemAdapter1,mWallItemAdapter2;
     String acomment;
 
     private View[] getTabs(ViewGroup container) {
@@ -114,7 +113,7 @@ public class ProfileActivityFragment extends Fragment{
                 container, false);
         view1.setTag("YAKLAŞAN ETKİNLİKLER");
         LinearLayout comment = (LinearLayout) view1.findViewById(R.id.comment);
-        comment.setVisibility(View.INVISIBLE);
+        comment.setVisibility(View.GONE);
         mWallItem1 = new ArrayList<>();
 
         RecyclerView recyclerView1 = (RecyclerView) view1.findViewById(R.id.pager_recyclerview);
@@ -124,39 +123,55 @@ public class ProfileActivityFragment extends Fragment{
 
         mWallItemAdapter1 = new WallItemAdapter(mWallItem1,R.layout.pager_comment_item);
         recyclerView1.setAdapter(mWallItemAdapter1);
-        new FetchWallTask().execute(getContext());
+        new GetOncomingActivitiesTask().execute();
 
-        View[] views = {view0,view1};
+        View view2 = LayoutInflater.from(getContext()).inflate(R.layout.pager_comment,
+                container, false);
+        view2.setTag("GEÇMİŞ");
+        LinearLayout comment2 = (LinearLayout) view2.findViewById(R.id.comment);
+        comment2.setVisibility(View.GONE);
+        mWallItem2 = new ArrayList<>();
+
+        RecyclerView recyclerView2 = (RecyclerView) view2.findViewById(R.id.pager_recyclerview);
+        recyclerView2.setHasFixedSize(true);//bunu silmeyi unutma
+        LinearLayoutManager llm2 = new LinearLayoutManager(getContext());
+        recyclerView2.setLayoutManager(llm2);
+
+        mWallItemAdapter2 = new WallItemAdapter(mWallItem2,R.layout.pager_comment_item);
+        recyclerView2.setAdapter(mWallItemAdapter2);
+        new GetAttendedActivitiesTask().execute();
+
+        View[] views = {view0,view1,view2};
         return views;
     }
-    class FetchWallTask extends AsyncTask<Context,Void, List<Entity>> {
-        Context context;
+    class GetOncomingActivitiesTask extends AsyncTask<Void,Void,List<Entity>> {
         @Override
-        protected List<Entity> doInBackground(Context... params) {
+        protected List<Entity> doInBackground(Void... params) {
+            /*
+            fid : the guy's id who creates activity
+            date: date of activity
+            */
             if(myApiService == null){
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
                 myApiService = builder.build();
             }
-            context = params[0];
-            List<Entity> list = new ArrayList<>();
+            List<Entity> list= null;
             try {
-                EntityCollection x = myApiService.fetchWall().execute();
-                for(int i=0;i<x.getItems().size();i++){
-                    list.add(x.getItems().get(i));
-                }
+
+                EntityCollection ec = myApiService.getOncomingActivities(fid).execute();
+                list = ec.getItems();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return list;
         }
-
         @Override
         protected void onPostExecute(List<Entity> entities) {
-            Log.i("entities", String.valueOf(entities.size()));
             mWallItem1.clear();
+            if(entities!=null)
             for(Entity e : entities){
-                Log.i("ppUrl",(String) e.getProperties().get("ppUrl"));
                 mWallItem1.add(new WallItem((String)e.getProperties().get("ppUrl"),
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
                         (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
@@ -165,6 +180,45 @@ public class ProfileActivityFragment extends Fragment{
                         (String) e.getProperties().get("fid")));
             }
             mWallItemAdapter1.notifyDataSetChanged();
+
+        }
+    }
+    class GetAttendedActivitiesTask extends AsyncTask<Void,Void,List<Entity>> {
+        @Override
+        protected List<Entity> doInBackground(Void... params) {
+            /*
+            fid : the guy's id who creates activity
+            date: date of activity
+            */
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            List<Entity> list= null;
+            try {
+
+                EntityCollection ec = myApiService.getAttendedActivities(fid).execute();
+                list = ec.getItems();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            mWallItem2.clear();
+            if(entities!=null)
+                for(Entity e : entities){
+                    mWallItem2.add(new WallItem((String)e.getProperties().get("ppUrl"),
+                            (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
+                            (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
+                            (String) e.getProperties().get("details"),
+                            (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title"),
+                            (String) e.getProperties().get("fid")));
+                }
+            mWallItemAdapter2.notifyDataSetChanged();
 
         }
     }

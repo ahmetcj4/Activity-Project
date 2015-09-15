@@ -12,7 +12,7 @@
         android:background="?colorPrimary">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout"
+            android:id="@+id/profile_collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
@@ -132,7 +132,7 @@
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/app_bar"
+                android:id="@+id/profile_app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
