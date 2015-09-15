@@ -44,7 +44,7 @@
                             app:border_color="@color/primary_light"
                             android:layout_margin="10dp" />
 
-                        <!--LinearLayout
+                        <LinearLayout
                             android:orientation="horizontal"
                             android:gravity="center"
                             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:background="?android:attr/selectableItemBackground"/>
-                        </LinearLayout-->
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/profile_name"
