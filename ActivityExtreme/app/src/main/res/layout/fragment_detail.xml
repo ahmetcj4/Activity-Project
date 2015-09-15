@@ -43,14 +43,17 @@
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:nestedScrollingEnabled="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="50dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout1">
             <TextView
                 android:id="@+id/detail_header"
                 android:textSize="20sp"
@@ -69,8 +72,8 @@
                 android:layout_height="wrap_content">
                 <com.intern.tmob.activityextreme.view.CircularImageView
                     android:id="@+id/detail_pp"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_margin="8dp"
                     app:border="true"
                     app:border_width="3dp"
@@ -78,7 +81,8 @@
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content">
                     <TextView
                         android:text="Lukas Podolski"
@@ -96,6 +100,12 @@
                         android:layout_margin="4dp"/>
                 </LinearLayout>
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="katıl"
+                    android:id="@+id/joinButton"
+                    android:layout_gravity="right"/>
             </LinearLayout>
             <View
                 android:layout_height="1dp"
@@ -124,36 +134,36 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/detail_activity_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
-
-            <View
-                android:layout_height="1dp"
-                android:layout_width="match_parent"
-                android:layout_marginTop="4dip"
-                android:background="?android:attr/dividerHorizontal"/>
-
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="true" >
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="5"
-                    android:id="@+id/activity_comment"
-                    android:hint="Yorum yaz.."
-                    android:layout_height="wrap_content" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="Paylaş"
-                    android:id="@+id/addComment" />
-            </LinearLayout>
-
+                android:layout_height="0dp"
+                android:layout_weight="1" />
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/scrollView"
+        app:layout_anchorGravity="bottom"
+        android:background="@color/white"
+        android:paddingRight="4dp"
+        android:paddingLeft="4dp">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:id="@+id/activity_comment"
+            android:hint="Yorum yaz.."
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Paylaş"
+            android:id="@+id/addComment" />
+    </LinearLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>

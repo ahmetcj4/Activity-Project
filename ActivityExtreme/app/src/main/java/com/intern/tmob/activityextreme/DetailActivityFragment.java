@@ -43,7 +43,8 @@ public class DetailActivityFragment extends Fragment {
     View rootView;
     List<WallItem> mWallItem;
     WallItemAdapter mWallItemAdapter;
-    String acomment,fid,time;
+    String acomment,fid;
+    RecyclerView recyclerView;
     public DetailActivityFragment() {
     }
 
@@ -108,7 +109,7 @@ public class DetailActivityFragment extends Fragment {
             }
         });
         mWallItem = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.detail_activity_recyclerview);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.detail_activity_recyclerview);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(llm);
 
@@ -202,6 +203,7 @@ public class DetailActivityFragment extends Fragment {
                             (String) e.getProperties().get("commenterID")));
                 }
             mWallItemAdapter.notifyDataSetChanged();
+            recyclerView.getLayoutParams().height = mWallItemAdapter.getItemCount() * 212;
         }
     }
 
