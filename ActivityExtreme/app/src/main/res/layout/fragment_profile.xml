@@ -52,7 +52,6 @@
 
                             <Button
                                 android:id="@+id/profile_positive"
-                                android:text="+123"
                                 android:textColor="#00FF00"
                                 android:textSize="15sp"
                                 android:layout_marginLeft="100dp"
@@ -68,7 +67,6 @@
                                 android:background="?android:attr/dividerVertical"/>
                             <Button
                                 android:id="@+id/profile_negative"
-                                android:text="-125"
                                 android:textSize="15sp"
                                 android:layout_marginRight="100dp"
                                 android:textColor="#FF0000"
