@@ -237,8 +237,11 @@ public class MyEndpoint {
         Entity entity = new Entity("likes_" + fid,userId);
         entity.setProperty("userId",userId);
         Entity res = isLikedPerson(fid, userId);
-        if(res == null)
+        if(res == null) {
+            if(isDislikedPerson(fid,userId)!=null)
+                dislikeUndislikePerson(fid,userId);
             dataStore.put(entity);
+        }
         else
             dataStore.delete(res.getKey());
     }
@@ -249,8 +252,11 @@ public class MyEndpoint {
         Entity entity = new Entity("dislikes_" + fid);
         entity.setProperty("userId",userId);
         Entity res = isDislikedPerson(fid, userId);
-        if(res == null)
+        if(res == null) {
+            if(isLikedPerson(fid,userId)!=null)
+                likeUnlikePerson(fid,userId);
             dataStore.put(entity);
+        }
         else
             dataStore.delete(res.getKey());
     }
