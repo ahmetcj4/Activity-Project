@@ -43,7 +43,7 @@ public class ProfileActivityFragment extends Fragment{
     TextView name,city,about;
     ImageView image;
     WallItem activity;
-    Button pos;
+    Button pos,neg;
     public ProfileActivityFragment() {
     }
 
@@ -56,12 +56,22 @@ public class ProfileActivityFragment extends Fragment{
 
         pos = (Button) rootView.findViewById(R.id.profile_positive);
         new GetLikesPerson().execute();
-
         pos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new LikePerson().execute();
                 new GetLikesPerson().execute();
+                new GetDislikesPerson().execute();
+            }
+        });
+        neg = (Button) rootView.findViewById(R.id.profile_negative);
+        new GetDislikesPerson().execute();
+        neg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DislikePerson().execute();
+                new GetLikesPerson().execute();
+                new GetDislikesPerson().execute();
             }
         });
 
@@ -227,11 +237,11 @@ public class ProfileActivityFragment extends Fragment{
             mWallItem2.clear();
             if(entities!=null)
                 for(Entity e : entities){
-                    mWallItem2.add(new WallItem((String)e.getProperties().get("ppUrl"),
-                            (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
-                            (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
+                    mWallItem2.add(new WallItem((String) e.getProperties().get("ppUrl"),
+                            (String) e.getProperties().get("name") + " " + e.getProperties().get("surname"),
+                            (String) e.getProperties().get("date") + " " + e.getProperties().get("time"),
                             (String) e.getProperties().get("details"),
-                            (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title"),
+                            (String) e.getProperties().get("type") + " - " + (String) e.getProperties().get("title"),
                             (String) e.getProperties().get("fid")));
                 }
             mWallItemAdapter2.notifyDataSetChanged();
@@ -349,6 +359,56 @@ public class ProfileActivityFragment extends Fragment{
             }
             try {
                 myApiService.likeUnlikePerson(fid, SplashActivityFragment.mProfile.getId()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    class GetDislikesPerson extends AsyncTask<Void,Void,List<Entity>> {
+        @Override
+        protected List<Entity> doInBackground(Void... params) {
+            /*
+            fid : the guy's id who creates activity
+            date: date of activity
+            */
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            List<Entity> list= null;
+            try {
+
+                EntityCollection ec = myApiService.getDislikesPerson(fid).execute();
+                list = ec.getItems();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            if(entities!=null)
+                neg.setText("+" + entities.size());
+            else neg.setText("+0");
+        }
+    }
+    class DislikePerson extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            /*
+            fid : the guy's id who creates activity
+            date: date of activity
+            */
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                myApiService.dislikeUndislikePerson(fid, SplashActivityFragment.mProfile.getId()).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }

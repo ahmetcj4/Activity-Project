@@ -65,9 +65,9 @@ public class ProfileActivity extends AppCompatActivity {
                             startActivity(new Intent(ProfileActivity.this,WallActivity.class));
                         return true;
                     case R.id.drawer_profile:
-//                        Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
-//                        intent.putExtra("fid", SplashActivityFragment.mProfile.getId());
-//                        startActivity(intent);
+                        Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                        intent.putExtra("fid", SplashActivityFragment.mProfile.getId());
+                        startActivity(intent);
                         return true;
                     case R.id.drawer_settings:
                         startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
