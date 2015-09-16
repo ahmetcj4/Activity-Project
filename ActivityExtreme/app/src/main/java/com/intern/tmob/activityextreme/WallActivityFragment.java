@@ -1,8 +1,10 @@
 package com.intern.tmob.activityextreme;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -80,7 +82,10 @@ public class WallActivityFragment extends Fragment implements AppBarLayout.OnOff
                     public void onItemClick(View v, int position) {
                         Intent intent = new Intent(getActivity(),DetailActivity.class);
                         intent.putExtra("object", mWallItem.get(position));
-                        intent.putExtra("location",(String)mEntities.get(position).getProperties().get("location"));
+                        intent.putExtra("location", (String) mEntities.get(position).getProperties().get("location"));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            getContext().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                        } else
                         startActivity(intent);
 
                         return;
@@ -117,15 +122,16 @@ public class WallActivityFragment extends Fragment implements AppBarLayout.OnOff
                 myApiService = builder.build();
             }
             context = params[0];
-            List<Entity> list = new ArrayList<>();
+            List<Entity> list = null;
+            EntityCollection ec = null;
             try {
-                EntityCollection x = myApiService.fetchWall().execute();
-                for(int i=0;i<x.getItems().size();i++){
-                    list.add(x.getItems().get(i));
-                }
+                ec = myApiService.fetchWall().execute();
+                list = ec.getItems();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
             return list;
         }
 
@@ -133,6 +139,7 @@ public class WallActivityFragment extends Fragment implements AppBarLayout.OnOff
         protected void onPostExecute(List<Entity> entities) {
             mWallItem.clear();
             mEntities = entities;
+            if(entities!=null)
             for(Entity e : entities){
                 mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl"),
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),

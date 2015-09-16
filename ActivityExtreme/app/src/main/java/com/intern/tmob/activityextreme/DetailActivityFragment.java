@@ -235,9 +235,10 @@ public class DetailActivityFragment extends Fragment {
                             (String) e.getProperties().get("dateTime"),
                             (String) e.getProperties().get("comment"), " ",
                             (String) e.getProperties().get("commenterID")));
+                 //   recyclerView.getLayoutParams().height += recyclerView.getChildAt(recyclerView.getChildCount()-1).getHeight();
                 }
             mWallItemAdapter.notifyDataSetChanged();
-            recyclerView.getLayoutParams().height = mWallItemAdapter.getItemCount() * 180;
+            recyclerView.getLayoutParams().height = mWallItemAdapter.getItemCount() * 182;
         }
     }
     class isAttendingActivityTask extends AsyncTask<Void,Void,Void> {
