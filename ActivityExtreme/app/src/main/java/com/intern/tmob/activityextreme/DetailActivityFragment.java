@@ -1,7 +1,9 @@
 package com.intern.tmob.activityextreme;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -72,7 +74,7 @@ public class DetailActivityFragment extends Fragment {
         date = (TextView) rootView.findViewById(R.id.detail_date);
         detail = (TextView) rootView.findViewById(R.id.detail_details);
         header = (TextView) rootView.findViewById(R.id.detail_header);
-        image = (ImageView) rootView.findViewById(R.id.detail_pp);
+        image = (ImageView) rootView.findViewById(R.id.profile_image);
         cover = (ImageView) rootView.findViewById(R.id.detail_cover);
         int coverDrawable = -1;
         switch (activity.getheader().charAt(0)){
@@ -145,8 +147,12 @@ public class DetailActivityFragment extends Fragment {
         Intent intent =new Intent(getActivity(), ProfileActivity.class);
         intent.putExtra("fid", fid);
         intent.putExtra("object", activity);
-        intent.putExtra("location",location);
-        startActivity(intent);
+        intent.putExtra("location", location);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getContext().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                    image,"profile").toBundle());
+        } else
+            startActivity(intent);
     }
 
     class CommentActivityTask extends AsyncTask<Void,Void,Void> {
