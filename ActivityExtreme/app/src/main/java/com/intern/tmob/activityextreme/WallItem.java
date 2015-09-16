@@ -1,10 +1,6 @@
 package com.intern.tmob.activityextreme;
 
 
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-
 import java.io.Serializable;
 
 public class WallItem implements Serializable{
