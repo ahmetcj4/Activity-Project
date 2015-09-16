@@ -11,7 +11,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.intern.tmob.activityextreme.view.CircularImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/drawer_image"
         android:layout_width="112dp"
         android:layout_height="112dp"
         app:border="true"
@@ -20,14 +20,14 @@
         android:layout_margin="6dp"
         android:layout_gravity="center_horizontal" />
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/drawer_name"
         android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textColor="@color/white" />
     <TextView
-        android:id="@+id/profile_city"
+        android:id="@+id/drawer_city"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

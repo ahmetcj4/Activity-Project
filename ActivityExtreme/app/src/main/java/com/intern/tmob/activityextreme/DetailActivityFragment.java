@@ -31,19 +31,18 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
-    boolean attended = false;
-    private static MyApi myApiService = null;
-    WallItem activity;
-    String location;
-    ImageView cover;
-    ImageView image;
-    TextView name,date,detail,header;
     View rootView;
+    ImageView cover, image;
+    TextView name,date,detail,header;
     Button attendButton;
+    RecyclerView recyclerView;
+    WallItem activity;
     List<WallItem> mWallItem;
     WallItemAdapter mWallItemAdapter;
-    String acomment,fid;
-    RecyclerView recyclerView;
+    boolean attended = false;
+    String acomment,fid, location;
+    private static MyApi myApiService = null;
+
     public DetailActivityFragment() {
     }
 
@@ -55,7 +54,7 @@ public class DetailActivityFragment extends Fragment {
         location = getActivity().getIntent().getStringExtra("location");
         fid = activity.getFid();
         ((CollapsingToolbarLayout) rootView.findViewById(R.id.detail_collapsing_toolbar_layout)).setTitle(" ");//activity.getheader());
-//invisible olsun sonra animation ile visible olsun.
+        //invisible olsun sonra animation ile visible olsun.
         findAndFill();
         return rootView;
     }
@@ -139,7 +138,7 @@ public class DetailActivityFragment extends Fragment {
     }
     private void openProfile() {
         Intent intent =new Intent(getActivity(), ProfileActivity.class);
-        intent.putExtra("fid", activity.getFid());
+        intent.putExtra("fid", fid);
         intent.putExtra("object", activity);
         intent.putExtra("location",location);
         startActivity(intent);

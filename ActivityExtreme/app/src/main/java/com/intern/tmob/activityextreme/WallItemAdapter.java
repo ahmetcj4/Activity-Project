@@ -70,7 +70,6 @@ public class WallItemAdapter extends RecyclerView.Adapter<WallItemAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(wallItemList.get(position).getname());
-        Log.i("infoinfoinfo", position + " " + wallItemList.get(position).getImageLink());
         if(wallItemList.get(position).getimage()==-1)
             Glide.with(context).load(wallItemList.get(position).getImageLink())
                 .into(holder.image);

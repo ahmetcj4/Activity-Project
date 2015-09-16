@@ -6,14 +6,11 @@ import android.content.SharedPreferences;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -47,12 +44,12 @@ public class ProfileActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.profile_drawer_layout);
         ((CollapsingToolbarLayout) findViewById(R.id.profile_collapsing_toolbar_layout)).setTitle("");
         //drawer header setup
-        TextView name = (TextView) findViewById(R.id.profile_name);
+        TextView name = (TextView) findViewById(R.id.drawer_name);
         name.setText(SplashActivityFragment.mProfile.getName());
         SharedPreferences settings = getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
-        TextView location = (TextView) findViewById(R.id.profile_city);
+        TextView location = (TextView) findViewById(R.id.drawer_city);
         location.setText(settings.getString("location", "def"));
-        ImageView avatar = (ImageView) findViewById(R.id.profile_image);
+        ImageView avatar = (ImageView) findViewById(R.id.drawer_image);
         Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200)).into(avatar);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.profile_navigation_view);

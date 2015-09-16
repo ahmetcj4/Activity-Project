@@ -3,10 +3,7 @@ package com.intern.tmob.activityextreme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.os.Bundle;
@@ -14,24 +11,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
-import com.example.mustafa.myapplication.backend.myApi.model.Entity;
-import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.List;
 
 public class WallActivity extends AppCompatActivity {
     private static MyApi myApiService = null;
@@ -60,12 +46,12 @@ public class WallActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //drawer header setup
-        TextView name = (TextView) findViewById(R.id.profile_name);
+        TextView name = (TextView) findViewById(R.id.drawer_name);
         name.setText(SplashActivityFragment.mProfile.getName());
         SharedPreferences settings = getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
-        TextView location = (TextView) findViewById(R.id.profile_city);
+        TextView location = (TextView) findViewById(R.id.drawer_city);
         location.setText(settings.getString("location", "def"));
-        ImageView avatar = (ImageView) findViewById(R.id.profile_image);
+        ImageView avatar = (ImageView) findViewById(R.id.drawer_image);
         Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200))
                 .placeholder(R.color.placeholder).into(avatar);
 

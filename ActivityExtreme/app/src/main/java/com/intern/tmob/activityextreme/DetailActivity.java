@@ -14,13 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -69,12 +66,12 @@ public class DetailActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.detail_drawer_layout);
 
         //drawer header setup
-        TextView name = (TextView) findViewById(R.id.profile_name);
+        TextView name = (TextView) findViewById(R.id.drawer_name);
         name.setText(SplashActivityFragment.mProfile.getName());
         SharedPreferences settings = getSharedPreferences("SplashActivityFragment", Context.MODE_PRIVATE);
-        TextView location = (TextView) findViewById(R.id.profile_city);
+        TextView location = (TextView) findViewById(R.id.drawer_city);
         location.setText(settings.getString("location", "def"));
-        ImageView avatar = (ImageView) findViewById(R.id.profile_image);
+        ImageView avatar = (ImageView) findViewById(R.id.drawer_image);
         Glide.with(this).load(SplashActivityFragment.mProfile.getProfilePictureUri(200, 200)).into(avatar);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.detail_navigation_view);
