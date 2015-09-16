@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +22,6 @@ import com.example.mustafa.myapplication.backend.myApi.model.Entity;
 import com.example.mustafa.myapplication.backend.myApi.model.EntityCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.intern.tmob.activityextreme.view.SlidingTabLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +31,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
+    boolean attended = false;
     private static MyApi myApiService = null;
     WallItem activity;
     String location;
@@ -41,6 +39,7 @@ public class DetailActivityFragment extends Fragment {
     ImageView image;
     TextView name,date,detail,header;
     View rootView;
+    Button attendButton;
     List<WallItem> mWallItem;
     WallItemAdapter mWallItemAdapter;
     String acomment,fid;
@@ -115,10 +114,8 @@ public class DetailActivityFragment extends Fragment {
 
         mWallItemAdapter = new WallItemAdapter(mWallItem,R.layout.pager_comment_item);
         recyclerView.setAdapter(mWallItemAdapter);
-
-        new GetCommentActivityTask().execute();
-        Button button = (Button) rootView.findViewById(R.id.addComment);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button commentButton = (Button) rootView.findViewById(R.id.addComment);
+        commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText comment = (EditText) rootView.findViewById(R.id.activity_comment);
@@ -127,7 +124,18 @@ public class DetailActivityFragment extends Fragment {
                 new CommentActivityTask().execute();
             }
         });
-
+        attendButton = (Button) rootView.findViewById(R.id.attendButton);
+        attendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(attended);//TODO unattend
+                else{
+                    new AttendActivityTask().execute();
+                }
+            }
+        });
+        new GetCommentActivityTask().execute();
+        new whoAttendedActivityTask().execute();
     }
     private void openProfile() {
         Intent intent =new Intent(getActivity(), ProfileActivity.class);
@@ -169,9 +177,41 @@ public class DetailActivityFragment extends Fragment {
             new GetCommentActivityTask().execute();
         }
     }
+    class AttendActivityTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            /*
+                fid : the guy's id who creates activity
+                activityId : id of activity
+            */
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            try {
+                Log.i("AttendActivityTask", "girdi");
+                //myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();
+                Log.i("AttendActivityTask", fid + " " + activity.getsent() + " " + SplashActivityFragment.mProfile.getId() + " " + acomment);
+                myApiService.attendActivity(fid + "_" + activity.getsent(), SplashActivityFragment.mProfile.getId()).execute();
+                attended = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("AttendActivityTask","Error");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(attended) {
+                attendButton.setTextColor(getActivity().getResources().getColor(R.color.primary_dark));
+                attendButton.setText("Katıldın");
+            }
+        }
+    }
 
     class GetCommentActivityTask extends AsyncTask<Void,Void,List<Entity>> {
-
         @Override
         protected List<Entity> doInBackground(Void... params) {
             if(myApiService == null){
@@ -180,7 +220,6 @@ public class DetailActivityFragment extends Fragment {
                 myApiService = builder.build();
             }
             List<Entity> list = new ArrayList<>();
-
             try {
                 EntityCollection x = myApiService.getCommentsActivity(fid, activity.getsent()).execute();
                 Log.i("commentActivityTask",fid+ " " + activity.getsent());
@@ -195,15 +234,55 @@ public class DetailActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Entity> entities) {
             mWallItem.clear();
+
             if(entities!=null)
                 for(Entity e : entities){
                     mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl"),
-                             (String)e.getProperties().get("name")+" "+(String)e.getProperties().get("surname"),
-                            " ", (String) e.getProperties().get("comment"), " ",
+                            (String)e.getProperties().get("name")+" "+(String)e.getProperties().get("surname"),
+                            (String) e.getProperties().get("dateTime"),
+                            (String) e.getProperties().get("comment"), " ",
                             (String) e.getProperties().get("commenterID")));
                 }
             mWallItemAdapter.notifyDataSetChanged();
-            recyclerView.getLayoutParams().height = mWallItemAdapter.getItemCount() * 212;
+            recyclerView.getLayoutParams().height = mWallItemAdapter.getItemCount() * 180;
+        }
+    }
+    class whoAttendedActivityTask extends AsyncTask<Void,Void,List<Entity>> {
+        @Override
+        protected List<Entity> doInBackground(Void... params) {
+            if(myApiService == null){
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://absolute-disk-105007.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+            List<Entity> list = new ArrayList<>();
+
+            try {
+                EntityCollection x = myApiService.whoAttends(fid + "_" + activity.getsent()).execute();
+                Log.i("whoAttendedActivityTask",fid+ "_" + activity.getsent());
+                list = x.getItems();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<Entity> entities) {
+            if(entities!=null)
+                for(Entity e : entities){
+
+//                    mWallItem.add(new WallItem((String)e.getProperties().get("ppUrl"),
+//                            (String)e.getProperties().get("name")+" "+(String)e.getProperties().get("surname"),
+//                            " ", (String) e.getProperties().get("comment"), " ",
+//                            (String) e.getProperties().get("commenterID")));
+                    if(SplashActivityFragment.mProfile.getId().equals((String)e.getProperties().get("ID"))) {
+                        attendButton.setTextColor(getActivity().getResources().getColor(R.color.primary_dark));
+                        attendButton.setText("Katıldın");
+                    }
+                }
         }
     }
 

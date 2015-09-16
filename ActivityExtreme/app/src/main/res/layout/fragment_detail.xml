@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="katıl"
-                    android:id="@+id/joinButton"
+                    android:id="@+id/attendButton"
                     android:layout_gravity="right"/>
             </LinearLayout>
             <View
