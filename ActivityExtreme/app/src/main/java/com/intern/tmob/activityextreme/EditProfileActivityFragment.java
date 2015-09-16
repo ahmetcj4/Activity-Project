@@ -10,9 +10,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class EditProfileActivityFragment extends Fragment {
 
     public EditProfileActivityFragment() {

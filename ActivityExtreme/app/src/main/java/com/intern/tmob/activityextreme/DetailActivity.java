@@ -30,6 +30,11 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         setupToolbar();
         setupDrawer();
+        setupTransition();
+
+    }
+
+    private void setupTransition() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.div1);
@@ -39,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
             slide.addTarget(R.id.detail_name);
             slide.addTarget(R.id.detail_header);
             slide.addTarget(R.id.detail_date);
-            slide.addTarget(R.id.detail_pp);
+            slide.addTarget(R.id.profile_image);
             slide.addTarget(R.id.attendButton);
             slide.addTarget(R.id.detail_details);
             slide.setInterpolator(AnimationUtils.loadInterpolator(this, android.R.interpolator
