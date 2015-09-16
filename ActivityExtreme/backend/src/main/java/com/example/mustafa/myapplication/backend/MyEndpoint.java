@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Filter;
+import java.util.logging.Logger;
 
 import javax.inject.Named;
 import javax.xml.crypto.Data;
@@ -345,23 +346,15 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name="getAttendedActivities",path="getAttendedActivities")
-    public List<Entity> getAttendedActivities(@Named("fid") String fid){
-        Calendar c = Calendar.getInstance();
-        String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
-        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
-        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
-        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
-        String sDate = c.get(Calendar.YEAR) + "." + sMonth
-                + "." + sDayOfMonth ;
-        String sTime = sHourOfDay + ":" + sMinute;
+    public List<Entity> getAttendedActivities(@Named("fid") String fid,@Named("dateTime") String dateTime){
         List<Entity> res = new ArrayList<>();
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("attend_"+fid);
         PreparedQuery pq = datastoreService.prepare(q);
         for(Entity e: pq.asIterable()){
             Entity x = getActivity((String) e.getProperty("activityID"));
-            String s =(String)x.getProperty("date")+(String)x.getProperty("time");
-            if(s.compareTo(sDate+sTime)<0)
+            String s =(String)x.getProperty("date")+ " " + (String)x.getProperty("time");
+            if(s.compareTo(dateTime)<0)
                 res.add(x);
         }
         return res;
@@ -379,22 +372,15 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name="getOncomingActivities",path="getOncomingActivities")
-    public List<Entity> getOncomingActivities(@Named("fid") String fid){
-        Calendar c = Calendar.getInstance();
-        String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
-        String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
-        String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
-        String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
-        String sDate = c.get(Calendar.YEAR) + "." + sMonth
-                + "." + sDayOfMonth ;
-        String sTime = sHourOfDay + ":" + sMinute;
+    public List<Entity> getOncomingActivities(@Named("fid") String fid,@Named("dateTime") String dateTime){
         List<Entity> res = new ArrayList<>();
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("attend_"+fid);
         PreparedQuery pq = datastoreService.prepare(q);
         for(Entity e: pq.asIterable()){
             Entity x = getActivity((String) e.getProperty("activityID"));
-            if(((String)x.getProperty("date")+(String)x.getProperty("time")).compareTo(sDate+sTime)>0)
+            String s =(String)x.getProperty("date")+ " " + (String)x.getProperty("time");
+            if(s.compareTo(dateTime)>=0)
                 res.add(x);
         }
         return res;

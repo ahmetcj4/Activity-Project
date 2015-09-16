@@ -166,6 +166,18 @@ public class ProfileActivityFragment extends Fragment{
         return views;
     }
     class GetOncomingActivitiesTask extends AsyncTask<Void,Void,List<Entity>> {
+
+        String getDateTime(){
+            Calendar c = Calendar.getInstance();
+            String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+            String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+            String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+            String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+            String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                    + "." + sDayOfMonth ;
+            String sTime = sHourOfDay + ":" + sMinute;
+            return sDate + " " + sTime;
+        }
         @Override
         protected List<Entity> doInBackground(Void... params) {
             /*
@@ -179,10 +191,8 @@ public class ProfileActivityFragment extends Fragment{
             }
             List<Entity> list= null;
             try {
-
-                EntityCollection ec = myApiService.getOncomingActivities(fid).execute();
+                EntityCollection ec = myApiService.getOncomingActivities(getDateTime(),fid).execute();
                 list = ec.getItems();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -204,6 +214,18 @@ public class ProfileActivityFragment extends Fragment{
         }
     }
     class GetAttendedActivitiesTask extends AsyncTask<Void,Void,List<Entity>> {
+        String getDateTime(){
+            Calendar c = Calendar.getInstance();
+            String sMonth = (c.get(Calendar.MONTH)+1<10?"0":"") + (c.get(Calendar.MONTH)+1);
+            String sDayOfMonth = (c.get(Calendar.DAY_OF_MONTH)<10?"0":"") + c.get(Calendar.DAY_OF_MONTH);
+            String sHourOfDay = (c.get(Calendar.HOUR_OF_DAY)<10?"0":"") + c.get(Calendar.HOUR_OF_DAY);
+            String sMinute = (c.get(Calendar.MINUTE)<10?"0":"") + c.get(Calendar.MINUTE);
+            String sDate = c.get(Calendar.YEAR) + "." + sMonth
+                    + "." + sDayOfMonth ;
+            String sTime = sHourOfDay + ":" + sMinute;
+            return sDate + " " + sTime;
+        }
+
         @Override
         protected List<Entity> doInBackground(Void... params) {
             /*
@@ -218,7 +240,7 @@ public class ProfileActivityFragment extends Fragment{
             List<Entity> list= null;
             try {
 
-                EntityCollection ec = myApiService.getAttendedActivities(fid).execute();
+                EntityCollection ec = myApiService.getAttendedActivities(getDateTime(),fid).execute();
                 list = ec.getItems();
 
             } catch (IOException e) {
