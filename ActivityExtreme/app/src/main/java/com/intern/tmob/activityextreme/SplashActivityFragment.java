@@ -134,7 +134,6 @@ public class SplashActivityFragment extends Fragment {
 
             @Override
             public void onError(FacebookException exception) {
-                Log.d("error", exception.toString());
                 Toast.makeText(getActivity(), "ERRORRRR", Toast.LENGTH_LONG).show();
             }
         });
