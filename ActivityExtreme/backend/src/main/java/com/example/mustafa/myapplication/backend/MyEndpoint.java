@@ -14,6 +14,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.sun.org.apache.regexp.internal.REUtil;
+
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,7 +79,7 @@ public class MyEndpoint {
                                @Named("surname")String surname,@Named("fid")String fid,@Named("ppUrl") String ppUrl,
                                @Named("location") String location){
         Entity entity = new Entity("Activities");
-        entity.setProperty("id",fid+"_"+date+"_"+time);
+        entity.setProperty("id",fid+"_"+date+" "+time);
         entity.setProperty("type",type);
         entity.setProperty("title",title);
         entity.setProperty("details",details);
@@ -253,8 +255,8 @@ public class MyEndpoint {
         entity.setProperty("userId",userId);
         Entity res = isDislikedPerson(fid, userId);
         if(res == null) {
-            if(isLikedPerson(fid,userId)!=null)
-                likeUnlikePerson(fid,userId);
+            if(isLikedPerson(fid, userId)!=null)
+                likeUnlikePerson(fid, userId);
             dataStore.put(entity);
         }
         else
@@ -293,17 +295,40 @@ public class MyEndpoint {
             res.add(e);
         return res;
     }
-    @ApiMethod(name="attendActivity",path="attendActivity")
-    public void attendActivity(@Named("fid")String fid,@Named("activityID") String activityId){
+
+    /// Burdayim
+    @ApiMethod(name="attendUnattendActivity",path="attendUnattendActivity")
+    public void attendUnattendActivity(@Named("fid")String fid,@Named("activityID") String activityId){
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Entity e = new Entity("attend_"+fid);
-        e.setProperty("activityID",activityId);
-        datastore.put(e);
+        Entity x = isAttending(activityId,fid);
+        if(x == null) {
+            Entity e = new Entity("attend_" + fid);
+            e.setProperty("activityID", activityId);
+            datastore.put(e);
 
-        e = new Entity("whoAttends_"+activityId);
-        e.setProperty("fid",fid);
-        datastore.put(e);
+            e = new Entity("whoAttends_" + activityId);
+            e.setProperty("fid", fid);
+            datastore.put(e);
+            return;
+        }
+        datastore.delete(x.getKey());
+        Query.Filter filter = new Query.FilterPredicate("activityID", Query.FilterOperator.EQUAL,activityId);
+        Query q = new Query("attend_"+fid).setFilter(filter);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity entity : pq.asIterable())
+            datastore.delete(entity.getKey());
+    }
+
+    @ApiMethod(name="isAttending")
+    public Entity isAttending(@Named("activityId") String activityId,@Named("fid") String fid){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter filter = new Query.FilterPredicate("fid", Query.FilterOperator.EQUAL,fid);
+        Query q = new Query("whoAttends_"+activityId).setFilter(filter);
+        PreparedQuery pq = datastore.prepare(q);
+        for(Entity e : pq.asIterable())
+            return e;
+        return null;
     }
 
     @ApiMethod(name="whoAttends",path = "whoAttends")
