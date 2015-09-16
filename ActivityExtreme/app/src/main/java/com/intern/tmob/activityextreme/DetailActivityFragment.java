@@ -1,6 +1,7 @@
 package com.intern.tmob.activityextreme;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,9 +13,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -131,6 +134,7 @@ public class DetailActivityFragment extends Fragment {
                 acomment = comment.getText().toString();
                 comment.setText("");
                 new CommentActivityTask().execute();
+                hideKeyboard();
             }
         });
         attendButton = (Button) rootView.findViewById(R.id.attendButton);
@@ -154,7 +158,14 @@ public class DetailActivityFragment extends Fragment {
         } else
             startActivity(intent);
     }
-
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
     class CommentActivityTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -235,8 +246,10 @@ public class DetailActivityFragment extends Fragment {
                 }
             mWallItemAdapter.notifyDataSetChanged();
            // recyclerView.getLayoutParams().height = (int) (getActivity().getResources().getDisplayMetrics().density*mWallItemAdapter.getItemCount() * 72.5);
+            recyclerView.scrollToPosition(mWallItem.size()-1);
         }
     }
+
     class isAttendingActivityTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... params) {
