@@ -37,7 +37,7 @@ import java.util.List;
 public class ProfileActivityFragment extends Fragment{
 
     private static MyApi myApiService = null;
-    String fid;
+    static String fid;
     TextView name,city,about;
     ImageView image;
     WallItem activity;
@@ -199,8 +199,7 @@ public class ProfileActivityFragment extends Fragment{
                 mWallItem1.add(new WallItem((String)e.getProperties().get("ppUrl"),
                         (String) e.getProperties().get("name")+" "+e.getProperties().get("surname"),
                         (String) e.getProperties().get("date")+" "+e.getProperties().get("time"),
-                        (String) e.getProperties().get("details"),
-                        (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title"),
+                        (String) e.getProperties().get("type")+" - "+(String) e.getProperties().get("title")," ",
                         (String) e.getProperties().get("fid")));
             }
             mWallItemAdapter1.notifyDataSetChanged();
