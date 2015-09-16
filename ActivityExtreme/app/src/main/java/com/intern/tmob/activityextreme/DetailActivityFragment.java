@@ -228,7 +228,7 @@ public class DetailActivityFragment extends Fragment {
                  //   recyclerView.getLayoutParams().height += recyclerView.getChildAt(recyclerView.getChildCount()-1).getHeight();
                 }
             mWallItemAdapter.notifyDataSetChanged();
-            recyclerView.getLayoutParams().height = mWallItemAdapter.getItemCount() * 182;
+           // recyclerView.getLayoutParams().height = (int) (getActivity().getResources().getDisplayMetrics().density*mWallItemAdapter.getItemCount() * 72.5);
         }
     }
     class isAttendingActivityTask extends AsyncTask<Void,Void,Void> {
