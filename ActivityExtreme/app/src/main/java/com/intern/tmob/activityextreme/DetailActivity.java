@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,7 +31,6 @@ public class DetailActivity extends AppCompatActivity {
         setupToolbar();
         setupDrawer();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.i("geldimi", "geldi");
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.div1);
             slide.addTarget(R.id.div2);

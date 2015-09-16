@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,13 +153,10 @@ public class DetailActivityFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Log.i("commentActivityTask", "girdi");
                 //myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();
-                Log.i("commentActivityTask",fid+" " + activity.getsent()+ " " +SplashActivityFragment.mProfile.getId() + " " + acomment);
                 myApiService.commentActivity(fid, activity.getsent(), SplashActivityFragment.mProfile.getId(), acomment).execute();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.i("commentActivityTask","Error");
             }
             return null;
         }
@@ -177,19 +173,15 @@ public class DetailActivityFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Log.i("attendActivity","niye girdi buraya????");
                 if(myApiService.isAttending(fid + "_" + activity.getsent(),SplashActivityFragment.mProfile.getId()).execute() == null)
                     attended = false;
                 else attended = true;
-                Log.i("AttendActivityTask", "girdi");
                 //myApiService.commentActivity("707265706085188","2015.09.09-13:40","707265706085188","Beyler bu ikinci yorum").execute();
-                Log.i("AttendActivityTask", fid + " " + activity.getsent() + " " + SplashActivityFragment.mProfile.getId() + " " + acomment);
                 myApiService.attendUnattendActivity(fid + "_" + activity.getsent(), SplashActivityFragment.mProfile.getId()).execute();
                 if(attended) attended = false;
                 else attended = true;
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.i("AttendActivityTask","Error");
             }
             return null;
         }
@@ -214,7 +206,6 @@ public class DetailActivityFragment extends Fragment {
             List<Entity> list = new ArrayList<>();
             try {
                 EntityCollection x = myApiService.getCommentsActivity(fid, activity.getsent()).execute();
-                Log.i("commentActivityTask",fid+ " " + activity.getsent());
                 list = x.getItems();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -284,12 +275,9 @@ public class DetailActivityFragment extends Fragment {
 //            try {
 //                /*if(myApiService.isLiked("123","2015.09.09 14:14","123").execute()==null)*/
 //                if(myApiService.isLiked(fid,date + " " + time,commenterID).execute() == null)
-//                    Log.i("likeUnlike","not liked");
 //                else
-//                    Log.i("likeUnlike","liked");
 //                /*myApiService.likeUnlikeActivity("123","2015.09.09 14:14","123").execute();*/
 //                myApiService.likeUnlikeActivity(fid,date + " " + time,commenterID).execute();
-//                Log.i("likeUnlike","liked");
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
