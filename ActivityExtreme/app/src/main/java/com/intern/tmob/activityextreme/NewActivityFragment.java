@@ -4,14 +4,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +30,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class NewActivityFragment extends Fragment {
     private static MyApi myApiService = null;
     Spinner spinner;
@@ -125,8 +120,6 @@ public class NewActivityFragment extends Fragment {
                 + ":" + sMinute;
 
         if(sDate.compareTo(activityDate + ' ' + activityTime)>0){
-            Log.i("newActivityFragment",sDate);
-            Log.i("newActivityFragment",activityDate + ' ' + activityTime);
             Toast.makeText(getActivity(), "Gecmis tarih giremezsiniz", Toast.LENGTH_LONG).show();
             return false;
         }

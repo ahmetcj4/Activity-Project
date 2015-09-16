@@ -31,8 +31,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         setupToolbar();
         setupDrawer();
+        setupTransition();
+
+    }
+
+    private void setupTransition() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.i("geldimi", "geldi");
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.div1);
             slide.addTarget(R.id.div2);

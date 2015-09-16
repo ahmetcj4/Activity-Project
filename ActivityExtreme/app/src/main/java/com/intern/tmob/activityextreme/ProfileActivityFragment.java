@@ -31,9 +31,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ProfileActivityFragment extends Fragment{
 
     private static MyApi myApiService = null;

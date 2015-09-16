@@ -17,9 +17,6 @@ import com.flipboard.bottomsheet.BottomSheetLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class FavoritesActivityFragment extends Fragment {
     List<WallItem> mWallItem = new ArrayList<>();
     Boolean[] mSelectedItems;
