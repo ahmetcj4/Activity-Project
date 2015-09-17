@@ -7,7 +7,7 @@
     android:id="@+id/list_item_cardview"
     android:layout_marginTop="4dp"
     app:elevation="3dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginLeft="2dp"
     android:layout_marginRight="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -59,51 +59,6 @@
                     android:layout_height="wrap_content"
                     android:onClick="onItemClicked"/>
             </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="1dp"
-            android:background="?android:attr/dividerHorizontal"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:text="Like"
-                android:id="@+id/list_item_like"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-            <View
-                android:layout_width="1dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dip"
-                android:layout_marginRight="4dip"
-                android:background="?android:attr/dividerVertical"/>
-            <Button
-                android:text="Comment"
-                android:id="@+id/list_item_comment"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-            <View
-                android:layout_width="1dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dip"
-                android:layout_marginRight="4dip"
-                android:background="?android:attr/dividerVertical"/>
-            <Button
-                android:text="Share"
-                android:id="@+id/list_item_share"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>

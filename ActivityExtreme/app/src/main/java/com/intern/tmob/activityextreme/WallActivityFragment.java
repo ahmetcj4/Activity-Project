@@ -13,9 +13,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.transition.TransitionValues;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 
 import com.example.mustafa.myapplication.backend.myApi.MyApi;
 import com.example.mustafa.myapplication.backend.myApi.model.Entity;
@@ -39,14 +46,14 @@ public class WallActivityFragment extends Fragment implements AppBarLayout.OnOff
     static int cnt=0;
     SwipeRefreshLayout srl;
     private List<Entity> mEntities;
-
+    View rootView;
     public WallActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
+        rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         ((CollapsingToolbarLayout) rootView.findViewById(R.id.collapsing_toolbar_layout)).setTitle(getString(R.string.app_name));
         appBarLayout = (AppBarLayout) rootView.findViewById(R.id.app_bar_layout);
         srl = (SwipeRefreshLayout)rootView.findViewById(R.id.wall_refresh);
@@ -147,8 +154,19 @@ public class WallActivityFragment extends Fragment implements AppBarLayout.OnOff
                         (String) e.getProperties().get("fid")));
             }
             mWallItemAdapter.notifyDataSetChanged();
+            startTransition();
             srl.setRefreshing(false);
+        }
+    }
 
+    public void startTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Explode explode = new Explode();
+            explode.addTarget(R.id.list_item_cardview);
+            explode.setInterpolator(AnimationUtils.loadInterpolator(getActivity(), android.R.interpolator
+                    .linear_out_slow_in));
+            explode.setDuration(300);
+            TransitionManager.beginDelayedTransition((ViewGroup) rootView,explode);
         }
     }
 }
