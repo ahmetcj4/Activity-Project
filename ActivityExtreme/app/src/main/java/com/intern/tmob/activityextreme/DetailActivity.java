@@ -1,5 +1,6 @@
 package com.intern.tmob.activityextreme;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -91,11 +92,15 @@ public class DetailActivity extends AppCompatActivity {
                         intent.putExtra("fid", SplashActivityFragment.mProfile.getId());
                         startActivity(intent);
                         return true;
-                    case R.id.drawer_settings:
-                        startActivity(new Intent(DetailActivity.this, SettingsActivity.class));
-                        return true;
                     case R.id.drawer_favourites:
                         startActivity(new Intent(DetailActivity.this, FavoritesActivity.class));
+                        return true;
+                    case R.id.drawer_about:
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            startActivity(new Intent(DetailActivity.this, AboutActivity.class),
+                                    ActivityOptions.makeSceneTransitionAnimation(DetailActivity.this).toBundle());
+                        } else
+                            startActivity(new Intent(DetailActivity.this, AboutActivity.class));
                         return true;
                 }
                 finish();

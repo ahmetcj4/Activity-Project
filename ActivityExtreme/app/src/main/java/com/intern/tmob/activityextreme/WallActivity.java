@@ -1,8 +1,10 @@
 package com.intern.tmob.activityextreme;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -69,11 +71,15 @@ public class WallActivity extends AppCompatActivity {
                         intent.putExtra("fid",SplashActivityFragment.mProfile.getId());
                         startActivity(intent);
                         return true;
-                    case R.id.drawer_settings:
-                        startActivity(new Intent(WallActivity.this, SettingsActivity.class));
-                        return true;
                     case R.id.drawer_favourites:
                         startActivity(new Intent(WallActivity.this, FavoritesActivity.class));
+                        return true;
+                    case R.id.drawer_about:
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            startActivity(new Intent(WallActivity.this, AboutActivity.class),
+                                    ActivityOptions.makeSceneTransitionAnimation(WallActivity.this).toBundle());
+                        } else
+                            startActivity(new Intent(WallActivity.this, AboutActivity.class));
                         return true;
                 }
                 menuItem.setChecked(true);

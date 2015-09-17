@@ -22,12 +22,7 @@
             android:title="@string/favourites"/>
 
         <item
-            android:id="@+id/drawer_settings"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/settings"/>
-
-        <item
-            android:id="@+id/drawer_more"
+            android:id="@+id/drawer_about"
             android:icon="@drawable/ic_more_horiz_black_24dp"
             android:title="@string/about"/>
     </group>

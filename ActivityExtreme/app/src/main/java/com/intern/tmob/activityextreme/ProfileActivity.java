@@ -1,8 +1,10 @@
 package com.intern.tmob.activityextreme;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -68,11 +70,15 @@ public class ProfileActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                         return true;
-                    case R.id.drawer_settings:
-                        startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
-                        return true;
                     case R.id.drawer_favourites:
                         startActivity(new Intent(ProfileActivity.this, FavoritesActivity.class));
+                        return true;
+                    case R.id.drawer_about:
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            startActivity(new Intent(ProfileActivity.this, AboutActivity.class),
+                                    ActivityOptions.makeSceneTransitionAnimation(ProfileActivity.this).toBundle());
+                        } else
+                            startActivity(new Intent(ProfileActivity.this, AboutActivity.class));
                         return true;
                 }
                 menuItem.setChecked(true);

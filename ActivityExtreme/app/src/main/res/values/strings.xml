@@ -13,10 +13,11 @@
     <string name="title_activity_new">NewActivity</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_test">Test</string>
-    <string name="profile">Profile</string>
-    <string name="wall">Wall</string>
-    <string name="favourites">Favourites</string>
+    <string name="profile">Profil</string>
+    <string name="wall">Ana Sayfa</string>
+    <string name="favourites">Favoriler</string>
     <string name="downloaded">Downloaded</string>
     <string name="settings">Settings</string>
-    <string name="about">About</string>
+    <string name="about">Hakkımızda</string>
+    <string name="title_activity_about">AboutActivity</string>
 </resources>
